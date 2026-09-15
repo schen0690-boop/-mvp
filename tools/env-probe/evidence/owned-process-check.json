@@ -1,0 +1,6 @@
+{
+  "checkedAt": "2026-09-15T10:51:48.3219501+00:00",
+  "ownedBrowserProcesses": [],
+  "ownedNodeProcesses": [],
+  "statement": "只筛选命令行包含env-probe的进程，不关闭其他浏览器或Node进程"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "12-provenance-with-sqlite",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "scripts/provenance.mjs"
+  ],
+  "startedAt": "2026-09-15T10:51:44.1171966+00:00",
+  "endedAt": "2026-09-15T10:51:44.3359794+00:00",
+  "timeoutSeconds": 30,
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "{\"cwd\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\",\"nodeExecutable\":\"D:\\\\nodejs\\\\node.exe\",\"nodeVersion\":\"v24.16.0\",\"sqliteVersion\":\"3.53.0\",\"packages\":[{\"name\":\"express\",\"version\":\"5.2.1\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\express\\\\package.json\",\"expected\":\"5.2.1\",\"local\":true},{\"name\":\"react\",\"version\":\"19.3.0\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\react\\\\package.json\",\"expected\":\"19.3.0\",\"local\":true},{\"name\":\"react-dom\",\"version\":\"19.3.0\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\react-dom\\\\package.json\",\"expected\":\"19.3.0\",\"local\":true},{\"name\":\"typescript\",\"version\":\"7.0.2\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\typescript\\\\package.json\",\"expected\":\"7.0.2\",\"local\":true},{\"name\":\"vite\",\"version\":\"8.3.0\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\vite\\\\package.json\",\"expected\":\"8.3.0\",\"local\":true},{\"name\":\"vitest\",\"version\":\"5.0.1\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\vitest\\\\package.json\",\"expected\":\"5.0.1\",\"local\":true},{\"name\":\"@playwright/test\",\"version\":\"1.63.0\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\@playwright\\\\test\\\\package.json\",\"expected\":\"1.63.0\",\"local\":true},{\"name\":\"@types/react\",\"version\":\"19.3.0\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\@types\\\\react\\\\package.json\",\"expected\":\"19.3.0\",\"local\":true},{\"name\":\"@types/react-dom\",\"version\":\"19.3.0\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\@types\\\\react-dom\\\\package.json\",\"expected\":\"19.3.0\",\"local\":true},{\"name\":\"@types/express\",\"version\":\"5.0.6\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\@types\\\\express\\\\package.json\",\"expected\":\"5.0.6\",\"local\":true},{\"name\":\"@types/node\",\"version\":\"24.13.4\",\"packageJsonPath\":\"D:\\\\实测文件夹\\\\tools\\\\env-probe\\\\node_modules\\\\@types\\\\node\\\\package.json\",\"expected\":\"24.13.4\",\"local\":true}]}\n",
+  "stderr": ""
+}

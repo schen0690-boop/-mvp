@@ -1,0 +1,17 @@
+{
+  "name": "03-typecheck",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/typescript/bin/tsc",
+    "-p",
+    "tsconfig.json"
+  ],
+  "startedAt": "2026-09-15T10:48:40.4330147+00:00",
+  "endedAt": "2026-09-15T10:48:44.0884537+00:00",
+  "timeoutSeconds": 60,
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}

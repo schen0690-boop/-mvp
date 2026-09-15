@@ -1,0 +1,18 @@
+{
+  "name": "10-unit-restored",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "vitest.config.ts"
+  ],
+  "startedAt": "2026-09-15T10:50:29.2979273+00:00",
+  "endedAt": "2026-09-15T10:50:31.2520909+00:00",
+  "timeoutSeconds": 60,
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "\n RUN  v5.0.1 D:/实测文件夹/tools/env-probe\n\n\n Test Files  2 passed (2)\n      Tests  9 passed (9)\n   Start at  18:50:30\n   Duration  912ms (tests 38%, import 31%, transform 22%, worker 9%)\n\n    Isolate  2 workers spawned · ~300ms startup each (spawn + environment, per file)\n             at least ~300ms faster with isolate: false — reuses workers across files instead of one per file\n\n",
+  "stderr": ""
+}

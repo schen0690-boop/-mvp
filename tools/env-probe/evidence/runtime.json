@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-09-15T10:44:36.7284702+00:00",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "os": {
+    "Caption": "Microsoft Windows 10 家庭版",
+    "Version": "10.0.19045",
+    "OSArchitecture": "64 位"
+  },
+  "shell": "7.6.5",
+  "nodePath": "D:\\nodejs\\node.exe",
+  "nodeVersion": "v24.16.0",
+  "npmVersion": "11.13.0",
+  "edgePath": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+  "edgeExists": true
+}

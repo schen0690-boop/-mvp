@@ -1,0 +1,16 @@
+{
+  "name": "04-build-client",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/vite/bin/vite.js",
+    "build"
+  ],
+  "startedAt": "2026-09-15T10:48:37.7616997+00:00",
+  "endedAt": "2026-09-15T10:48:40.0034213+00:00",
+  "timeoutSeconds": 90,
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "vite v8.3.0 building client environment for production...\ntransforming...\n✓ 14 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/client/index.html                  0.30 kB │ gzip:  0.26 kB\ndist/client/assets/index-8ZdmG-_Q.js  220.45 kB │ gzip: 69.18 kB\n\n✓ built in 568ms\n",
+  "stderr": ""
+}

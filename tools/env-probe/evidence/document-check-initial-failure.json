@@ -1,0 +1,22 @@
+{
+  "recordedAt": "2026-09-15T10:57:57.210938+00:00",
+  "purpose": "Final document/source preservation check",
+  "command": "python -B - (inline document checker)",
+  "cwd": "D:\\实测文件夹",
+  "exitCode": 1,
+  "error": "KeyError: 'docs/sources/development-prompts.md'",
+  "minimalReproduction": "baseline['files']['docs/sources/development-prompts.md']",
+  "actualKeys": [
+    ".gitignore",
+    "AGENTS.md",
+    "docs\\architecture.md",
+    "docs\\contracts.md",
+    "docs\\development-log.md",
+    "docs\\requirements.md",
+    "docs\\test-plan.md",
+    "docs\\ui-spec.md",
+    "docs\\sources\\development-prompts.md",
+    "docs\\sources\\stage-0-audit.md"
+  ],
+  "scope": "Document audit helper only; does not invalidate executed environment test results"
+}

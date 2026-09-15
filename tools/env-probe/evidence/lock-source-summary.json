@@ -1,0 +1,33 @@
+{
+  "lockSHA256": "0e66ea5495ba6052b06948fd61bf26953ef8869329f50c60ad48469b0bf2f67a",
+  "lockfileVersion": 3,
+  "resolvedHosts": [
+    "registry.npmjs.org"
+  ],
+  "installedPlatformPackages": [
+    {
+      "path": "node_modules/@rolldown/binding-win32-x64-msvc",
+      "version": "1.2.8"
+    },
+    {
+      "path": "node_modules/@rolldown/pluginutils",
+      "version": "1.0.1"
+    },
+    {
+      "path": "node_modules/@typescript/typescript-win32-x64",
+      "version": "7.0.2"
+    },
+    {
+      "path": "node_modules/lightningcss",
+      "version": "1.33.0"
+    },
+    {
+      "path": "node_modules/lightningcss-win32-x64-msvc",
+      "version": "1.33.0"
+    },
+    {
+      "path": "node_modules/rolldown",
+      "version": "1.2.8"
+    }
+  ]
+}

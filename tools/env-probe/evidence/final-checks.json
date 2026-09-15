@@ -1,0 +1,71 @@
+{
+  "checkedAt": "2026-09-15T10:59:55.008134+00:00",
+  "requirements": 32,
+  "productTestsAllPlanned": 20,
+  "oldPromptPrefixUnchanged": true,
+  "stage0ArchiveUnchanged": true,
+  "executionRecords": [
+    {
+      "evidence": "01-install-ignore-scripts.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "02-dependency-source.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "03-typecheck.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "04-build-client.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "05-build-server.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "06-http-health.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "07-unit-sqlite.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "08-intentional-negative.json",
+      "exitCode": 1,
+      "expectedExitCode": 1
+    },
+    {
+      "evidence": "09-browser-edge.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "10-unit-restored.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "11-npm-tree.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    },
+    {
+      "evidence": "12-provenance-with-sqlite.json",
+      "exitCode": 0,
+      "expectedExitCode": 0
+    }
+  ],
+  "lockMatchesPackage": true,
+  "problems": []
+}

@@ -1,0 +1,21 @@
+{
+  "name": "01-install-ignore-scripts",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "D:\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+    "install",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund",
+    "--fetch-retries=1",
+    "--fetch-timeout=60000"
+  ],
+  "startedAt": "2026-09-15T10:44:37.2999424+00:00",
+  "endedAt": "2026-09-15T10:45:13.8101220+00:00",
+  "timeoutSeconds": 240,
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "\nadded 127 packages in 35s\n",
+  "stderr": "npm notice\nnpm notice New major version of npm available! 11.13.0 -> 12.0.2\nnpm notice Changelog: https://github.com/npm/cli/releases/tag/v12.0.2\nnpm notice To update run: npm install -g npm@12.0.2\nnpm notice\n"
+}

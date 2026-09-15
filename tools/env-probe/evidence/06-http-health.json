@@ -1,0 +1,15 @@
+{
+  "name": "06-http-health",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "scripts/http-smoke.mjs"
+  ],
+  "startedAt": "2026-09-15T10:49:00.7095072+00:00",
+  "endedAt": "2026-09-15T10:49:04.8737645+00:00",
+  "timeoutSeconds": 30,
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "{\"status\":200,\"body\":{\"ok\":true,\"message\":\"本地后端已连接\"},\"ownedServerPid\":12912}\n{\"ownedServerStopped\":true,\"serverOutput\":\"{\\\"event\\\":\\\"probe-server-started\\\",\\\"pid\\\":12912,\\\"host\\\":\\\"127.0.0.1\\\",\\\"port\\\":41732}\\n\"}\n",
+  "stderr": ""
+}

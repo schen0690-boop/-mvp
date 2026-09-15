@@ -1,0 +1,24 @@
+# 后续依赖、构建和本地运行产物；当前均未生成
+node_modules/
+dist/
+coverage/
+test-results/
+playwright-report/
+.env
+.env.*
+!.env.example
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.log
+# 样例和初始化方案提交可审阅的 SQL/JSON 文件，不提交运行数据库
+# 阶段1B隔离实验：只忽略可重建/大体积产物，源码、锁文件和精简证据保留
+/tools/env-probe/.cache/
+/tools/env-probe/.tmp/
+/tools/env-probe/evidence/raw/
+/tools/env-probe/evidence/screenshots/
+/.cache/
+/.tmp/

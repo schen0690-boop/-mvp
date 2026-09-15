@@ -1,0 +1,23 @@
+{
+  "name": "03-input-green",
+  "cwd": "D:\\实测文件夹",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "vitest.config.ts",
+    "tests/unit/input.test.ts"
+  ],
+  "startedAt": "2026-09-15T11:18:20.0521444+00:00",
+  "endedAt": "2026-09-15T11:18:20.8272040+00:00",
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "\n RUN  v5.0.1 D:/实测文件夹\n\n\n Test Files  1 passed (1)\n      Tests  38 passed (38)\n   Start at  19:18:20\n   Duration  271ms (transform 42%, import 42%, tests 11%, worker 5%)\n\n",
+  "stderr": "",
+  "sourceHashes": {
+    "src\\domain\\errors.ts": "6829B6C518174D7E047EC770D3523AD4D5745F20E1D13B078F3D24B582400887",
+    "src\\domain\\input.ts": "398AD18FF1637ECF6D9B84AF7E2294FB98B262F2A9022A54883F1BCF77750563",
+    "tests\\unit\\input.test.ts": "1688220685BE3ECC20EA453F8DAB6398B1A0CE6918012419DDB3B27DD4C80BEA"
+  }
+}

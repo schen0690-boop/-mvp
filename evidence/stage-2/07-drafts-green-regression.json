@@ -1,0 +1,28 @@
+{
+  "name": "07-drafts-green-regression",
+  "cwd": "D:\\实测文件夹",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "vitest.config.ts"
+  ],
+  "startedAt": "2026-09-15T11:21:44.6368069+00:00",
+  "endedAt": "2026-09-15T11:21:45.5251385+00:00",
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "\n RUN  v5.0.1 D:/实测文件夹\n\n\n Test Files  3 passed (3)\n      Tests  52 passed (52)\n   Start at  19:21:45\n   Duration  403ms (transform 35%, import 32%, tests 27%, worker 5%)\n\n",
+  "stderr": "",
+  "sourceHashes": {
+    "src\\db\\database.ts": "FB8CEF6D8B674C75B2B7694F8FB83BD980985F27CEDE3BE24D95D1299C67E854",
+    "src\\db\\sqlite-drafts.ts": "CB9DE592585A52539E3932D9A41A2848B3CED43F59E759AA759CC6A476A04216",
+    "src\\domain\\drafts.ts": "A27B1013752B0229CE173EF7080A190C6E8CE3AEC8455B85417F231EC26A02EF",
+    "src\\domain\\errors.ts": "6829B6C518174D7E047EC770D3523AD4D5745F20E1D13B078F3D24B582400887",
+    "src\\domain\\input.ts": "398AD18FF1637ECF6D9B84AF7E2294FB98B262F2A9022A54883F1BCF77750563",
+    "tests\\helpers\\database.ts": "865AFBEEDC435D1E0D8DE38818C792A2FF7AF38F75D2BC8E9EDDADEC952E321C",
+    "tests\\integration\\drafts.test.ts": "DDDF0210455CBB87ECF092534D0FE239E77A44AE97EBD238AA76D1210CBC5700",
+    "tests\\integration\\schema.test.ts": "0A2F369FBCD81742233F2E2B5876D07FE6D0AF6DBF54A9FA43AD1C429E2EC8B2",
+    "tests\\unit\\input.test.ts": "1688220685BE3ECC20EA453F8DAB6398B1A0CE6918012419DDB3B27DD4C80BEA"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "ai-roundtable-env-probe",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Phase 1B environment validation only; not product functionality",
+  "engines": {
+    "node": ">=24.16.0 <25"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build:client": "vite build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "test:unit": "vitest run --config vitest.config.ts",
+    "test:negative": "node scripts/negative-runner.mjs",
+    "test:browser": "playwright test --config playwright.config.ts",
+    "check:http": "node scripts/http-smoke.mjs",
+    "check:source": "node scripts/provenance.mjs"
+  },
+  "dependencies": {
+    "express": "5.2.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "8.3.0",
+    "vitest": "5.0.1",
+    "@playwright/test": "1.63.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/express": "5.0.6",
+    "@types/node": "24.13.4"
+  }
+}

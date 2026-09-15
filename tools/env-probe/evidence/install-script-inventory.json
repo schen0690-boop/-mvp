@@ -1,0 +1,50 @@
+[
+  {
+    "name": "content-type",
+    "version": "2.1.0",
+    "path": "node_modules\\body-parser\\node_modules\\content-type\\package.json",
+    "lifecycle": {
+      "prepare": "ts-scripts install && npm run build"
+    }
+  },
+  {
+    "name": "lightningcss",
+    "version": "1.33.0",
+    "path": "node_modules\\lightningcss\\package.json",
+    "lifecycle": {
+      "prepare": "patch-package"
+    }
+  },
+  {
+    "name": "content-type",
+    "version": "2.1.0",
+    "path": "node_modules\\negotiator\\node_modules\\content-type\\package.json",
+    "lifecycle": {
+      "prepare": "ts-scripts install && npm run build"
+    }
+  },
+  {
+    "name": "path-to-regexp",
+    "version": "8.4.2",
+    "path": "node_modules\\path-to-regexp\\package.json",
+    "lifecycle": {
+      "prepare": "ts-scripts install && npm run build"
+    }
+  },
+  {
+    "name": "tinyexec",
+    "version": "1.3.0",
+    "path": "node_modules\\tinyexec\\package.json",
+    "lifecycle": {
+      "prepare": "npm run build"
+    }
+  },
+  {
+    "name": "content-type",
+    "version": "2.1.0",
+    "path": "node_modules\\type-is\\node_modules\\content-type\\package.json",
+    "lifecycle": {
+      "prepare": "ts-scripts install && npm run build"
+    }
+  }
+]

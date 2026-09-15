@@ -1,0 +1,7 @@
+{
+  "statement": "Windows 10 本机实验，不属于官方支持认证。",
+  "browserVersion": "153.0.4234.32",
+  "channel": "msedge",
+  "headless": true,
+  "url": "http://127.0.0.1:41731/"
+}

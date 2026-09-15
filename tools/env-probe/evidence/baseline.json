@@ -1,0 +1,15 @@
+{
+  "recordedAt": "2026-09-15T10:41:52.164308+00:00",
+  "files": {
+    ".gitignore": "b0273e7de865b8dc8f589a3bc2d9936e54b79afc662584a57d57105f07992389",
+    "AGENTS.md": "fc658b0d75729ddac17b9c6a15d5bc0a7453ab739dfcdefee400ab4db1a2cb48",
+    "docs\\architecture.md": "162ce236459b45144458cb1e47f96e891f7c6c647cf74ea04e185cac6f19a53e",
+    "docs\\contracts.md": "b6d99445e382edb0fd1bcbd8b3e97c9509c33db9ab79c3866862166330ee99a4",
+    "docs\\development-log.md": "7e267df9fc9ef9514d2769edf4da52f6fdfcc71aa3103479ed70c8336c64c6fb",
+    "docs\\requirements.md": "f96452e519695d68b2fae138dfcc28ca8aba18dfd894be5453b329bc0cf77f78",
+    "docs\\test-plan.md": "6d4a121e70be3627ef4921bf56be92046e382cd24c76896a19c3b3d143e6c5e9",
+    "docs\\ui-spec.md": "d50ae27b5a32e804f7983112509a3c9208846f2a3c6828117edd42ee51152089",
+    "docs\\sources\\development-prompts.md": "98209b8ac8de8d85d099f52a04c4090574b21e1ab3fa936da1b698df457be7c7",
+    "docs\\sources\\stage-0-audit.md": "1c0a2cb40881afa6414fba16a0e3d1832731f14ca42f045adff0db56cfaa85eb"
+  }
+}

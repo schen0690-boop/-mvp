@@ -1,0 +1,22 @@
+{
+  "name": "ai-roundtable-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.16.0 <25" },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run --config vitest.config.ts",
+    "db:init": "node dist/init-db.js",
+    "start": "node dist/server.js"
+  },
+  "dependencies": { "express": "5.2.1" },
+  "devDependencies": {
+    "@types/express": "5.0.6",
+    "@types/node": "24.13.4",
+    "typescript": "7.0.2",
+    "vite": "8.3.0",
+    "vitest": "5.0.1"
+  }
+}

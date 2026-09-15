@@ -1,0 +1,26 @@
+{
+  "name": "04-schema-red",
+  "cwd": "D:\\实测文件夹",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "vitest.config.ts",
+    "tests/integration/schema.test.ts"
+  ],
+  "startedAt": "2026-09-15T11:18:45.2012035+00:00",
+  "endedAt": "2026-09-15T11:18:45.9609376+00:00",
+  "timedOut": false,
+  "exitCode": 1,
+  "stdout": "\n RUN  v5.0.1 D:/实测文件夹\n\n ❯ tests/integration/schema.test.ts (1 test | 1 failed) 11ms\n   × 初始化创建草稿与公开事件两张必要业务表，并启用外键 10ms\n\n Test Files  1 failed (1)\n      Tests  1 failed (1)\n   Start at  19:18:45\n   Duration  249ms (import 45%, transform 37%, tests 12%, worker 6%)\n\n",
+  "stderr": "\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/integration/schema.test.ts > 初始化创建草稿与公开事件两张必要业务表，并启用外键\nAssertionError: expected [] to deeply equal [ 'discussions', 'public_events' ]\n\n- Expected\n+ Received\n\n- [\n-   \"discussions\",\n-   \"public_events\",\n- ]\n+ []\n\n ❯ tests/integration/schema.test.ts:10:41\n      8|     initializeDatabase(db);\n      9|     const tables = db.prepare(\"SELECT name FROM sqlite_master WHERE ty…\n     10|     expect(tables.map(row => row.name)).toEqual(['discussions', 'publi…\n       |                                         ^\n     11|     expect(db.prepare('PRAGMA foreign_keys').get()?.foreign_keys).toBe…\n     12|   } finally { db.close(); }\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n",
+  "sourceHashes": {
+    "src\\db\\database.ts": "4B60888477AB5C99B150EB837527C15827123C7076242C0378BD6614857780FB",
+    "src\\domain\\errors.ts": "6829B6C518174D7E047EC770D3523AD4D5745F20E1D13B078F3D24B582400887",
+    "src\\domain\\input.ts": "398AD18FF1637ECF6D9B84AF7E2294FB98B262F2A9022A54883F1BCF77750563",
+    "tests\\helpers\\database.ts": "865AFBEEDC435D1E0D8DE38818C792A2FF7AF38F75D2BC8E9EDDADEC952E321C",
+    "tests\\integration\\schema.test.ts": "0A2F369FBCD81742233F2E2B5876D07FE6D0AF6DBF54A9FA43AD1C429E2EC8B2",
+    "tests\\unit\\input.test.ts": "1688220685BE3ECC20EA453F8DAB6398B1A0CE6918012419DDB3B27DD4C80BEA"
+  }
+}

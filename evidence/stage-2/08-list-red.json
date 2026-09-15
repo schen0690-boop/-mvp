@@ -1,0 +1,30 @@
+{
+  "name": "08-list-red",
+  "cwd": "D:\\实测文件夹",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "vitest.config.ts",
+    "tests/integration/list.test.ts"
+  ],
+  "startedAt": "2026-09-15T11:22:16.1746971+00:00",
+  "endedAt": "2026-09-15T11:22:17.0196574+00:00",
+  "timedOut": false,
+  "exitCode": 1,
+  "stdout": "\n RUN  v5.0.1 D:/实测文件夹\n\n ❯ tests/integration/list.test.ts (8 tests | 7 failed) 74ms\n   × 默认active不将草稿标成运行中，all明确返回草稿 15ms\n   × 按updatedAt降序，同时间按discussionId升序，列表内容互相独立 25ms\n   × 拒绝非法列表过滤 created 5ms\n   × 拒绝非法列表过滤  5ms\n   × 拒绝非法列表过滤 null 5ms\n   × 拒绝非法列表过滤 [ 'all' ] 5ms\n   × 拒绝非法列表过滤 1 5ms\n\n Test Files  1 failed (1)\n      Tests  7 failed | 1 passed (8)\n   Start at  19:22:16\n   Duration  345ms (tests 38%, transform 30%, import 29%, worker 3%)\n\n",
+  "stderr": "\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/integration/list.test.ts > 默认active不将草稿标成运行中，all明确返回草稿\nAssertionError: expected { items: [] } to deeply equal { items: [ { …(6) } ] }\n\n- Expected\n+ Received\n\n  {\n-   \"items\": [\n-     {\n-       \"discussionId\": \"b414491f-e8e2-432d-91cc-7b5e071f887a\",\n-       \"expertCount\": 4,\n-       \"status\": \"created\",\n-       \"topic\": \"草稿\",\n-       \"updatedAt\": \"2026-09-15T11:22:16.845Z\",\n-       \"version\": 1,\n-     },\n-   ],\n+   \"items\": [],\n  }\n\n ❯ tests/integration/list.test.ts:25:31\n     23|   const created = service.create({ topic: '草稿', requestId: randomUUID(…\n     24|   expect(service.list()).toEqual({ items: [] });\n     25|   expect(service.list('all')).toEqual({ items: [{ discussionId: create…\n       |                               ^\n     26|     expertCount: 4, status: 'created', version: 1, updatedAt: created.…\n     27| });\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯\n\n FAIL  tests/integration/list.test.ts > 按updatedAt降序，同时间按discussionId升序，列表内容互相独立\nAssertionError: expected [] to deeply equal [ { …(6) }, { …(6) }, { …(6) } ]\n\n- Expected\n+ Received\n\n- [\n-   {\n-     \"discussionId\": \"bc66932f-0e0c-4f27-b31e-b9cdcf3eac9d\",\n-     \"expertCount\": 2,\n-     \"status\": \"created\",\n-     \"topic\": \"话题1\",\n-     \"updatedAt\": \"2026-09-15T02:00:00.000Z\",\n-     \"version\": 1,\n-   },\n-   {\n-     \"discussionId\": \"c9927ffa-78b9-452d-9aa3-c2cd5920f781\",\n-     \"expertCount\": 3,\n-     \"status\": \"created\",\n-     \"topic\": \"话题2\",\n-     \"updatedAt\": \"2026-09-15T02:00:00.000Z\",\n-     \"version\": 1,\n-   },\n-   {\n-     \"discussionId\": \"89786ec7-71b8-4c01-a4f3-8ef5a17723f4\",\n-     \"expertCount\": 1,\n-     \"status\": \"created\",\n-     \"topic\": \"话题0\",\n-     \"updatedAt\": \"2026-09-15T01:00:00.000Z\",\n-     \"version\": 1,\n-   },\n- ]\n+ []\n\n ❯ tests/integration/list.test.ts:37:37\n     35|     .map(record => ({ discussionId: record.discussionId, topic: record…\n     36|       status: record.status, version: record.version, updatedAt: recor…\n     37|   expect(service.list('all').items).toEqual(expected);\n       |                                     ^\n     38| });\n     39| it.each(['created', '', null, ['all'], 1].map(status => ({ status })))…\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯\n\n FAIL  tests/integration/list.test.ts > 拒绝非法列表过滤 created\n FAIL  tests/integration/list.test.ts > 拒绝非法列表过滤 \n FAIL  tests/integration/list.test.ts > 拒绝非法列表过滤 null\n FAIL  tests/integration/list.test.ts > 拒绝非法列表过滤 [ 'all' ]\n FAIL  tests/integration/list.test.ts > 拒绝非法列表过滤 1\nAssertionError: expected function to throw an error, but it didn't\n ❯ tests/integration/list.test.ts:40:38\n     38| });\n     39| it.each(['created', '', null, ['all'], 1].map(status => ({ status })))…\n     40|   expect(() => service.list(status)).toThrowError(expect.objectContain…\n       |                                      ^\n     41| });\n     42|\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯\n\n",
+  "sourceHashes": {
+    "src\\db\\database.ts": "FB8CEF6D8B674C75B2B7694F8FB83BD980985F27CEDE3BE24D95D1299C67E854",
+    "src\\db\\sqlite-drafts.ts": "CB9DE592585A52539E3932D9A41A2848B3CED43F59E759AA759CC6A476A04216",
+    "src\\domain\\drafts.ts": "A27B1013752B0229CE173EF7080A190C6E8CE3AEC8455B85417F231EC26A02EF",
+    "src\\domain\\errors.ts": "6829B6C518174D7E047EC770D3523AD4D5745F20E1D13B078F3D24B582400887",
+    "src\\domain\\input.ts": "398AD18FF1637ECF6D9B84AF7E2294FB98B262F2A9022A54883F1BCF77750563",
+    "tests\\helpers\\database.ts": "865AFBEEDC435D1E0D8DE38818C792A2FF7AF38F75D2BC8E9EDDADEC952E321C",
+    "tests\\integration\\drafts.test.ts": "DDDF0210455CBB87ECF092534D0FE239E77A44AE97EBD238AA76D1210CBC5700",
+    "tests\\integration\\list.test.ts": "F8C1CEBB34616E657EC224ED9A010714E7B336FEE5AA5337281667DB55433F93",
+    "tests\\integration\\schema.test.ts": "0A2F369FBCD81742233F2E2B5876D07FE6D0AF6DBF54A9FA43AD1C429E2EC8B2",
+    "tests\\unit\\input.test.ts": "1688220685BE3ECC20EA453F8DAB6398B1A0CE6918012419DDB3B27DD4C80BEA"
+  }
+}

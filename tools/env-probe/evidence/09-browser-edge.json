@@ -1,0 +1,18 @@
+{
+  "name": "09-browser-edge",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/@playwright/test/cli.js",
+    "test",
+    "--config",
+    "playwright.config.ts"
+  ],
+  "startedAt": "2026-09-15T10:49:29.0708802+00:00",
+  "endedAt": "2026-09-15T10:49:37.4674144+00:00",
+  "timeoutSeconds": 90,
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "\nRunning 1 test using 1 worker\n\n{\"statement\":\"Windows 10 本机实验，不属于官方支持认证。\",\"browserVersion\":\"153.0.4234.32\",\"channel\":\"msedge\",\"headless\":true,\"url\":\"http://127.0.0.1:41731/\"}\n  ok 1 tests\\browser\\environment.spec.ts:4:1 › real local React page, interaction and Express response (1.5s)\n\n  1 passed (6.3s)\n",
+  "stderr": "[WebServer] (node:16612) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:17784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "05-build-server",
+  "cwd": "D:\\实测文件夹\\tools\\env-probe",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/typescript/bin/tsc",
+    "-p",
+    "tsconfig.server.json"
+  ],
+  "startedAt": "2026-09-15T10:48:44.5050304+00:00",
+  "endedAt": "2026-09-15T10:48:45.2193593+00:00",
+  "timeoutSeconds": 60,
+  "timedOut": false,
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}
