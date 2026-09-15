@@ -139,3 +139,21 @@ brainstorming检查清单：上下文已读取；本轮无必须以交互视觉�
 未执行/待确认：完整运行生命周期、模型能力、SSE/共识/总结、完整产品E2E、真实移动设备和受支持OS、漏洞审计；工具口径仍待出题方确认。当前P0–P4为五条真实主请求，P4明确DDD+交互测试+局部E2E，不将拆分一条Prompt算多条，也不将专家角色Prompt算开发Prompt；完整交付质量仍需后续验收。5组阵容样例、模型相关测试及1–1.5页工作流说明尚未交付。下一阶段仅建议阵容生成模型边界与非破坏数据库迁移TDD，需新授权。
 
 阶段3实际提交补记：b2d830d已提交界面、请求控制、单元/局部E2E及项目级Skill，时间取真实Git记录。文档与证据随后单独提交；不将这些收尾提交伪装成RED时已经提交。来源核对最终通过：旧Prompt前缀字节不变，本轮原文只归一化CRLF/LF比较；50份探针与后端未改，Skill源哈希一致，未命中所检查的敏感形态。首次来源检查的换行比较失败保留于23记录，修正检查器后的24记录退出0。
+
+## 阶段4A：阵容领域、迁移与Provider边界设计（当前轮）
+
+记录时间：2026-09-15T12:43:34.866279+00:00。P5真实原文来自用户附件C:\Users\Administrator\.codex\attachments\601957d4-f3e8-4acc-b4e1-affbf1329e24\pasted-text.txt，已按原文追加至sources/development-prompts.md。旧归档前缀55983字节、SHA-256=581a8212ccdafe62edd86e135970d6a561d11e5d9062612a9fb6e1bf7dc09091；附件11753字节、SHA-256=deace2227b1f4dd564e740d1df0cc035e5e727d0465ebb0fc61f7d41431ec60f。归档不把本轮设计写成已批准，也不把P5说成已执行TDD。
+
+起始main/03cf8ea，工作区干净；git log确实有65e24f5、b2d830d、03cf8ea。当前仓库身份仍为用户明确授权的暂定schen <cs064210@163.com>，本轮不改配置；获准形成一个实际设计提交，不修改前面历史，不推送。
+
+实际读取AGENTS、需求/架构/契约/UI/测试及阶段2、3验证报告，完整src/db、domain、HTTP、初始化/运行入口，web快照校验、controller、App及文件清单；没有仅据摘要推测字段。当前仍仅created两表，默认data/discussions.sqlite不存在；只读检查两个旧临时库schema和user_version，不读取业务正文。最终smoke-mFF73x库与正式源码相符，user_version=0；早期case-0WwOur库仍是旧length(topic)CHECK，促使迁移规格加入完整旧结构识别与拒绝未知库，未修改这些库。
+
+本轮只使用现有brainstorming，实际路径C:\Users\Administrator\.codex\skills\superpowers\skills\brainstorming\SKILL.md，文件存在、完整已读、用于architectural子系统设计。该本地Skill未单列architectural工具接口，按需求/边界/方案取舍/规格自检处理，不虚构调用。版本沿用此前记录6.1.0及f268f7c953744036f0fa7e9d4b73535c04e57cb8，本轮未重新核实版本。未调用TDD、frontend-design、writing-plans、代理或worktree；无Skill脚本执行。用户明确要求先写可审阅设计再等待，因此将完整待确认规格写入docs/lineup-design.md；不套用Skill默认“写完立即转实施计划”。没有已确认独立spec，待本次审阅后再确认其状态，不重复创建同职责文档。
+
+本轮推荐：lineup沿用命名、确认独立；当前逻辑代次存Discussion，整组成员另表；失败后新代次重试，旧迟到结果CAS拒收；生成中禁止强制替换；旧完整阵容保留存储但暂不公开/确认。当前Provider窄接口不绑定供应商，输入/结构/业务校验、单层总计两次调用、错误分类和公开边界写明。001严格接管+002事务重建，不引入ORM/attempt平台。原严格草稿前端对新DTO不兼容已报告，4B需最小消费者兼容，4C再增加阵容UI。
+
+来源核实仅补充SQLite官方重建与PRAGMA说明，用于迁移技术判断，不新审计全套工具；链接在lineup-design。候选9色对比度用只读计算验证范围5.57–12.62，未浏览器渲染、未宣称卡片UI通过。已形成32项S4用例，unit/DB integration/HTTP integration/E2E/real-model check分层，全部计划。设计没有新增发言、调度、SSE或通用任务API。
+
+本轮未执行：业务测试、类型检查/构建、正式迁移、模型调用、阵容UI、浏览器验证。阶段2/3通过记录仍是历史结果，本轮没有复跑。下一步只等待用户确认三组设计决定，未获确认不得进入4B或writing-plans。原工具口径与真实模型资料仍待核实，不阻塞本轮供应商无关设计。
+
+本轮文档自检实际退出0：32条S4编号唯一且全为计划，32条原R编号保留；相对链接存在、围栏成对、修改设计无占位符、所检查的高置信度敏感形态无命中。旧Prompt前缀55983字节哈希不变，附件原始11753字节完整出现在新增归档；业务代码/依赖/测试/探针及阶段2、3历史报告对HEAD无差异。git diff --check退出0（只有既有CRLF换行提示）。自审补充总期限计时器的失败CAS，避免“只丢弃到期结果却遗留生成中”；并注明旧lineup.ready属于未来SSE背景，4B只复用状态事件。Mermaid未渲染，迁移SQL与所有未来用例未执行，不据文档检查宣称产品通过。

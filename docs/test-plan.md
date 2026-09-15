@@ -17,8 +17,8 @@
 | 用例 | 层次/需求 | 前置条件 | 操作 | 预期结果 | 状态 |
 |---|---|---|---|---|---|
 | T01 创建与列表 | 集成/E2E；R02 R03 | 空库，真实UI/API，模型替身待命 | 填写中文话题及4专家，创建后请求阵容；另一观察页打开列表 | 生成1个discussionId，expertCount=4；active可见；GET不启动模型；空态/加载/错误可区分 | 计划 |
-| T02 阵容校验 | 单元/集成/E2E；R03 R04 R20 R22 | created；提供错误人数/缺title/重复host/额外隐藏字段的模型响应 | 请求lineup，先无效再有效；另测所有尝试均无效 | 无效输出不保存为可确认阵容；只按有限次数尝试；有效时恰好1主持人+N专家及完整颜色身份；耗尽回created+安全notice | 计划 |
-| T03 确认门槛 | 单元/集成/E2E；R04 R20 | created、generating_lineup、awaiting_confirmation分别准备 | 未确认时观察；调用/start传旧revision；正确revision并发提交两次 | 前两状态不可启动；旧版409；正确版仅一次原子迁移、一次开场；UI开始按钮条件正确 | 计划 |
+| T02 阵容校验 | 单元/集成/E2E；R03 R04 R20 R22 | created；提供错误人数/缺profession/title/重复moderator/额外隐藏字段的模型响应 | 请求lineup，先无效再有效；另测所有尝试均无效 | 无效输出不保存为可确认阵容；只按有限次数尝试；有效时恰好1主持人+N专家及完整颜色身份；耗尽进入lineup_generation_failed+安全notice（4A提案） | 计划 |
+| T03 确认门槛 | 单元/集成/E2E；R04 R20 | created、generating_lineup、awaiting_confirmation分别准备 | /lineup/confirm传旧版本或正确双版本，两观察者并发确认 | 前两状态不可确认；旧版409；正确版仅一次迁移到lineup_confirmed、无开场；未来运行门槛另行验收（4A修订） | 计划 |
 | T04 普通发言结构 | 单元/集成；R07 R22 | 已启动，模型返回0/3句、空串、JSON正文、HTML、跨讨论replyTo | 逐项提交边界响应；再提交合法1/2句 | 无效正文不入库、不发utterance.created；合法普通发言有单调seq；中文句界歧义列入人工检查 | 计划 |
 | T05 当前内容影响回应 | 单元/集成/E2E；R05 R06 R08 R20 | 最新transcript=v含可辨识观点A；真实协调器；替身按所收到transcript选择回应 | 发布新观点B，再释放下一轮意愿/发言请求；检查提供商边界收到的输入 | 请求包含本场最新B及正确角色；不含他场文本；协调器按新意愿选择；UI显示真实preparing/idle和公开关注点；不把此测试称为真实模型语义验证 | 计划 |
 | T06 非固定轮转/非剧本 | 单元/集成/E2E；R06 | 固定阵容，但替身依当前已发布内容让同一专家两轮有回应意愿 | 推进两轮，检查每次请求时点/输入及公开发言序列；将第二轮最新内容替换后另跑独立场景 | 可出现同一专家连续回应，改变内容改变选择；下一轮公开发言请求发生在先前transcript提交之后；不存在开始时一次性取得整场script的路径 | 计划 |
@@ -34,7 +34,7 @@
 | T16 文档/过程/交付 | 人工交付检查；R18 R19 R23–R32 | 最终仓库与原始开发记录，当前仅草案 | 对照需求、文档、源码、Git日志、Prompt、样例、README、工作流说明逐项核验 | 至少5段真实核心Prompt覆盖四阶段且每段1–2句说明；5组话题+阵容；所需源码/初始化/测试/文档/链接齐全；工具历史真实；1–1.5页说明有2–3个真实问题；不以本轮建档当最终通过 | 计划 |
 | T17 真实模型连接 | 真实模型检查；R04 R06 R10 R14 | 用户另行授权，已确认实际模型与协议，后端环境安全配置 | 各任务最小调用，观察结构化输出、延迟、限流/取消行为及真实语义；记录实际结果 | 成功或失败均据实记录；不要求模型泄露推理；不夸称供应商支持未测试能力；与替身测试报告分开 | 计划 |
 | T18 讨论质量/样例 | 人工；R01 R05 R06 R07 R10 R25 | 至少5组话题/阵容；真实运行样本与合成样例标签区分 | 审查回应依赖、补充反驳、主持追问串联、句子自然性、证据支持综合 | 明确列出具体优点/问题及关联发言ID；不以格式合格替代质量；不把生成文本当事实验证或专家真身 | 计划 |
-| T19 SQLite/重启 | 集成/运行检查；R13 R28 D07 | 真SQLite文件、迁移/初始化，预置各生命周期状态 | 重启后端，读快照；验证外键、事务回滚、事件原子性、记录查询 | 仅中断running/stopping转failed、角色idle、旧任务不续跑；created/awaiting_confirmation/completed保留；generating_lineup按C建议回created提示未生成；数据事件一致；没有提交运行数据库或依赖私有缓存 | 计划 |
+| T19 SQLite/重启 | 集成/运行检查；R13 R28 D07 | 真SQLite文件、迁移/初始化，预置各生命周期状态 | 重启后端，读快照；验证外键、事务回滚、事件原子性、记录查询 | 仅中断running/stopping转failed、角色idle、旧任务不续跑；created/awaiting_confirmation/completed保留；generating_lineup按4A提案进入lineup_generation_failed提示中断；数据事件一致；没有提交运行数据库或依赖私有缓存 | 计划 |
 | T20 安装与系统执行 | 环境/E2E；R13 R20 R21 R27 | 明确受支持环境与项目锁文件，测试文件已实现后 | 按README从独立目录安装并运行真实系统E2E | 可复现启动、持久化与退出码；报告真实版本和环境；Win10实验若可运行也不声称官方支持 | 计划 |
 
 T12故意构造错序是验证提交防护，不表示MVP默认无限并行生成综合。T19未来才执行运行态恢复；阶段2已有草稿初始化与重开读取，但没有运行态迁移/恢复实现。
@@ -81,3 +81,44 @@ T12故意构造错序是验证提交防护，不表示MVP默认无限并行生�
 | S3-05 R17 | 局部E2E e2e/layout.spec.ts | 390×844、1366×768、2560×1080，新建独立布局数据 | 键盘聚焦、三区访问、长话题、滚动及窄屏往返 | 无页面横向溢出，主操作初始可见、分区滚动和状态保留；3项通过，截图另行目视检查 |
 
 所有业务等待按角色/标签、可见状态、响应和expect.poll；不靠固定休眠或networkidle。正常链路用真实Express、SQLite和React；标注故障测试不等于真实服务器产生该错误。截图只证明本机Edge视口布局，不证明真实移动设备、屏幕阅读器或整个产品质量。无阵容、SSE、真实模型与人工讨论质量测试。
+
+## S4：未来4B阵容TDD验收矩阵（全为计划，未运行）
+
+设计依据[lineup-design.md](lineup-design.md)与contracts的阶段4A节。以下不是实施计划或现成测试，用户确认后才执行真实RED→GREEN。unit为纯校验/状态决策；DB integration用真实临时SQLite、业务和repository；HTTP integration用真实Express请求链路；E2E在4C阵容UI完成后使用真实前后端SQLite、仅FakeRosterProvider；real-model check另行授权，不能算Fake测试通过。
+
+| 编号 | 层次 | 前置 | 操作 | 预期 | 状态 |
+|---|---|---|---|---|---|
+| S4-01 | HTTP integration | created草稿、Fake受控 | 新requestId及null基代次请求/lineup | 202，生成代次1；GET无副作用 | 计划 |
+| S4-02 | unit / HTTP integration | generating/confirmed及未来运行状态决策样例 | 不同requestId再次生成 | 按契约409，Provider不调用；未来状态用纯决策样例，不绕过002约束写运行记录 | 计划 |
+| S4-03 | DB integration | 已持久化中文话题和人数 | 生成、失败、再生成、确认 | topic/count/createdAt逐字不变 | 计划 |
+| S4-04 | unit / HTTP integration | N=1/4/8，Fake正常候选 | 释放1主持人+N专家JSON | ready，完整职业/头衔、成员ID/排序 | 计划 |
+| S4-05 | unit | 分别少/多专家、无/双主持人 | 验证候选 | 全部业务无效，无静默裁剪/补造 | 计划 |
+| S4-06 | unit | 空白/缺字段、非法role、同名含空白/NFKC变化 | 验证每组候选 | 分类准确，重复跨角色也拒绝；同职业不同名允许 | 计划 |
+| S4-07 | unit / DB integration | 模型带color/order/ID及合法候选 | 先验证恶意字段再正常生成 | 未知系统字段拒绝；系统主持人0专家1…N，固定色不重复 | 计划 |
+| S4-08 | unit / HTTP integration | Fake等待，受控时钟 | 两次超时至总期限 | 最多2调用，failed/LINEUP_TIMEOUT，GET200 | 计划 |
+| S4-09 | unit / HTTP integration | 临时网络故障、另例永久配置错误 | 释放分类错误 | 临时最多重试1次；永久不重试，固定notice不泄漏异常正文 | 计划 |
+| S4-10 | unit | 非JSON、围栏、根数组、未知字段、字段类型错误 | parse及结构校验 | LINEUP_INVALID_STRUCTURE；不抽取猜测JSON | 计划 |
+| S4-11 | unit | 字符串合法但超长/空值/错误人数/重复 | 业务验证 | LINEUP_INVALID_MEMBERS；归一化视图一致 | 计划 |
+| S4-12 | unit | 首次网络失败后二次结构错误；另例首次业务错 | 推动重试/修复 | 总次数最多2；第二例仅给安全规则反馈，不回传raw；无第三次 | 计划 |
+| S4-13 | DB integration | 旧空阵容或既有完整阵容；新候选非法 | 完成失败 | 无半组成员；旧完整存储保留且公开失败roles为空 | 计划 |
+| S4-14 | DB integration | 合法候选，成员写入或事件写入故障点 | 事务成功及受控失败两例 | 成员/版本/状态/事件共同提交或全回滚，FK有效 | 计划 |
+| S4-15 | DB integration / HTTP integration | 精确001旧schema，已有草稿/幂等ID/事件/引号及NUL话题 | 升002，再原路径查询与创建重放 | 旧字段/事件字节不变，created19字段兼容，唯一键有效 | 计划 |
+| S4-16 | DB integration | 已完成002 | 再执行迁移 | 无重建、无重复行，applied_at/业务版本不变 | 计划 |
+| S4-17 | DB integration | 精确旧schema，新表复制后及登记版本后分别注入失败 | 升级 | 全事务回滚，旧数据/表可读、无半迁移记录，finally外键ON | 计划 |
+| S4-18 | DB integration / HTTP integration | ready旧整组 | 新requestId+当前代次重新生成 | 生成时旧组保留但不公开；成功整组新ID替换，无混合版本 | 计划 |
+| S4-19 | unit / DB integration | A超时failed，B请求并先成功；Fake A忽略取消 | 最后释放A成功及失败回调 | B的成员/版本/notice/事件不变；仅内部stale诊断 | 计划 |
+| S4-20 | HTTP integration | B ready，持有A确认body | 确认A，再确认B | A409 STALE_LINEUP；B200且不启动讨论 | 计划 |
+| S4-21 | DB integration / HTTP integration | 当前ready，两个观察者 | 并发相同确认、确认后再重复 | 一次确认事件，固定confirmedAt，后者replayed:true | 计划 |
+| S4-22 | HTTP integration | lineup_confirmed | 原生成ID重放及新生成ID | 均409 INVALID_STATE，不改已确认成员 | 计划 |
+| S4-23 | HTTP integration / E2E（4C） | ready已持久化 | 重新GET、重开数据库；4C刷新页面 | 同ID/字段/颜色/order可读，刷新不重复生成 | 计划 |
+| S4-24 | unit / HTTP integration / E2E（4C） | Fake含隐藏键/异常栈/测试哨兵 | 生成失败、GET、检查可见日志/DOM | 无原始输出、内部ID字段或隐藏诊断泄漏；只安全白名单 | 计划 |
+| S4-25 | HTTP integration | 同一生成requestId、同/异基代次，A被B替代 | 重放各body | 当前同键按202/200；异输入409；旧代次409，不重调模型 | 计划 |
+| S4-26 | DB integration / HTTP integration | 进程遗留generating；另有created/ready/confirmed | 启动恢复并查询 | 仅遗留生成失败+事件，其他不变；不自动续跑 | 计划 |
+| S4-27 | unit / DB integration | 两场交错任务、伪造跨场generation/member引用 | 验证及提交 | CAS/复合外键阻止跨讨论串数据 | 计划 |
+| S4-28 | HTTP integration | 全局槽满、受理CAS失败、Provider超时 | 请求/释放资源 | 429不留生成记录；回滚释放槽；有限预算，无无限队列 | 计划 |
+| S4-29 | DB integration | 早期length(topic)库、半表、未知触发器、缺号或checksum变化 | 尝试迁移 | SCHEMA_MISMATCH等明确停止，无“修好”或删除未知数据 | 计划 |
+| S4-30 | HTTP integration | 成功写入失败且失败状态提交也失败 | 完成任务、GET，再恢复启动 | 两次事务均无半数据，进程内503，重启恢复持久化后才接请求 | 计划 |
+| S4-31 | HTTP integration / E2E | 阶段3创建/列表/详情功能及新版DTO | 回归旧created；已生成记录的创建幂等重放 | 原79/18/9相关行为保持，联合解码接受新快照且不放宽未知字段 | 计划 |
+| S4-32 | real-model check | 后续用户授权实际协议/模型、后端安全配置 | 最小阵容请求、结构/超时/取消/修复记录 | 据实记录能力、延迟、格式/多样性问题；不从Fake推断真实质量 | 计划 |
+
+S4-15/17/29均由测试创建独立临时旧库，不使用或清空用户库；故障注入只用于错误路径，正常迁移/HTTP链路真实执行。E2E需4C UI，不能将4B HTTP集成升级称作UI通过。真实模型与人工成员质量未执行；色板数字检查也不是UI验收。

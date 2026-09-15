@@ -50,7 +50,7 @@
 | R27 | A §3.1 | 交付测试代码 | TEST | T16、T20 | 持久化后端/前端单元及局部E2E已交付；完整系统E2E未实现 | 不把此文档等同测试实现 |
 | R28 | A §3.1 | README 含运行指南、环境变量配置、技术选型、主要 API 列表、已完成功能与后续改进 | LOG 清单 | T16、T19 | 已建立当前模块README；完整应用说明待扩展 | 环境变量示例不得含真实值 |
 | R29 | A §3.1 | Git Commit 演进历史层级清晰，可见文档/结构/UI/测试/逻辑等渐进开发 | LOG；AGENTS | T16 | 已建立阶段2基线与阶段3实际提交 | 用户暂定schen/cs064210@163.com；不照抄题面示例伪造提交顺序 |
-| R30 | A §3.2 | 至少 5 段核心原始开发 Prompt，标出 SDD 数据建模/API 契约、DDD 前端组件/页面、TDD 测试与实现、E2E 系统测试/质量闭环 | LOG；原文归档 | T16 | 已归档P0–P4五条主请求，P4含DDD与局部E2E；完整产品E2E交付仍未完成 | 不扩写 SDD/DDD 英文全称；本轮长 Prompt 不能拆分冒充多段 |
+| R30 | A §3.2 | 至少 5 段核心原始开发 Prompt，标出 SDD 数据建模/API 契约、DDD 前端组件/页面、TDD 测试与实现、E2E 系统测试/质量闭环 | LOG；原文归档 | T16 | 已归档P0–P5六条主请求，P4含DDD与局部E2E、P5为阵容设计；完整产品E2E交付仍未完成 | 不扩写 SDD/DDD 英文全称；本轮长 Prompt 不能拆分冒充多段 |
 | R31 | A §3.2 | 每段 Prompt 附 1–2 句说明：意图、挑战、如何引导 AI 修正 | LOG 记录规范 | T16 | 当前记录建立 | 只记录实际发生的纠偏 |
 | R32 | A §3.3 | 1–1.5 页开发过程思路/工作流说明：开发流程、2–3 个真实典型问题及解决路径、对工程化 AI 开发的理解 | LOG 交付清单 | T16 | 后续据实编写 | D05：其中“Claude Code 结合 Deepseek V4 Pro”措辞冲突须确认；不能改写实际工具历史 |
 
@@ -64,7 +64,7 @@
 | D04 | D | 开发用具体模型未核实；应用模型提供商、ID、协议、结构化输出/取消能力均未定 | Codex 是已用开发工具；应用适配器只能声明所需输入输出，不承诺供应商能力 |
 | D05 | D | 题面任意 Vibe Coding 与指定 Claude Code/Deepseek V4 Pro 的差异 | 用户需向出题方确认；不声称获许可，不补造工具记录 |
 | D06 | B（本机实验）/D（支持环境） | 用户已授权Windows10独立Edge优先，必要时匹配官方Chromium的可行性实验 | 不是官方支持认证；受支持环境仍待验证；不自动配置WSL或降级版本 |
-| D07 | B（1B确认） | 仅将确实中断的running/stopping标为failed，保留记录不自动续跑；created/awaiting_confirmation/completed不误伤 | generating_lineup中断恢复到created并提示阵容未生成（C细节），不误归运行失败；不增加跨进程协调或无限重试 |
+| D07 | B（1B确认） | 仅将确实中断的running/stopping标为failed，保留记录不自动续跑；created/awaiting_confirmation/completed不误伤 | generating_lineup原C细节回created，在4A提案修订为lineup_generation_failed+LINEUP_INTERRUPTED（待确认），不误归运行失败；不增加跨进程协调或无限重试 |
 | D08 | C | 同一后端进程、单一本地 SQLite 文件，公开事件持久化并按讨论递增；数据不自动删除 | MVP 无通用消息代理/账户/分布式锁；清理策略以后另行确认 |
 | D09 | D | 用户画像提到“可录制、可回放”的内容素材，但功能清单未定义录制/回放操作 | 本轮不设音视频、时间轴回放、录制导出为验收；持久化文字记录和查询明确纳入 |
 
@@ -82,3 +82,9 @@
 ## 阶段3来源与验收补充
 
 P4及暂定Git身份原文已追加归档，原有Prompt与题面未改。B类授权中文草稿首页/详情、React+Vite、局部E2E、仅frontend-design项目级安装与当前仓库提交。具体三尺寸是本轮验收尺寸，不是题面数字。S3矩阵映射R02/R03/R13/R17/R20/R22/R27；不把草稿观察等同运行中的Agent观察。测试草稿不计入R25的5组话题及阵容。
+
+## 阶段4A来源与冲突登记
+
+P5是B类本轮范围：1 moderator+expertCount expert；职业profession与title分开；系统ID/颜色/时间/版本不由模型控制；确认阵容不得自动开始；只做设计，不实施迁移或调用模型。对应R04/R09/R13/R14/R15/R20/R22/R26，具体设计见[lineup-design.md](lineup-design.md)，S4-01–32全部为未来计划。
+
+C类待确认推荐：沿用generating_lineup/awaiting_confirmation，加lineup_generation_failed/lineup_confirmed；当前代次存Discussion，不另建attempt表；生成中不强制替换，失败新代次可重试；旧阵容暂存但失败不开放确认；严格001接管与002事务重建。状态名、错误码、调色板和文本阈值均非原题原话。旧确认即/start和Role.kind/host约定与本轮要求不一致，已在设计正文明确修订；历史Prompt/阶段2、3报告保持原样，不冒充过去已采用新方案。

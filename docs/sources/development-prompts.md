@@ -1444,3 +1444,420 @@ Prompt 阶段标签如实记录：
 ```text
 署名为schen，邮箱为cs064210\@163.com，目前为暂定
 ```
+
+
+## P5：阶段4A阵容领域与迁移设计
+
+实际收到时间以会话为准；本次归档时间：2026-09-15T12:37:33.652648+00:00。来源：用户附件601957d4-f3e8-4acc-b4e1-affbf1329e24/pasted-text.txt。阶段标签：SDD数据建模/API契约、brainstorming子系统设计。意图：核对真实草稿实现后冻结可评审的阵容边界；不执行4B。原文如下：
+
+```text
+请进入：
+
+【阶段 4A：阵容生成领域设计、非破坏迁移设计与模型边界冻结】
+
+项目根目录：
+D:\实测文件夹
+
+本轮只完成设计和可执行实施规格。
+不实现阵容生成业务代码，
+不调用真实模型，
+不执行数据库正式迁移，
+不进入讨论调度或 SSE。
+
+这是一个新的子系统。
+先使用现有 brainstorming 能力，
+读取真实项目结构和阶段 2、3 已实现代码，
+再形成设计。
+设计完成后停止，等待我确认。
+
+━━━━━━━━━━━━━━━━━━
+一、读取真实项目状态
+━━━━━━━━━━━━━━━━━━
+
+读取：
+- AGENTS.md
+- docs/requirements.md
+- docs/architecture.md
+- docs/contracts.md
+- docs/test-plan.md
+- docs/ui-spec.md
+- docs/stage-2-validation.md
+- docs/stage-3-validation.md
+- 当前正式数据库初始化/访问代码
+- discussion 领域类型、校验、service、repository、HTTP 路由
+- web 中与 discussion snapshot/status 有关的真实类型和界面逻辑
+- 当前 Git 历史和工作区状态
+
+不要只依据之前的总结推测现有字段。
+列出当前真实 discussion schema、状态枚举、
+公开 snapshot 结构和数据库版本情况。
+
+不得修改业务代码。
+
+━━━━━━━━━━━━━━━━━━
+二、本轮需要冻结的领域规则
+━━━━━━━━━━━━━━━━━━
+
+基于题面和既有需求，设计以下阵容模型：
+
+一场讨论包含：
+- 恰好 1 位主持人；
+- expertCount 位专家。
+
+成员至少包含：
+- 稳定 memberId；
+- role：moderator / expert；
+- name；
+- profession；
+- title；
+- stance；
+- color；
+- displayOrder。
+
+职业与 Title 分开保存。
+
+明确区分：
+- 模型生成字段；
+- 系统生成字段；
+- 前端公开字段；
+- 禁止模型控制的字段。
+
+优先采用：
+颜色由系统从固定的、经过 UI 校验的调色板分配，
+而不是由模型自由决定。
+
+如果现有 ui-spec 或前端实现对此已有不同约定，
+先报告冲突，不静默改写。
+
+━━━━━━━━━━━━━━━━━━
+三、生命周期设计
+━━━━━━━━━━━━━━━━━━
+
+评估并设计类似：
+
+created
+→ generating_roster
+→ roster_ready
+→ roster_confirmed
+
+失败路径：
+generating_roster
+→ roster_generation_failed
+
+允许：
+created → generate
+roster_generation_failed → retry
+roster_ready → regenerate
+
+禁止：
+讨论已经进入 running / ending / completed 后重新生成阵容。
+
+生成完成不等于用户确认。
+确认阵容本轮只进入 roster_confirmed，
+不要自动启动讨论。
+
+如现有状态命名不同，
+优先沿用现有命名体系并给出映射，
+不要无必要重命名所有已实现状态。
+
+明确：
+- 每个状态允许哪些 HTTP 操作；
+- 重复操作如何处理；
+- 并发请求如何处理；
+- 页面刷新后的可恢复状态；
+- 服务进程重启时 generating_roster 如何恢复或失败。
+
+━━━━━━━━━━━━━━━━━━
+四、阵容生成版本与迟到结果
+━━━━━━━━━━━━━━━━━━
+
+设计轻量 generation attempt/version 机制。
+
+必须解决：
+
+A 请求开始；
+B 请求之后开始；
+B 先完成并成为当前有效阵容；
+A 后完成时不得覆盖 B。
+
+说明：
+- generationId / version 在哪里生成；
+- 当前有效 generation 如何保存；
+- 迟到结果如何判定；
+- 什么时候可以丢弃；
+- 用户确认时如何确认“当前这一版”；
+- 已确认版本是否还能被旧任务覆盖。
+
+不要引入通用分布式任务平台。
+
+━━━━━━━━━━━━━━━━━━
+五、模型 Provider 边界
+━━━━━━━━━━━━━━━━━━
+
+业务层不能依赖具体模型供应商。
+
+设计一个最小接口，例如概念上的：
+
+RosterGenerator
+generateRoster(input) -> result
+
+明确输入至少包括：
+- discussionId 或业务需要的等价标识；
+- topic；
+- expertCount；
+- 必要的结构化生成约束。
+
+明确业务结果结构。
+
+区分未来：
+- FakeRosterProvider：自动化测试；
+- Real provider adapter：真实模型接入。
+
+本轮不决定未经确认的真实模型 ID，
+不读取 API Key，
+不调用任何模型。
+
+不得让模型直接返回并控制：
+- database ID；
+- discussion status；
+- generation version；
+- createdAt；
+- confirmedAt；
+- 系统颜色分配；
+- 其他系统字段。
+
+━━━━━━━━━━━━━━━━━━
+六、模型输出验证设计
+━━━━━━━━━━━━━━━━━━
+
+明确解析与验证管线：
+
+model raw output
+→ parse
+→ runtime structural validation
+→ business validation
+→ normalization
+→ system field enrichment
+→ database transaction
+
+至少验证：
+- 恰好 1 位主持人；
+- 专家数量恰好等于 expertCount；
+- 必填文本为非空字符串；
+- role 合法；
+- displayOrder 唯一且可预测；
+- 成员不能出现明显重复；
+- 输出不能注入系统字段；
+- 多余未知字段如何处理；
+- JSON/结构无效时如何分类失败；
+- 一次有限修复/重试与普通网络重试如何区分。
+
+不要把“模型输出错误”统一当作 HTTP 500。
+设计清楚：
+- provider transport failure；
+- timeout；
+- invalid structured output；
+- business-invalid output；
+- stale generation result；
+- local persistence failure。
+
+这些错误如何记录、
+哪些用户可见、
+哪些只能内部诊断，
+都要写明。
+
+━━━━━━━━━━━━━━━━━━
+七、数据库非破坏迁移设计
+━━━━━━━━━━━━━━━━━━
+
+当前数据库已经存在阶段 2 的真实草稿结构。
+
+本轮必须设计正式 migration 机制，
+而不是继续依赖删库重建。
+
+评估并设计：
+- schema_migrations；
+- migration 编号；
+- 当前 schema 如何视为 migration 001；
+- 阵容支持作为后续 migration。
+
+阵容表设计需说明：
+- 主键；
+- discussion 外键；
+- generation/version 关联；
+- role；
+- name/profession/title/stance；
+- color；
+- displayOrder；
+- createdAt 等确实必要字段。
+
+同时决定：
+generation attempt 是否需要独立表，
+还是 discussion 中保存当前 generation 信息即可。
+
+优先 YAGNI：
+只有恢复、审计、并发正确性真正需要时才建独立表。
+
+迁移必须满足：
+- 现有草稿不丢失；
+- 原接口在迁移后仍能读取已有草稿；
+- 重复运行 migration 不重复破坏 schema；
+- 迁移失败不留下半完成结构；
+- 外键和必要唯一约束有效；
+- 不清空开发数据库；
+- 测试可在临时数据库上从旧 schema 升级到新 schema。
+
+不要为了迁移引入 ORM，
+除非能证明现有 node:sqlite 无法合理实现。
+
+━━━━━━━━━━━━━━━━━━
+八、API 契约设计
+━━━━━━━━━━━━━━━━━━
+
+根据现有 contracts.md 风格设计最小阵容 API。
+
+至少覆盖概念上的：
+
+- 请求生成阵容；
+- 查询 discussion 时返回当前阵容状态/结果；
+- 确认当前阵容；
+- 在允许状态下重新生成。
+
+路径和字段以现有 API 命名风格为准，
+不要机械采用示例路径。
+
+明确：
+- request body；
+- response；
+- HTTP status；
+- 幂等/重复调用；
+- generationId/version；
+- stale confirmation；
+- 非法 discussion 状态；
+- provider 失败；
+- validation 失败。
+
+本轮不要设计讨论发言 API、SSE 或通用任务管理 API。
+
+━━━━━━━━━━━━━━━━━━
+九、未来 4B 的 TDD 验收矩阵
+━━━━━━━━━━━━━━━━━━
+
+只设计用例，不实施。
+
+至少规划：
+
+1. created 草稿可以请求生成；
+2. 非法 discussion 状态不能生成；
+3. 生成时不改变 topic/expertCount；
+4. Fake provider 正常返回 1 主持人 + N 专家；
+5. 少专家、多专家、无主持人、双主持人被拒绝；
+6. 空字段、非法 role、重复成员被拒绝；
+7. 系统颜色由系统分配；
+8. provider timeout；
+9. provider transport failure；
+10. 非 JSON/结构化输出失败；
+11. business-invalid 输出；
+12. 重试上限生效；
+13. 无效结果不形成半套阵容；
+14. 完整阵容原子保存；
+15. 原来的草稿迁移后仍能读取；
+16. migration 重复执行安全；
+17. migration 中途失败回滚；
+18. regenerate 整套替换而非部分覆盖；
+19. generation A 晚于 B 返回时不能覆盖 B；
+20. 只能确认当前 generation；
+21. 重复确认行为符合契约；
+22. roster_confirmed 后不能再生成；
+23. 页面刷新后 roster_ready 数据可重新读取；
+24. provider 原始输出和隐藏诊断不进入公开 snapshot。
+
+将每条标记未来属于：
+unit / DB integration / HTTP integration / E2E / real-model check。
+
+不要把这些用例标为已运行。
+
+━━━━━━━━━━━━━━━━━━
+十、前端影响范围
+━━━━━━━━━━━━━━━━━━
+
+只设计，不改 React。
+
+说明阶段 4B/4C 后前端需要增加：
+- 生成阵容动作；
+- generating 状态；
+- generation failed；
+- roster ready；
+- 主持人与专家卡片；
+- 确认阵容；
+- 重新生成；
+- stale/冲突提示。
+
+保持阶段 3 已完成的创建、列表、详情功能稳定。
+
+不要现在设计完整演播厅，
+也不要提前添加发言状态、Transcript、共识分歧。
+
+━━━━━━━━━━━━━━━━━━
+十一、Skills 和设计过程
+━━━━━━━━━━━━━━━━━━
+
+本轮使用现有：
+- brainstorming。
+
+这是新子系统，按 architectural 路径处理。
+
+在设计得到确认前：
+- 不调用 test-driven-development；
+- 不调用 frontend-design；
+- 不写业务实现；
+- 不执行正式 migration。
+
+设计完成后：
+1. 更新受影响的 architecture/contracts/test-plan；
+2. 如 Superpowers 流程要求，
+   将该子系统的已确认设计形成独立 design spec；
+3. 进行自检：
+   - 无 TBD/TODO；
+   - 状态无冲突；
+   - API 与数据库字段一致；
+   - migration 可从现有 schema 演进；
+   - 模型边界不依赖具体供应商；
+   - 没有扩张到调度/SSE；
+4. 展示设计摘要供我确认。
+
+本轮不要进入 writing-plans 的实施计划，
+直到我明确批准设计。
+
+━━━━━━━━━━━━━━━━━━
+十二、Git 与记录
+━━━━━━━━━━━━━━━━━━
+
+先确认工作区干净和当前真实提交历史。
+
+本轮设计文档修改可以形成一个真实设计提交，
+但只有在现有仓库身份仍是我明确授权的身份时执行。
+
+不要修改阶段 2、3 的历史提交。
+不要 squash、rebase 或倒填日期。
+
+追加本轮真实 Prompt 和设计说明，
+旧 Prompt 保持原样。
+
+最终回复只包含：
+
+1. 当前真实 schema/状态/API 摘要；
+2. 推荐的阵容领域模型；
+3. 推荐的生命周期；
+4. generation/version 并发处理方案；
+5. Provider 边界；
+6. migration 方案；
+7. API 契约摘要；
+8. 未来 4B TDD 测试矩阵摘要；
+9. 与现有实现发现的冲突；
+10. Git 状态与设计文档位置；
+11. 需要我确认的少量设计决定。
+
+完成后停止。
+不要实现阶段 4B。
+```

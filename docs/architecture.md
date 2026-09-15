@@ -2,6 +2,8 @@
 
 阶段1A架构在1B按用户授权修订。技术路线、默认限制及运行/收尾重启语义为B类已确认基线；调度细节仍为C类建议，待确认项见 [需求登记](requirements.md)。契约的唯一字段定义见 [contracts.md](contracts.md)。
 
+阶段4A阵容子系统提案见[lineup-design.md](lineup-design.md)，待用户确认；下文与阵容有关的设计按该提案修订，尚未实现。后续发言/调度/SSE原设计仅保留背景，不属本轮冻结范围。
+
 ## 模块与数据访问边界
 
 | 模块 | 职责 | 边界 |
@@ -13,7 +15,7 @@
 | 校验与公开投影 | 校验输入、模型输出、跨记录引用；将白名单内容变为 PublicSnapshot/PublicEvent | 模型不提供隐藏推理给客户端；不把原始响应当错误详情 |
 | SQLite 数据访问 | 创建、原子迁移、提交发言/综合、读取快照/事件 | 小型项目专用操作，无通用 ORM 框架；阶段2选用node:sqlite，不向业务泄露 Statement/Database 对象 |
 
-候选数据访问操作：createDiscussion、beginLineup、commitLineup、confirmAndStart、commitUtterance、commitSynthesis、requestStop、finishDiscussion、readSnapshot、readPublicEvents。事务冲突返回明确的版本/状态冲突，由服务层处理；驱动选型不改变 HTTP 契约。
+候选数据访问操作：createDiscussion、beginLineup、commitLineup、confirmLineup、commitUtterance、commitSynthesis、requestStop、finishDiscussion、readSnapshot、readPublicEvents。事务冲突返回明确的版本/状态冲突，由服务层处理；驱动选型不改变 HTTP 契约。
 
 建议单一本地后端进程拥有 SQLite 文件和协调器；开发前后端独立进程，可用 Vite 代理同源访问后端。不得同时启动两个后端共享同一运行数据库。不是多进程协调系统，进程所有权检测方式在 1B 运行准备时明确。
 
@@ -34,7 +36,7 @@ erDiagram
 | 实体 | 最小字段与约束 | 持久化策略 |
 |---|---|---|
 | Discussion | id、topic、expertCount、status、version、lineupRevision、confirmedLineupRevision、transcriptVersion、lastEventId、synthesisSourceTranscriptVersion、synthesisUpdatedAt、runEpoch、createdAt/updatedAt/startedAt/endedAt、stopReason、createRequestId及输入指纹、lastNotice | 状态/计数持久化；runEpoch、输入指纹为内部字段；创建 requestId 唯一 |
-| Role | id、discussionId、kind(host/expert)、name、title、stance、color、status、publicFocus | 角色和最近公开状态持久化；状态是当前任务的投影，重启要纠正为 idle |
+| LineupMember（snapshot.roles） | memberId、role(moderator/expert)、name、profession、title、stance、color、displayOrder；内部discussion_id/generation_id/generation_version/name_key/created_at | 阶段4A提案；整组替换，生成代次和确认存Discussion；不提前增加运行status/publicFocus |
 | Utterance | id、discussionId、roleId、seq、sentences、replyToUtteranceIds、createdAt | 已校验的公开发言追加保存，不修改历史正文；discussionId+seq 唯一 |
 | Finding | id、discussionId、kind(consensus/disagreement)、text、sourceTranscriptVersion | 保存当前有效的一组条目；每次合格综合原子替换，旧版在公开事件中留痕 |
 | FindingEvidence | findingId、discussionId、utteranceId | 至少一条引用；分歧建议至少两个不同角色的相异发言，不能仅凭模型标签认定存在分歧 |
@@ -51,26 +53,19 @@ transcriptVersion 每新增一条普通公开发言加 1，与最后一条 seq �
 
 五组样例将保存为可审阅的 SQL/JSON 数据及初始化入口：每组一个不同话题、一个主持人、expertCount 位专家，字段完整、立场差异合理。若补充 transcript，必须标注为样例而非真实模型运行证据；样例不会在运行模式里作为预生成剧本播放。
 
-## 生命周期和重复启动
+## 生命周期与确认边界（阶段4A待确认提案）
 
 ```mermaid
 stateDiagram-v2
-  [*] --> created
-  created --> generating_lineup: 请求生成阵容
-  generating_lineup --> awaiting_confirmation: 校验通过并保存
-  generating_lineup --> created: 有限尝试失败，可重试生成
-  awaiting_confirmation --> running: 确认当前阵容且原子启动
-  running --> stopping: 用户结束或达到边界
-  stopping --> completed: 总结已完成或明确不可用
-  running --> failed: 不可恢复错误
-  generating_lineup --> created: 阵容生成中断，允许重新请求
-  running --> failed: 进程重启中断
-  stopping --> failed: 进程重启中断
-  completed --> [*]
-  failed --> [*]
+  created --> generating_lineup: 生成
+  generating_lineup --> awaiting_confirmation: 完整阵容提交
+  generating_lineup --> lineup_generation_failed: 有限失败或重启中断
+  lineup_generation_failed --> generating_lineup: 用户重试
+  awaiting_confirmation --> generating_lineup: 用户重新生成
+  awaiting_confirmation --> lineup_confirmed: 确认当前版本
 ```
 
-创建与生成阵容是两个操作。确认与开始合并为一个 `/start` 原子操作：仅当 status=awaiting_confirmation 且 lineupRevision 匹配时设置 confirmedLineupRevision、startedAt、status=running、runEpoch+1。同一短写事务内检查running/stopping总数与容量，避免两场同时start绕过上限。受影响行数只能是 1；重复请求返回已有状态，绝不再次安排开场或任务。若数据库提交成功但进程随即退出，重启按中断语义处理，不隐式再次调用模型。
+旧版“确认并开始”的confirmAndStart方案由P5明确拆开：确认只保存lineup_confirmed/confirmedLineupRevision/confirmedAt，startedAt保持null，无开场或运行任务。后续运行子系统只能从已确认阵容进入，其开始/停止接口不在4A定义。完整状态权限、同ID重放、CAS和重启详见lineup-design第3–4节；此处不保留相反的旧确认门槛。
 
 多个观察者：不同浏览器/SSE 连接读取同一讨论，GET/SSE 都无启动副作用，页面关闭也不停止讨论。多个讨论：每个拥有不同实体、上下文、事件序列、任务和取消令牌；共享的只有全局调用上限与 SQLite 短写事务。
 
@@ -153,7 +148,7 @@ sequenceDiagram
 
 用户点击结束后不再接受专家发言；总结含排队/调用/重试的总等待不超过进入stopping后60秒，超期取消并标记unavailable；总结迟到也不能覆盖已结束状态。故 UI 先显示“正在结束”，然后才显示最终总结或失败提示。致命错误或进程中断为 failed，不能包装成正常完成。
 
-**D07 已确认重启语义：** created、awaiting_confirmation、completed、failed保持已有数据与状态；仅确实中断的running/stopping在下一次后端启动接收请求之前转为failed，runEpoch+1、角色状态重置idle，并保存公开中断事件。generating_lineup不归为运行中断失败；C类处理细节为恢复到created、使旧生成任务失效并提示阵容未生成，由用户重新请求。保留已有阵容/发言/综合，提示“上次运行中断，可查看记录并新建讨论”。不自动续跑、不复原远端任务、不提供同一讨论二次运行。旧观察者重连得到修正后的快照/事件。
+**D07 已确认重启语义：** created、awaiting_confirmation、lineup_confirmed、lineup_generation_failed、completed、failed保持已有数据与状态；仅确实中断的running/stopping在下一次后端启动接收请求之前转为failed，runEpoch+1、角色状态重置idle，并保存公开中断事件。generating_lineup不归为运行中断失败；阶段4A提案修订此前C细节：恢复为lineup_generation_failed、使旧生成任务失效并给LINEUP_INTERRUPTED，由用户重新请求。保留已有阵容/发言/综合，提示“上次运行中断，可查看记录并新建讨论”。不自动续跑、不复原远端任务、不提供同一讨论二次运行。旧观察者重连得到修正后的快照/事件。
 
 模型调用始终在数据库事务之外；只在读取一致快照、申请状态迁移、验证并落盘结果时用短事务。前端只有在持久化成功后收到公开事件，无法提交的结果不得先展示。
 
@@ -174,3 +169,21 @@ sequenceDiagram
 创建在事件处理函数中触发；同步busy防重入，冻结规范化输入+requestId。失败保留请求；编辑输入解除旧请求，成功后显式再次创建生成新ID。提交时采用服务端返回快照，不拼装假草稿。列表刷新独立捕获错误，不抹去已保存状态；列表/详情分别递增查询代次，旧success/error/finally均不能覆盖当前结果。刷新不持久化未决请求ID或表单，因此结果不确定时先查全部列表；没有自动POST恢复、轮询或SSE。
 
 Playwright启动正式编译后端、Vite及新建独立SQLite；正常读取链路不替换，故障场景只在明确标注的网络边界注入。测试进程由Playwright管理，不复用个人浏览器上下文或既有服务。
+
+## 阶段4A数据演进范围
+
+推荐001接管已核实的阶段2两表，002事务重建discussions以放宽CHECK并增加当前代次/确认字段，新建lineup_members；不新建attempt平台，不删除用户数据库。新状态与字段仍未实现。详细schema、复合外键、旧阵容保留策略、恢复和失败回滚以[lineup-design.md](lineup-design.md)为唯一细节规格。
+
+```mermaid
+erDiagram
+  DISCUSSIONS ||--o{ LINEUP_MEMBERS : last_successful_lineup
+  DISCUSSIONS ||--o{ PUBLIC_EVENTS : atomic_public_changes
+  SCHEMA_MIGRATIONS {
+    int id PK
+    string name
+    string checksum
+    string applied_at
+  }
+```
+
+图中generation不另建实体：当前尝试与最后成功阵容的ID/版本分别存在Discussion中。模型输出先解析/结构与业务验证/规范化，再由系统补字段，最后CAS短事务写整组成员及状态事件；Provider等待不持有写事务。所有4A规格待确认，本轮只做文档自查。

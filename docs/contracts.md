@@ -2,19 +2,21 @@
 
 阶段1A协议草案在阶段2局部落实：仅POST创建、GET单条与列表已实现，其余HTTP/SSE仍为设计，未实现。技术基线已确认，默认运行参数/总结句数已在阶段1B获得用户确认；其余具体路径、字段、校验阈值和错误码仍为C类设计建议。使用 `/api` 前缀；所有正文 UTF-8，JSON 是传输格式，不是直接显示给用户的文本。
 
+阶段4A待确认提案：阵容字段和HTTP增量以本文末节及[lineup-design.md](lineup-design.md)为准。旧确认即启动设计已撤销为本轮推荐基线；运行/SSE段仅为后续设计背景，本轮不新增其接口。
+
 ## 标识、版本与公开类型
 
 | 字段/类型 | 定义 |
 |---|---|
 | discussionId、roleId、utteranceId、findingId | 服务端生成的不透明 UUID；查询及引用必须验证归属，UUID 本身不提供授权 |
-| status | created / generating_lineup / awaiting_confirmation / running / stopping / completed / failed |
+| status | created / generating_lineup / awaiting_confirmation / lineup_generation_failed / lineup_confirmed；running / stopping / completed / failed属于未来运行阶段 |
 | version / dataVersion | 同一场公开数据版本：快照字段为 version，事件字段为 dataVersion；每次原子变更加1，不保证与事件数相同 |
 | eventId / lastEventId | 同一场持久化公开事件正整数序号；初始快照无事件时 lastEventId=0；不同场编号可重复 |
 | transcriptVersion / seq | 公开普通发言的版本/序号；初始0，每条发言加1，Summary 不计入 |
-| lineupRevision | 阵容版本；初始0，有效阵容生成完成变为1；MVP 暂不支持确认页编辑和换人 |
-| confirmedLineupRevision | 尚未确认时为 null，成功 start 后固定为确认的版本 |
+| lineupRevision | 最后成功阵容的generationVersion；初始0，可跳号；可整套重新生成，不支持编辑/换人 |
+| confirmedLineupRevision | 尚未确认时为 null，成功/lineup/confirm后固定为当前版本，不自动start |
 | sourceTranscriptVersion | 综合/总结依据的 transcript 版本，由后端请求上下文设置 |
-| Role | id、discussionId、kind(host/expert)、name、title、stance、color、status(idle/preparing/speaking)、publicFocus(string或null) |
+| LineupMember（roles元素） | memberId、role(moderator/expert)、name、profession、title、stance、color、displayOrder；不含未来运行字段 |
 | Utterance | id、discussionId、roleId、seq、sentences(1–2项)、replyToUtteranceIds、createdAt |
 | Finding | id、kind(consensus/disagreement)、text、evidenceUtteranceIds(至少1项) |
 | Synthesis | sourceTranscriptVersion、items(Finding数组)、updatedAt；初始null |
@@ -34,15 +36,13 @@ PublicSnapshot 是明确字段白名单，不能直接展开数据库行。内�
 |---|---|---|---|
 | GET /api/discussions | 首页列表；query：status=active或all（默认active） | 200：items 数组，每项 discussionId/topic/expertCount/status/version/updatedAt；active 包含 generating_lineup/awaiting_confirmation/running/stopping；updatedAt降序、同时间discussionId升序（阶段2补充的C类排序规则） | 400 无效过滤条件；列表读取不创建/启动任务。MVP 全量列表，分页待需要时设计 |
 | POST /api/discussions | 创建草稿；body：topic、expertCount、requestId(客户端UUID) | 首次201；重复同输入200；body：discussionId、snapshot、replayed | topic去首尾空白后1–500字符；expertCount省略时服务端默认4，显式值须为整数1–8且另加主持人；null/字符串/布尔/小数/越界拒绝；requestId唯一，重复且输入不同409 IDEMPOTENCY_CONFLICT；不自动调用模型 |
-| POST /api/discussions/{discussionId}/lineup | 请求动态生成；空JSON对象 | created首次受理202；正在生成202；awaiting_confirmation返回现有快照200；body为快照 | 原子 created→generating_lineup；并发/重试不能重复安排任务。running及其后状态409 INVALID_STATE；404不存在；全局工作队列无空位429 CAPACITY_REACHED。生成失败异步回 created+notice，可再次请求 |
 | GET /api/discussions/{discussionId} | 阵容、观察、结束记录的初始/重置快照 | 200快照；Cache-Control: no-store | 404不存在；无启动、确认、模型调用等副作用 |
-| POST /api/discussions/{discussionId}/start | 用户确认当前阵容并开始；body：lineupRevision | 首次202快照；相同已确认版本重复200当前快照 | 未完成生成409 LINEUP_NOT_READY；版本错误409 STALE_LINEUP；已启动且版本相同即使已结束也只返回现状，不重新启动；运行槽满429 CAPACITY_REACHED；生成失败尚无有效阵容不能开始 |
 | POST /api/discussions/{discussionId}/stop | 提前结束运行；空JSON对象 | running首次202快照；stopping为202；completed/failed为200 | 每个讨论最多安排一次终结总结；重复请求不增加runEpoch、不重复总结。created/generating_lineup/awaiting_confirmation返回409 INVALID_STATE，不将离开确认页等同停止 |
 | GET /api/discussions/{discussionId}/events | 订阅本场公开事件；query after=非负整数；自动重连可带Last-Event-ID | 200 text/event-stream；具体见下 | 404不存在；400无效游标/UUID/跨讨论游标。断线与重新订阅都不启动/停止讨论 |
 
-没有独立的 `/confirm` 和第二个启动按钮；“确认并开始”一个原子操作避免确认成功但重复启动的歧义。进入stopping起60秒内完成总结（包含排队、调用、重试），否则summary.status=unavailable并进入completed；迟到总结拒收。开场失败后 status=failed；重复 start 返回该现状，不能用重复请求实现未设计的重跑功能。
+阶段4A新增生成/确认的契约见末节；confirm与start分离，只确认不启动。未来开始接口需在后续运行设计明确，不把旧/start合并行为继续当作有效阵容契约。旧stop/events尚未实现，本轮没有设计增量。
 
-生成阵容、start 和 stop 的202仅表示受理，之后依赖快照/SSE观察成功或失败，不等同模型成功。HTTP连接在受理后断开不取消任务。客户端写操作失败时可查询快照再决定重试；创建始终复用原 requestId，防止网络错误产生重复讨论。
+202只代表受理，HTTP断开不撤销已提交生成；GET查询不触发任务。阵容命令幂等不同于创建幂等，详见末节。
 
 ## 运行时校验
 
@@ -51,7 +51,7 @@ PublicSnapshot 是明确字段白名单，不能直接展开数据库行。内�
 | 边界 | 校验规则（长度均为Unicode码点，数字为C建议） |
 |---|---|
 | HTTP | 限JSON正文16KiB；拒绝null/数组充当对象；UUID格式、整数范围、枚举、未知字段、空白topic；expertCount不可是字符串/小数/NaN；持久化规范化topic |
-| 阵容输出 | 对象只含roles数组，每项kind/name/title/stance；恰好1位host及expertCount位expert；name 1–64、title 1–80、stance 1–200，去首尾空白且非空，显示名不重复。id及颜色由后端赋值，颜色从经对比度检查的角色配色集合选择；模型不可自行设discussionId |
+| 阵容输出 | 对象只含roles，每项role/name/profession/title/stance；1 moderator+N expert；名称1–64、profession/title各1–80、stance1–200码点；trim后非空、规范化姓名判重；memberId/颜色/displayOrder/版本/时间由系统生成。详细管线与分类见lineup-design第5节 |
 | 意愿输出 | wantsToSpeak布尔；intent仅answer/supplement/rebuttal/question；replyToUtteranceIds为本场已存在ID数组；publicFocus为null或1–80字符的独立公开关注点；不接受reasoning/score/debug等额外字段 |
 | 普通发言输出 | sentences恰好1–2个非空纯文本字符串，每项建议至多160字符；replyToUtteranceIds只引用本场请求快照中已有发言；后端设置roleId/seq/版本。拒绝明显序列化对象/数组或HTML作为“公开句子”，不执行HTML；句界除数组约束外做中文终止标点检查，缩写/引文边界列入人工质量检查 |
 | 共识/分歧输出 | items建议至多12；kind合法、text 1–300字符、evidenceUtteranceIds非空且全部属于本场请求快照；服务端生成findingId和sourceTranscriptVersion。分歧验证不同角色证据，空items合法且不虚构共识 |
@@ -63,6 +63,8 @@ PublicSnapshot 是明确字段白名单，不能直接展开数据库行。内�
 纯文本显示使用框架转义，不使用 dangerouslySetInnerHTML；禁止以“调试模式”把原始输出展示给用户。公开关注点由专门字段生成和筛选，不从隐藏推理或内部评分重写而来。schema不能完全证明文本语义安全，仍需T13恶意输出样例与T18人工检查。
 
 ## SSE 公开事件
+
+以下是早期未来SSE设计，尚未实现；阶段4A不新增SSE，阵容状态变更仅按lineup-design第7节复用已存储的discussion.status_changed。表中的lineup.ready不在4B产生，未来实现SSE时再统一消费者契约，不能把此表当作4B需要新增推送的授权。
 
 持久化事件统一载荷：discussionId、eventId、dataVersion、type、occurredAt、payload。SSE 的 `event` 行使用下表 type；`id` 行为 `discussionId:eventId`，`data` 行是上述公开对象。每个事件最多只归属一场讨论。
 
@@ -124,3 +126,42 @@ HTTP错误体只含 error：code、message、retryable、action、requestId。re
 - 请求10秒超时是前端C类等待边界，不等同未来模型超时；超时不能证明后端未提交。尚未确认的创建信息仅存在内存，刷新后须先查列表而非自动重发。
 - 列表和详情各有本地查询代次，防旧响应及finally覆盖；该代次不是服务端version或eventId，不写入API。
 - 本轮浏览器采用固定安全中文文案映射HTTP错误状态；不信任或直接渲染响应error.message、HTML或原始JSON。成功正文需运行时校验，话题通过React文本节点显示。本地时间显示只转换格式，API仍使用UTC ISO毫秒。
+
+## 阶段4A阵容HTTP增量（待确认、未实现）
+
+详细领域和事务条件见[lineup-design.md](lineup-design.md)。不改变已有创建/单条/列表路径；新增两个写操作，不新增任务查询或发言API。写操作统一应用JSON对象、16KiB、拒绝未知字段、同源loopback Origin保护；这些保护当前只装在创建路由，4B必须明确覆盖新增路由。
+
+### 请求与返回
+
+| 方法/路径 | 精确body | 成功响应 | 状态与重复 |
+|---|---|---|---|
+| POST /api/discussions/{discussionId}/lineup | requestId: UUID；expectedGenerationId: UUID或null，两键必填 | 首次受理202：{discussionId,generationId,generationVersion,snapshot,replayed:false} | created使用null；失败重试/ready重新生成使用当前generationId。新代次只在CAS和状态校验通过时受理；原topic/count从DB读取 |
+| 同一/lineup请求重放 | 相同requestId和expectedGenerationId | 仍在生成202；ready/生成失败200；同样五字段，replayed:true、snapshot为当前持久化快照 | 不增加代次/版本/事件，不再调用Provider；生成失败后若要真正重试，必须新ID+当前generationId |
+| POST /api/discussions/{discussionId}/lineup/confirm | generationId: UUID；lineupRevision: 正安全整数，两键必填 | 首次及相同版本重放均200：{discussionId,snapshot,replayed} | 只从awaiting_confirmation确认当前双版本，进入lineup_confirmed；重复确认同版本replayed:true，不更新时间或启动任务 |
+| GET /api/discussions/{discussionId} | 无body | 200：扩展的公开snapshot | 从一致读事务读取讨论+成员，刷新不调Provider、不修复状态 |
+| GET /api/discussions?status=active或all | 无body | 200：原六字段items | 保留原active集合和排序；lineup_generation_failed/lineup_confirmed仅在all，全部状态使用准确文案 |
+
+generationId与requestId均为UUID：前者服务端UUIDv4，后者客户端UUID，输入校验沿用现有UUID规则及小写规范化。expectedGenerationId只用于并发比较，不等于客户端决定新ID。新生成成功返回的generationVersion由系统分配，从1递增。服务端在事务提交前预留本进程调用槽，CAS失败/回滚则释放；无槽429且不写业务数据。不承诺网络层“恰好一次”，只承诺这些幂等和CAS范围。
+
+建议请求示例（占位UUID仅说明，不能固定复用创建不同操作）：首次生成body为requestId+expectedGenerationId:null；确认时取GET当前lineupGeneration.generationId和lineupRevision；重新生成另取新requestId+当前generationId。生成接口同时承担重试和整套重新生成，不增设同义/regenerate。
+
+### 快照兼容与不变量
+
+- **status=created**：保留阶段3严格19字段及初始值，省略新键；已迁移旧草稿通过同一路径读取仍是该形态。
+- **其他四个阵容状态**：保留原19键，新增lineupGeneration和confirmedAt两个键。lineupGeneration精确为{generationId,generationVersion,startedAt,finishedAt}，映射current_generation_id/generation_version/generation_started_at/generation_finished_at；startedAt非null，finishedAt生成中null、其余非null。此处nested startedAt是生成时间，外层startedAt仍为null（讨论未运行）。
+- lineupRevision映射lineup_revision；confirmedLineupRevision映射confirmed_lineup_revision；confirmedAt映射confirmed_at，仅lineup_confirmed非null。roles仅ready/confirmed返回LineupMember八公开字段，按displayOrder排序；生成中/失败返回[]，即使DB保留上版也不投影。ready/confirmed时lineupRevision=lineupGeneration.generationVersion；生成/失败时lineupRevision≤该值。
+- transcriptVersion=0，utterances=[]，synthesis/summary/stopReason/外层startedAt/endedAt均null。lastNotice仅失败时由固定错误码映射{code,message,retryable,action}，其他状态null。version/lastEventId不再限定1，均正安全整数；createdAt不变，updatedAt由实际公开事务推进。
+- 不公开generation_request_id/generation_base_id、旧隐藏成员、name_key、Provider内容、attempt计数、异常栈、库路径。成员只有memberId/role/name/profession/title/stance/color/displayOrder；没有id/kind别名或虚构运行状态。
+- 创建同requestId重放时仍返回当前discussion快照，讨论可能已进入阵容状态；新版创建响应解码必须允许该联合类型，不能强断言created。新建草稿的首次201仍严格created。讨论topic/count不可被阵容命令改变。
+
+### 错误优先级与公开边界
+
+先校验请求形状/UUID/整数（400 INVALID_INPUT），再定位讨论（404 NOT_FOUND）。已确认或未来运行终态先409 INVALID_STATE，避免旧生成ID绕过锁定。对生成中/ready/失败：先匹配当前requestId，基代次不同409 IDEMPOTENCY_CONFLICT；同键同输入按表重放；否则基代次不匹配409 STALE_GENERATION，匹配但正在生成409 GENERATION_IN_PROGRESS。created正常路径仅允许expectedGenerationId=null。
+
+确认在created/generating/生成失败时409 LINEUP_NOT_READY；ready/confirmed双版本不匹配409 STALE_LINEUP；ready匹配则原子确认；confirmed匹配200重放；未来运行状态409 INVALID_STATE。旧确认绝不确认用户未看过的新阵容。
+
+请求合法但没有调用槽429 CAPACITY_REACHED（true/try_again）；受理前已识别存储故障503 STORAGE_UNAVAILABLE（true/try_again）；未知内部异常500 INTERNAL_ERROR（true/try_again）。400/404/409仍false/none。均沿用error.code/message/retryable/action/requestId五字段，关联requestId是服务端错误追踪UUID，不是幂等键。
+
+Provider超时、传输/结构/业务错误发生在202之后：不补写HTTP错误、不统一500，而是落为lineup_generation_failed，GET200带安全notice。已知永久配置失败用LINEUP_PROVIDER_CONFIGURATION（retryable=false/action=none）；暂时不可用用LINEUP_PROVIDER_UNAVAILABLE（true/try_again）；其他LINEUP_TIMEOUT/LINEUP_INVALID_STRUCTURE/LINEUP_INVALID_MEMBERS/LINEUP_STORAGE_FAILED/LINEUP_INTERRUPTED均true/try_again。客户端按允许的code映射文案，不显示任意error.message或Provider正文。
+
+同时无法保存结果与失败状态时，事务回滚并由内存标记当前讨论不可用，相关请求503；既有持久化generating状态由下一次启动恢复，不在GET内写库或虚构failed。该故障需要处理本地存储问题；重复GET不会修复磁盘。迟到结果仅内部分类STALE_GENERATION_RESULT，无公开事件/notice。原有created错误契约保持不变。
