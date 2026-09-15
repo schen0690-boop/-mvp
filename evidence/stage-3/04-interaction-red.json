@@ -1,0 +1,42 @@
+{
+  "name": "04-interaction-red",
+  "cwd": "D:\\实测文件夹",
+  "program": "D:\\nodejs\\node.exe",
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "web/vitest.config.ts",
+    "web/tests/controller.test.ts"
+  ],
+  "startedAt": "2026-09-15T12:01:04.5519855+00:00",
+  "endedAt": "2026-09-15T12:01:05.6627704+00:00",
+  "timedOut": false,
+  "exitCode": 1,
+  "stdout": "\n RUN  v5.0.1 D:/实测文件夹\n\n ❯ web/tests/controller.test.ts (0 test)\n\n Test Files  1 failed (1)\n      Tests  no tests\n   Start at  20:01:05\n   Duration  341ms (worker 95%, environment 5%)\n\n",
+  "stderr": "\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  web/tests/controller.test.ts [ web/tests/controller.test.ts ]\nError: Cannot find module './fixtures.js' imported from D:/实测文件夹/web/tests/controller.test.ts\n ❯ web/tests/controller.test.ts:4:1\n      2| import { Controller } from '../src/controller.js';\n      3| import type { Api, CreateInput, CreateResult, DraftSnapshot, DraftList…\n      4| import { snapshot, id } from './fixtures.js';\n       | ^\n      5| function deferred<T>() {\n      6|   let resolve!: (value: T) => void; let reject!: (error: Error) => voi…\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n",
+  "sourceHashes": {
+    "src\\db\\database.ts": "A0A0B8B32B562F955CD5D19935E905818CA44A28F5A2C8017478DB8BDD7E5809",
+    "src\\db\\sqlite-drafts.ts": "1918179BB655AF1D2B635DD57EEADF090C972516D5336E3CF3F80C18882CA99E",
+    "src\\domain\\drafts.ts": "5550A4572771F36B5A1C9EAED152F63F8C5B7C0E66681790A0C54A488C3600D7",
+    "src\\domain\\errors.ts": "6829B6C518174D7E047EC770D3523AD4D5745F20E1D13B078F3D24B582400887",
+    "src\\domain\\input.ts": "398AD18FF1637ECF6D9B84AF7E2294FB98B262F2A9022A54883F1BCF77750563",
+    "src\\http\\app.ts": "3FD7F19ADDC63AD3FADCB60EDA1BC0C6E4D256D4AF45A7684388B7409EFBF5CA",
+    "src\\init-db.ts": "25DD035C71B96D6C44A5DB5D31554B22F5E8BE7D6784AA498B7092EB1FA5066F",
+    "src\\runtime.ts": "08E8B406BE9322262A7E9EC28952EF6690AD7DCB5A7B7C804A8F5827C4CC568A",
+    "src\\server.ts": "441AC6DED4EC39FC270258CF80A4E389403468B88518084613A60E4FC854BAE6",
+    "tests\\helpers\\database.ts": "865AFBEEDC435D1E0D8DE38818C792A2FF7AF38F75D2BC8E9EDDADEC952E321C",
+    "tests\\integration\\drafts.test.ts": "C77716D5517EE81AF285933166BD15D47029E3E2ED3D5FF5A6039CE875F6355B",
+    "tests\\integration\\http.test.ts": "F9FA756378B0F5DD8A49B4EB74CB0A9E1CCC8730B86DF66A41C17B7BC65DD497",
+    "tests\\integration\\list.test.ts": "F8C1CEBB34616E657EC224ED9A010714E7B336FEE5AA5337281667DB55433F93",
+    "tests\\integration\\schema.test.ts": "0A2F369FBCD81742233F2E2B5876D07FE6D0AF6DBF54A9FA43AD1C429E2EC8B2",
+    "tests\\unit\\input.test.ts": "1688220685BE3ECC20EA453F8DAB6398B1A0CE6918012419DDB3B27DD4C80BEA",
+    "web\\src\\api.ts": "A30FBB5A86336D1C47575136783FA4DAC35F9F358756EF904391CE27FC1BE3F4",
+    "web\\src\\controller.ts": "749F3791EFC083A57F9ED92900BEFBC1A2A364C1F482874D77EF0B90A2B05E97",
+    "web\\tests\\api.test.ts": "673484B5AC9AB7BAB1187E6DCF014565F114D3861CA50BF62E180D713B8718C3",
+    "web\\tests\\controller.test.ts": "AC74B26DA73F18E7EF7F362D360AA9517E42F6F370A54D5ECC0345B0F42E5097",
+    "web\\tsconfig.json": "32E594E1EE4F929AFEDED0E5E0F2D01A862B3829E1C9B3F51F835EAF6382558C",
+    "web\\vite.config.ts": "23408A3305A3E673123A716D5FBDBAFB5A16469A803A3E801EF4EDA4A9E06348",
+    "web\\vitest.config.ts": "6BF014F128CF6B31B7EDDFC9AD17F58156BDFB311DA22F1A92A145D5FCD91184"
+  }
+}

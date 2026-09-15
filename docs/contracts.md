@@ -115,3 +115,12 @@ HTTP错误体只含 error：code、message、retryable、action、requestId。re
 - 400包括JSON格式/对象形状错误、未知字段、人数/话题/UUID非法、超过16KiB、Content-Type错误、Origin不允许及不支持的正文编码。所有错误沿用error五字段；400/404/409为retryable=false、action=none；500为retryable=true、action=try_again。错误关联requestId由服务端另行生成，与创建幂等键职责不同。
 - 写操作仅application/json；无Origin的本地客户端允许；带Origin只允许HTTP同源loopback，未启用跨域访问。公开响应均no-store。未实现路径返回安全404。
 - 话题1–500码点规则由运行时执行；SQLite仅做1–2000字节的存储保护，避免其文本length在U+0000处停止造成与业务规则不一致。正文不是页面渲染，后续UI仍须文本转义。
+
+## 阶段3浏览器消费者约定（HTTP字段与后端不变）
+
+- 前端topic按trim后Unicode码点1–500校验，不使用UTF-16 maxlength；人数选择1–8，默认4，不含主持人。未知响应字段/缺字段、非草稿状态、不一致ID/人数/话题均拒绝显示；当前客户端只接受阶段2草稿DTO，扩展生命周期时须同步更新校验。
+- 每次逻辑提交使用crypto.randomUUID；忙碌时表单禁用并同步防重入；失败重试保持不可变正文/ID；编辑输入或成功后明确再次创建生成新ID。201首次和200重放都显示同一服务端快照；409显示冲突并保留原ID，不静默轮换。
+- 创建成功后切换all并加载列表、选中新建详情。active仍按后端过滤且不含created。GET无创建副作用。列表失败可独立重载，已保存快照不丢失。
+- 请求10秒超时是前端C类等待边界，不等同未来模型超时；超时不能证明后端未提交。尚未确认的创建信息仅存在内存，刷新后须先查列表而非自动重发。
+- 列表和详情各有本地查询代次，防旧响应及finally覆盖；该代次不是服务端version或eventId，不写入API。
+- 本轮浏览器采用固定安全中文文案映射HTTP错误状态；不信任或直接渲染响应error.message、HTML或原始JSON。成功正文需运行时校验，话题通过React文本节点显示。本地时间显示只转换格式，API仍使用UTC ISO毫秒。

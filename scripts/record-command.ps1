@@ -2,11 +2,12 @@ param(
     [Parameter(Mandatory)][string]$Name,
     [Parameter(Mandatory)][string]$Program,
     [string[]]$CommandArgs = @(),
+    [string]$Stage = 'stage-2',
     [int]$TimeoutSeconds = 120
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
-$evidenceRoot = Join-Path $projectRoot 'evidence/stage-2'
+$evidenceRoot = Join-Path $projectRoot ('evidence/' + $Stage)
 $cacheRoot = Join-Path $projectRoot '.cache'
 foreach ($dir in @($evidenceRoot, $cacheRoot, (Join-Path $cacheRoot 'tmp'))) {
     [void][IO.Directory]::CreateDirectory($dir)
@@ -47,10 +48,10 @@ $stdout = $outTask.GetAwaiter().GetResult()
 $stderr = $errTask.GetAwaiter().GetResult()
 $code = if ($timedOut) { 124 } else { $process.ExitCode }
 $hashes = [ordered]@{}
-foreach ($folder in @('src', 'tests')) {
+foreach ($folder in @('src', 'tests', 'web', 'e2e')) {
     $path = Join-Path $projectRoot $folder
     if (Test-Path -LiteralPath $path) {
-        Get-ChildItem -LiteralPath $path -Recurse -File | Sort-Object FullName | ForEach-Object {
+        Get-ChildItem -LiteralPath $path -Recurse -File | Where-Object { $_.FullName -notmatch '[\\/](dist|node_modules)[\\/]' } | Sort-Object FullName | ForEach-Object {
             $hashes[[IO.Path]::GetRelativePath($projectRoot, $_.FullName)] = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash
         }
     }

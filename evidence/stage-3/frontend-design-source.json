@@ -1,0 +1,17 @@
+{
+  "commit": "34040c9c568585f6929bedeaad110ad08f079624",
+  "path": ".agents\\skills\\frontend-design",
+  "files": {
+    "SKILL.md": {
+      "url": "https://raw.githubusercontent.com/anthropics/skills/34040c9c568585f6929bedeaad110ad08f079624/skills/frontend-design/SKILL.md",
+      "sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3"
+    },
+    "LICENSE.txt": {
+      "url": "https://raw.githubusercontent.com/anthropics/skills/34040c9c568585f6929bedeaad110ad08f079624/skills/frontend-design/LICENSE.txt",
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+    }
+  },
+  "dependencies": "No scripts/references or executable dependencies in selected skill directory",
+  "autoDiscovery": "not verified; file read explicitly",
+  "modifiedUpstreamFiles": false
+}
