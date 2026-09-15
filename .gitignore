@@ -22,3 +22,4 @@ playwright-report/
 /tools/env-probe/evidence/screenshots/
 /.cache/
 /.tmp/
+/evidence/stage-3/raw/
