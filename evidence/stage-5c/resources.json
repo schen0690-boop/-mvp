@@ -1,0 +1,49 @@
+{
+  "checkedAt": "2026-09-16T12:32:01.9875029Z",
+  "reason": "Playwright Windows teardown ended owned processes but left advisory owner files. Explicit controlled cleanup, not automatic takeover.",
+  "cleanups": [
+    {
+      "directory": "browser-4VPntF",
+      "pid": 22936,
+      "processExited": true,
+      "ownerRemoved": true,
+      "databasePreserved": true
+    },
+    {
+      "directory": "browser-5kwV8j",
+      "pid": 23848,
+      "processExited": true,
+      "ownerRemoved": true,
+      "databasePreserved": true
+    },
+    {
+      "directory": "browser-cjF2Zf",
+      "pid": 16624,
+      "processExited": true,
+      "ownerRemoved": true,
+      "databasePreserved": true
+    },
+    {
+      "directory": "browser-JTCT4G",
+      "pid": 10064,
+      "processExited": true,
+      "ownerRemoved": true,
+      "databasePreserved": true
+    },
+    {
+      "directory": "browser-pb1Lds",
+      "pid": 6824,
+      "processExited": true,
+      "ownerRemoved": true,
+      "databasePreserved": true
+    },
+    {
+      "directory": "browser-qE9XD7",
+      "pid": 24224,
+      "processExited": true,
+      "ownerRemoved": true,
+      "databasePreserved": true
+    }
+  ],
+  "listeners": []
+}

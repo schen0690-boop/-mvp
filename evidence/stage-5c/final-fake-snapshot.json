@@ -1,0 +1,361 @@
+{
+  "checkedAt": "2026-09-16T12:32:44.906Z",
+  "provider": "Fake",
+  "databaseScope": ".tmp/stage-5c/browser-JTCT4G/test.sqlite",
+  "callsUsed": 73,
+  "snapshot": {
+    "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+    "topic": "AI如何改善教育？ [text] [run:c4488b48-a2ec-4d0a-aa2a-af94236fc4ad]",
+    "expertCount": 4,
+    "status": "completed",
+    "version": 223,
+    "lastEventId": 260,
+    "createdAt": "2026-09-16T12:29:35.178Z",
+    "updatedAt": "2026-09-16T12:29:40.866Z",
+    "lineupRevision": 1,
+    "confirmedLineupRevision": 1,
+    "transcriptVersion": 13,
+    "roles": [
+      {
+        "role": "moderator",
+        "name": "示例主持人",
+        "profession": "沟通",
+        "title": "主持人（Fake）",
+        "stance": "整理不同观点",
+        "memberId": "466513de-8653-4c46-995c-72686c362212",
+        "color": "#193455",
+        "displayOrder": 0
+      },
+      {
+        "role": "expert",
+        "name": "示例专家1",
+        "profession": "研究方向1",
+        "title": "研究员（Fake）",
+        "stance": "从角度1观察话题",
+        "memberId": "a2a512ba-c0d0-41d7-8458-e55950ded9d3",
+        "color": "#2157a5",
+        "displayOrder": 1
+      },
+      {
+        "role": "expert",
+        "name": "示例专家2",
+        "profession": "研究方向2",
+        "title": "研究员（Fake）",
+        "stance": "从角度2观察话题",
+        "memberId": "45ef663a-9763-48db-9796-0beadd4c0933",
+        "color": "#137568",
+        "displayOrder": 2
+      },
+      {
+        "role": "expert",
+        "name": "示例专家3",
+        "profession": "研究方向3",
+        "title": "研究员（Fake）",
+        "stance": "从角度3观察话题",
+        "memberId": "e596a186-4155-4789-a920-3b70e5269dab",
+        "color": "#8b4c20",
+        "displayOrder": 3
+      },
+      {
+        "role": "expert",
+        "name": "示例专家4",
+        "profession": "研究方向4",
+        "title": "研究员（Fake）",
+        "stance": "从角度4观察话题",
+        "memberId": "c95363ef-c295-4595-b8f6-c1a2250386be",
+        "color": "#734a9c",
+        "displayOrder": 4
+      }
+    ],
+    "utterances": [
+      {
+        "id": "76566531-0b45-4fd8-9a7e-71ec0de1e999",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "466513de-8653-4c46-995c-72686c362212",
+        "seq": 1,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [],
+        "createdAt": "2026-09-16T12:29:38.302Z"
+      },
+      {
+        "id": "ea2c8c9d-2e04-4a4c-8437-09ca76c1ceb1",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "45ef663a-9763-48db-9796-0beadd4c0933",
+        "seq": 2,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "76566531-0b45-4fd8-9a7e-71ec0de1e999"
+        ],
+        "createdAt": "2026-09-16T12:29:38.441Z"
+      },
+      {
+        "id": "b1469f6c-e206-4b15-a025-8135956b2051",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "a2a512ba-c0d0-41d7-8458-e55950ded9d3",
+        "seq": 3,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "ea2c8c9d-2e04-4a4c-8437-09ca76c1ceb1"
+        ],
+        "createdAt": "2026-09-16T12:29:38.562Z"
+      },
+      {
+        "id": "2dd1bdbd-c2ca-40c2-8053-38b7b47b9850",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "c95363ef-c295-4595-b8f6-c1a2250386be",
+        "seq": 4,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "b1469f6c-e206-4b15-a025-8135956b2051"
+        ],
+        "createdAt": "2026-09-16T12:29:39.273Z"
+      },
+      {
+        "id": "00cf73b8-add4-40a3-90c3-d77769861e56",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "e596a186-4155-4789-a920-3b70e5269dab",
+        "seq": 5,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "2dd1bdbd-c2ca-40c2-8053-38b7b47b9850"
+        ],
+        "createdAt": "2026-09-16T12:29:39.442Z"
+      },
+      {
+        "id": "9ed8a20e-4cd8-4fc8-8786-d00193443418",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "45ef663a-9763-48db-9796-0beadd4c0933",
+        "seq": 6,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "00cf73b8-add4-40a3-90c3-d77769861e56"
+        ],
+        "createdAt": "2026-09-16T12:29:39.597Z"
+      },
+      {
+        "id": "acaf5f3f-6de0-4ae8-8c83-13323f697e12",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "a2a512ba-c0d0-41d7-8458-e55950ded9d3",
+        "seq": 7,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "9ed8a20e-4cd8-4fc8-8786-d00193443418"
+        ],
+        "createdAt": "2026-09-16T12:29:39.747Z"
+      },
+      {
+        "id": "c11e6db1-6ce7-40d0-95d0-f35a11a45c73",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "c95363ef-c295-4595-b8f6-c1a2250386be",
+        "seq": 8,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "acaf5f3f-6de0-4ae8-8c83-13323f697e12"
+        ],
+        "createdAt": "2026-09-16T12:29:39.921Z"
+      },
+      {
+        "id": "e44caf8f-95b2-426c-a11a-fcd1c31df8ba",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "e596a186-4155-4789-a920-3b70e5269dab",
+        "seq": 9,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "c11e6db1-6ce7-40d0-95d0-f35a11a45c73"
+        ],
+        "createdAt": "2026-09-16T12:29:40.091Z"
+      },
+      {
+        "id": "5dff4032-e11b-4a1d-b5bb-14a379f00588",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "45ef663a-9763-48db-9796-0beadd4c0933",
+        "seq": 10,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "e44caf8f-95b2-426c-a11a-fcd1c31df8ba"
+        ],
+        "createdAt": "2026-09-16T12:29:40.263Z"
+      },
+      {
+        "id": "a8dd8aa9-e01c-4a1c-9fed-6aa2f9af084b",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "a2a512ba-c0d0-41d7-8458-e55950ded9d3",
+        "seq": 11,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "5dff4032-e11b-4a1d-b5bb-14a379f00588"
+        ],
+        "createdAt": "2026-09-16T12:29:40.444Z"
+      },
+      {
+        "id": "abda89e3-d199-49d1-aff6-a80d78c192e7",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "c95363ef-c295-4595-b8f6-c1a2250386be",
+        "seq": 12,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "a8dd8aa9-e01c-4a1c-9fed-6aa2f9af084b"
+        ],
+        "createdAt": "2026-09-16T12:29:40.642Z"
+      },
+      {
+        "id": "2870f669-5d2b-4455-95ec-10f6ce9da781",
+        "discussionId": "34fea1c3-05a3-4697-9428-522562c6efb5",
+        "roleId": "e596a186-4155-4789-a920-3b70e5269dab",
+        "seq": 13,
+        "sentences": [
+          "面对教育资源、教师培训和数据保护的实际限制，我们需要从已经公开的意见出发，逐步验证课堂效果，并让不同背景的学生都能参与反馈。",
+          "建议先进行小范围、可撤回的试点，记录学习变化与教师负担，再根据证据调整实施方式，而不是仅凭技术新颖程度作决定。"
+        ],
+        "replyToUtteranceIds": [
+          "abda89e3-d199-49d1-aff6-a80d78c192e7"
+        ],
+        "createdAt": "2026-09-16T12:29:40.840Z"
+      }
+    ],
+    "synthesis": {
+      "sourceTranscriptVersion": 12,
+      "updatedAt": "2026-09-16T12:29:40.670Z",
+      "items": [
+        {
+          "kind": "consensus",
+          "text": "现有发言支持先进行小范围试点，并共同关注教育资源差异、教师自主判断、学生反馈及长期维护成本；这些局部一致仍需要后续实际证据检验。",
+          "evidenceUtteranceIds": [
+            "5dff4032-e11b-4a1d-b5bb-14a379f00588",
+            "a8dd8aa9-e01c-4a1c-9fed-6aa2f9af084b",
+            "abda89e3-d199-49d1-aff6-a80d78c192e7",
+            "e44caf8f-95b2-426c-a11a-fcd1c31df8ba"
+          ],
+          "positions": [],
+          "id": "761d100c-6602-4113-a597-8706a1023407"
+        }
+      ]
+    },
+    "summary": {
+      "status": "ready",
+      "text": "本场Fake讨论已保存13条发言，最后关注面对教育资源、教师培训和数据保护的实际限制，我们。仍需真实证据检验，不能据此认定讨论质量已验证。",
+      "sourceTranscriptVersion": 13
+    },
+    "lastNotice": null,
+    "stopReason": "turn_limit",
+    "startedAt": "2026-09-16T12:29:38.274Z",
+    "endedAt": "2026-09-16T12:29:40.866Z",
+    "lineupGeneration": {
+      "generationId": "400739be-ff30-4ce0-babb-ea0e8eed1ef0",
+      "generationVersion": 1,
+      "startedAt": "2026-09-16T12:29:35.478Z",
+      "finishedAt": "2026-09-16T12:29:35.492Z"
+    },
+    "confirmedAt": "2026-09-16T12:29:38.078Z",
+    "runtime": {
+      "runId": "051c39c1-8985-4f9c-8dfa-d2829810b09c",
+      "runDeadlineAt": "2026-09-16T12:39:38.274Z",
+      "stoppingAt": "2026-09-16T12:29:40.840Z",
+      "stopDeadlineAt": "2026-09-16T12:30:40.840Z"
+    },
+    "synthesisState": "ready",
+    "roleStates": [
+      {
+        "roleId": "466513de-8653-4c46-995c-72686c362212",
+        "status": "idle",
+        "publicFocus": null,
+        "focusSourceTranscriptVersion": null,
+        "updatedAt": "2026-09-16T12:29:40.840Z"
+      },
+      {
+        "roleId": "a2a512ba-c0d0-41d7-8458-e55950ded9d3",
+        "status": "idle",
+        "publicFocus": "关注第12条：面对教育资源、教师培训和数据保护的实际限制，我们",
+        "focusSourceTranscriptVersion": 12,
+        "updatedAt": "2026-09-16T12:29:40.840Z"
+      },
+      {
+        "roleId": "45ef663a-9763-48db-9796-0beadd4c0933",
+        "status": "idle",
+        "publicFocus": "关注第12条：面对教育资源、教师培训和数据保护的实际限制，我们",
+        "focusSourceTranscriptVersion": 12,
+        "updatedAt": "2026-09-16T12:29:40.840Z"
+      },
+      {
+        "roleId": "e596a186-4155-4789-a920-3b70e5269dab",
+        "status": "idle",
+        "publicFocus": "关注第12条：面对教育资源、教师培训和数据保护的实际限制，我们",
+        "focusSourceTranscriptVersion": 12,
+        "updatedAt": "2026-09-16T12:29:40.840Z"
+      },
+      {
+        "roleId": "c95363ef-c295-4595-b8f6-c1a2250386be",
+        "status": "idle",
+        "publicFocus": "关注第12条：面对教育资源、教师培训和数据保护的实际限制，我们",
+        "focusSourceTranscriptVersion": 12,
+        "updatedAt": "2026-09-16T12:29:40.840Z"
+      }
+    ]
+  },
+  "eventCounts": [
+    {
+      "type": "discussion.notice",
+      "count": 22
+    },
+    {
+      "type": "discussion.status_changed",
+      "count": 7
+    },
+    {
+      "type": "role.status_changed",
+      "count": 195
+    },
+    {
+      "type": "summary.ready",
+      "count": 1
+    },
+    {
+      "type": "synthesis.status_changed",
+      "count": 11
+    },
+    {
+      "type": "synthesis.updated",
+      "count": 11
+    },
+    {
+      "type": "utterance.created",
+      "count": 13
+    }
+  ]
+}

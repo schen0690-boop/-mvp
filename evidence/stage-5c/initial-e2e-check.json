@@ -1,0 +1,12 @@
+{
+  "recordedAt": "2026-09-16T12:11:49.297Z",
+  "stats": {
+    "startTime": "2026-09-16T12:09:21.938Z",
+    "duration": 112439.603,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  },
+  "cause": "Test config re-evaluation allocated a different readonly counter database; missing test cleanup left run capacity occupied. Not a product RED."
+}

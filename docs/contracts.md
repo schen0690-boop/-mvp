@@ -1,10 +1,10 @@
-# HTTP 已实现契约与后续 SSE 草案
+# HTTP与SSE公开契约（当前阶段5C）
 
-当前：草稿创建/查询及阶段4B阵容生成/确认HTTP已实现；运行/停止/SSE仍为未来设计。用户P6确认4A阵容设计，阵容当前字段以本文末节和[lineup-design.md](lineup-design.md)为准。所有正文UTF-8，JSON是API传输格式，不直接作为页面文本。
+当前：草稿、阵容、5B运行/停止及5C SSE均已实现。各阶段小节保留历史背景；当前运行字段及SSE以本文末节为准，阵容沿用[lineup-design.md](lineup-design.md)。所有正文UTF-8，JSON是API传输格式，不直接作为页面文本。
 
 阶段2/3小节保留其历史背景；下方“阶段4B阵容HTTP增量”覆盖新状态、版本、错误和前端解析。确认与开始严格分离，本轮不新增运行接口。
 
-阶段5A新增的**待确认、尚未实现**运行/SSE精确规格见末节；它覆盖上文早期stop/SSE/发言类型草案中的冲突。4B/4C已实现阵容契约不被改写为已支持讨论。4D单样本阵容结果见stage-4d-validation，原真实调用授权已关闭。
+阶段5A设计经P11确认并在5B/5C实施；末节覆盖上文早期stop/SSE/发言类型草案中的冲突，早期未实现措辞仅反映当时状态。4D单样本阵容结果见stage-4d-validation，原真实调用授权已关闭。
 
 ## 标识、版本与公开类型
 
@@ -193,9 +193,9 @@ DeepSeekRosterProvider以注入fetch发送固定官方HTTPS Chat Completions；m
 
 真实验收在固定持久化授权目录绑定一组discussion/generation，仅指定话题4专家；出站前预约累计2次，成功或终结后关闭。不把验收计数变成公开字段或通用计费平台。原Fake入口及常规测试不加载私有配置。
 
-## 阶段5A设计、5B运行实现与5C SSE待实现契约
+## 阶段5A设计、5B运行与5C SSE实际契约
 
-领域接受条件、预算和迁移以[discussion-runtime-design.md](discussion-runtime-design.md)为唯一设计依据。用户P11已确认并授权5B：以下HTTP命令、24字段运行快照及公开事件持久化已实现，结果见[5B验证](stage-5b-validation.md)。SSE envelope、订阅/补发/重连/背压仍为5C计划，当前没有/events路由。不授权真实调用。旧阵容19/21字段保持，新增运行联合分支，未知字段仍严格拒绝。
+领域接受条件、预算和迁移以[discussion-runtime-design.md](discussion-runtime-design.md)为唯一设计依据。P11授权的HTTP命令、24字段运行快照及事件持久化见[5B验证](stage-5b-validation.md)；P12授权的SSE envelope、订阅/补发/重连/背压及前端消费见[5C验证](stage-5c-validation.md)。不授权真实调用。旧阵容19/21字段保持，运行联合分支及事件未知字段仍严格拒绝。
 
 ### HTTP命令与重复语义
 
@@ -259,7 +259,7 @@ SSE持久化消息envelope为{discussionId,eventId,dataVersion,type,occurredAt,p
 2. after为非负安全整数十进制（缺省0），拒绝重复/未知query。有效Last-Event-ID=`同discussionId:非负安全整数`优先于URL旧after；非法/跨场header直接400而非退回after。不存在讨论404，已识别存储不可用503；不返回诊断。
 3. 补发包含快照后订阅前的事件；前端只接受当前页面选择token/当前discussion，eventId≤已应用k直接忽略。更高ID但dataVersion倒退、未知类型/字段、批次不一致、序号缺口均不应用，关闭并重新GET。snapshot替换必须关闭旧EventSource和失效旧回调，避免旧连接污染新场。
 4. 请求游标超出末尾、历史缺失、游标落在事务批次中间时，返回200 SSE发送`stream.reset`控制消息（**无id、不写库**）：{reason:cursor_ahead/history_unavailable/partial_transaction,snapshotPath:固定本场GET路径}，然后关闭；前端关闭旧实例、GET再连接。不能将reset塞进Transcript或当业务failed。
-5. 原生EventSource的Last-Event-ID代表已接收，不保证应用已完成批次。5C前端在onerror主动close，丢弃未提交缓冲，用新实例after=最后已应用k重连；不依赖旧实例自动推进的header。服务端仍支持符合格式的Last-Event-ID客户端；partial_transaction触发快照恢复。建议重连等待1/2/4/8/10秒，连续5次仍失败显示手动重连，不修改业务状态、不自动POST。
+5. 原生EventSource的Last-Event-ID代表已接收，不保证应用已完成批次。5C前端在onerror主动close，保留最后已应用快照并丢弃半批；等待1/2/4/8/10秒后执行单个可取消GET，严格验证其不旧于已应用快照，再以新快照lastEventId创建EventSource。不依赖旧实例自动推进的header。5次自动恢复机会耗尽后显示手动重连；连接open本身不清零失败次数，有效业务批次才清零。服务端仍支持Last-Event-ID；partial_transaction触发快照恢复。所有恢复只读，不修改业务状态、不自动POST。
 6. 通常SSE 200、Content-Type text/event-stream;charset=utf-8、Cache-Control:no-store；注释心跳约15秒、无id且不写业务表，不模拟专家状态。实际文本按完整短发言提交就推送，不收集整场后播放。供应商token流不是本阶段需求。
 7. 补发完completed/failed的最后完整事务后发送无id的`stream.end` {discussionId,lastEventId}并结束；客户端看到终态批次立即close。已在终态且请求游标等于末尾时204，不进入自动重连循环；落后则先补发终态，超前先reset。lineup_confirmed不是运行终态，可只读订阅等待另一Tab开始。
 8. 页面切换/卸载关闭连接、心跳与重连定时器，注销服务器监听和缓冲；不stop runner。多个观察者共享已存在runner，不复制上下文/任务。不同场的游标、连接、通知和取消域分别管理。
@@ -268,4 +268,12 @@ SSE持久化消息envelope为{discussionId,eventId,dataVersion,type,occurredAt,p
 
 每连接最多64条待发事件且总字节≤256KiB（C，先达到者为限），数据库按最多32条分页读取，不拆分事务组（下一整组超出页上限则留到下一页；本版单事务事件数不得超过32）；无法放入下一批则暂停读库。response.write返回false后停止继续写，等drain，最长10秒；超限/超时断开该连接，不阻塞runner或其他观察者，不删除持久化事件。已背压时不保证能发送reset；前端从已应用游标重连/快照恢复。仅一个dirty标记合并通知，不创建无限事件副本。终态和断连都清理监听。
 
-编号、应用幂等和有限缓冲是应用契约，SSE不是“恰好一次”。重连/204/Last-Event-ID依据[WHATWG规范](https://html.spec.whatwg.org/multipage/server-sent-events.html)，write/drain依据[Node HTTP文档](https://nodejs.org/api/http.html#responsewritechunk-encoding-callback)；具体阈值与跨事件事务缓冲须5C验证。
+编号、应用幂等和有限缓冲是应用契约，SSE不是“恰好一次”。重连/204/Last-Event-ID依据5A已查阅的[WHATWG规范](https://html.spec.whatwg.org/multipage/server-sent-events.html)，write/drain依据[Node HTTP文档](https://nodejs.org/api/http.html#responsewritechunk-encoding-callback)；5C本地验证见报告，不代表生产负载验证。
+
+### 5C补充边界
+
+- 服务端允许订阅任意已有讨论状态，包含草稿、阵容态与运行态；所有订阅均无业务副作用。当前前端仅为lineup_confirmed和运行分支建立连接，completed/failed快照直接关闭；generating_lineup仍使用4C轮询。
+- 数据源先注册数据库提交通知，再一致读库；通知只有唤醒作用，不包含业务载荷。当前单数据库单进程通知会唤醒其他讨论订阅，但每次读库严格按discussionId筛选，绝不跨场发送。外部进程写库不属于已支持的运行方式。
+- 流额外设置X-Accel-Buffering:no，flushHeaders及时送出；Vite代理实时性已有真实浏览器链路验证。出流后异常仅安全reset/关闭，不能再写普通JSON错误。
+- 同场手动GET加载保留已有内容，旧GET不能覆盖新版本；跨场切换使旧响应/回调失效。StrictMode清理后可重建，任何时刻只保留一个有效页面订阅。前端批次最多32事件/256KiB，超限执行有限快照恢复。
+- 每次读库最多32条且不拆分事务；当前实现不叠加多个待读批次，write=false即停止读取。批次超过64条/256KiB连接限额即关闭；10秒未drain关闭；取消订阅不取消runner、不释放运行槽。15秒心跳仅注释且不写库。

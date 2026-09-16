@@ -274,3 +274,30 @@ P11原文来自用户附件16b71862-f30e-4936-946d-adc36f0081f7/pasted-text.txt�
 最终Fake HTTP轨迹代码72fcb21，discussion=d9c1f026-79e1-4314-88f3-74a40ef978f6，run=ce56a9e1-fbf1-4ada-b3fb-838ac313d6c4；13公开发言、11增量提炼、1最终总结、73次Fake调用/168限额。真实Express/SQLite、同场重复命令、进程重开GET保持终态，两个自有进程退出0并释放占用。记录保存在evidence/stage-5b/fake-trace-final.json，不是模型质量或付费调用证据。
 
 所有数据库实验使用本轮自建临时文件；未读私有配置、未启动4D入口、未操作已关闭预算或验收库。旧适配器测试只用注入传输/本机stub。本轮无安装、依赖变更、SSE route、演播厅、真实讨论适配器。29条S5已映射实际测试或5C/Q计划；后续交付检查（至少5段真实Prompt覆盖四标记阶段、样例/初始化/API/README/测试/Git/工作流说明）继续保留，不以本轮执行器代表整个作业交付完成。完成后停止，等待5C授权。
+
+## 阶段5C：SSE、演播厅与Fake全流程（2026-09-16）
+
+P12原文来自附件1e14b982-6901-43b4-9a46-e7db3ab81fa8/pasted-text.txt，已逐字追加docs/sources/development-prompts.md；以c35f514历史前缀和附件原文比对通过，不复制密钥聊天。本轮意图是接通5B已提交公开事件与中文界面，完成可观察/可结束/可恢复的核心流程，不能把阵容真实样本冒充真实讨论质量。
+
+实际阅读AGENTS、运行设计、contracts/ui-spec/test-plan、5B验证和当前事件/事务/runner/接口/前端/测试配置，随后writing-plans保存本阶段计划，当前会话逐任务实施。已确认设计直接沿用，无新增架构审批、子代理、worktree、依赖或Skills安装。实际开发工具为Codex，开发模型身份不在项目记录中猜测。
+
+| 实际使用Skill | 路径 | 文件存在/已读取/已用于任务 | 任务验证 |
+|---|---|---|---|
+| using-superpowers | C:\Users\Administrator\.codex\skills\superpowers\skills\using-superpowers\SKILL.md | 是/是/是，另读references/codex-tools.md | 遵守当前接口与用户阶段边界 |
+| writing-plans / executing-plans | 同上skills根下writing-plans/SKILL.md、executing-plans/SKILL.md | 是/是/是，拆SSE/消费/UI/E2E/收尾 | 各任务命令实际执行 |
+| test-driven-development | 同上skills根下test-driven-development/SKILL.md | 是/是/是，业务RED先于实现 | 代表失败/修正及最终回归见5C报告 |
+| systematic-debugging | 同上skills根下systematic-debugging/SKILL.md | 是/是/是，reset异常、状态恢复、测试夹具/期限定位 | 对应回归及保留失败报告 |
+| verification-before-completion | 同上skills根下verification-before-completion/SKILL.md | 是/是/是，最后修正后完整复验 | 323/87/37、类型、构建和静态检查 |
+| frontend-design | D:\实测文件夹\.agents\skills\frontend-design\SKILL.md | 是/是/是，沿用现有视觉体系、文本优先与分区滚动 | 六张最终代表截图实际查看 |
+
+Superpowers可得版本沿用既有本地6.1.0/f268f7c记录，本轮没有重新审计或升级；frontend-design使用项目已有文件，不另查远程版本。“已用于任务”与Skill自身执行测试不是一回事，没有执行任何Skill远程安装脚本。
+
+实现：提交通知只唤醒SQLite事件读取；完整事务分页、游标/终态恢复、心跳/背压；原生EventSource、严格整批应用与有限GET恢复；start/stop互斥和未知结果核对；演播厅状态/发言/观点证据/总结。保留阵容轮询、19/21/24字段与5B调度/预算/003，真实调用关闭。
+
+真实修正：无效reset最初抛到监听外；同场手动刷新清空内容/接受旧GET；StrictMode清理后controller仍disposed，分别补测试后最小修复。E2E配置在worker重评估生成不同测试库，加上失败后运行槽未清，改为共享本轮新库路径及afterEach受控清理。初次完整37用例中滚动测试7秒计数等待失败、随后截图已终态；检查本轮测试库/trace并单独复现通过，记录观察到的UI延迟，不捏造确定根因。整场完成断言设有限15秒后重跑全部验证，没有修改runner或真实模型期限。详见stage-5c-validation。
+
+最后完整执行20:27:34–20:31:11（UTC+8）：后端323（162单元/161集成，含SSE真实HTTP8）、前端87、原26+新11 Edge E2E37，全部退出0，pending/skip/only/retry=0；三类型/两构建/HTTP进程冒烟均0。旧阶段结果仅作历史，未复用旧成功冒充本轮。最终截图与白名单Fake快照见evidence/stage-5c，源代码哈希及原Prompt比对见source-and-scope.json。
+
+资源检查：Playwright在Windows下关闭进程树后留下6个本轮test.sqlite.owner，PID均已退出，核对绝对路径后仅删除这些已知占用文件，数据库保留；不是自动接管/恢复。41861/41862无监听。无4D库/预算或私有配置读写，无真实调用。继续schen/cs064210@163.com项目级身份，SSE、前端、E2E和文档按真实内容提交，不倒填/重写/推送。
+
+本轮完成Fake核心用户流程E2E；真实讨论质量、生产负载、移动真机完整可访问性、完整作业全部要求尚未验证。后续交付清单仍需正式5组样例及完整工作流说明，测试门闩话题不冒充高质量样例。停止等待下一阶段授权，不自动接入真实讨论。

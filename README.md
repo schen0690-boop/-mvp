@@ -1,8 +1,8 @@
-# AI 圆桌讨论 MVP：阶段5B Fake讨论执行器
+# AI 圆桌讨论 MVP：阶段5C SSE与Fake演播厅
 
-已完成草稿创建/查询、阵容生成与确认；阶段5B新增Fake讨论执行、内容驱动调度、增量提炼和有限总结，使用HTTP开始/结束。创建不自动生成阵容，确认不自动开始讨论。现有中文页面保留阵容流程，只增加运行状态消费兼容；尚无讨论控制按钮和演播厅。
+已完成草稿创建/查询、阵容生成与确认、Fake讨论执行、内容驱动调度、增量提炼和有限总结。中文页面可明确开始讨论、实时观察、结束并刷新恢复记录；创建不自动生成阵容，确认不自动开始。演播厅显示真实已提交的发言、角色公开状态、观点证据及总结。
 
-**4D已完成一次真实阵容联调，原授权已关闭。普通启动仅Fake，无需密钥。** 本轮未调用真实讨论模型；SSE及完整演播厅仍未实现。当前验收见[阶段5B验证](docs/stage-5b-validation.md)，不要重新执行历史4D受限入口。
+**4D已完成一次真实阵容联调，原授权已关闭。普通启动仅Fake，无需密钥。** 本轮未调用真实讨论模型；Fake通过不代表真实讨论质量。当前验收见[阶段5C验证](docs/stage-5c-validation.md)，不要重新执行历史4D受限入口。
 
 ## 运行
 
@@ -40,7 +40,9 @@ npm start
 
 正常12次专家公开发言或10分钟后收尾；总结不可用也可能completed，须检查summary.status及安全提示。失败终态不能重新开播。服务启动先取得数据库`.owner`占用，再把确实中断的running/stopping记为failed/RUN_INTERRUPTED，不自动续跑。未知遗留占用文件必须由操作人先确认原进程已停止，程序不自动删除或误杀进程。
 
-阶段5B回归命令为`npm test`、`npm run test:web`、三项typecheck、两项build及`npx --no-install playwright test --config playwright.stage5b.config.ts`。最后一项运行旧26条草稿/阵容E2E，截图保存stage-5b，不能称为讨论演播厅E2E。运行状态暂靠现有手动重新加载读取；SSE和正式讨论界面留5C。
+阶段5C回归命令为`npm test`、`npm run test:web`、三项typecheck、两项build及`npm run test:e2e`。一并执行并保存本轮证据可用`node scripts/stage5c-verify.mjs`。浏览器配置为playwright.stage5c.config.ts，使用已安装Edge独立上下文、41861/41862端口、每轮新建.tmp/stage-5c/browser-*数据库；不下载浏览器，不复用已占用端口，retries=0。旧26条及新增演播厅测试都保留，截图写入evidence/stage-5c。旧阶段配置仅作历史记录，不用于当前截图验收。
+
+SSE为`GET /api/discussions/{id}/events?after=lastEventId`，通过Vite的同源/api代理。初始和故障恢复用GET；阵容生成仍用原有限轮询；确认后的讨论用一条EventSource。事务事件整批应用，断线保留内容、有限恢复后提供手动重新连接。观察、刷新、切页不POST开始/结束。业务终态和网络中断分开显示；completed且summary.unavailable时明确显示“讨论已结束，但总结生成失败。”。
 
 | 方法与路径 | 成功响应 |
 |---|---|
@@ -81,9 +83,9 @@ node scripts/http-smoke.mjs --lineup
 - `src/domain/`：校验、业务服务、存储操作接口及公开投影，不导入SQLite驱动。
 - `src/db/`：node:sqlite、参数绑定、001/002、四张表（含迁移记录）、短事务；初始化入口为`src/init-db.ts`。
 - `src/http/app.ts`：只创建Express应用；`src/server.ts`才监听端口。
-- 当前支持草稿及四种阵容状态；002不允许未来running等状态。存储边界与Provider解耦，无ORM；`src/providers/`只有Fake。
+- 当前003支持草稿、四种阵容状态及running/stopping/completed/failed。存储与Provider解耦，无ORM；普通入口明确组合Fake阵容与讨论Provider，真实阵容适配器仅供历史受限入口。
 - web/src为React组件、API运行时校验及请求状态控制；只共享浏览器安全的输入校验和类型，不打包数据库或服务端配置。
-- 4D本地适配已完成，真实调用须等待密钥配置交接；讨论调度及完整系统仍未实现。
+- 4D单样本真实阵容联调已完成且授权已关闭；5B/5C完成Fake讨论调度与演播厅，尚未实现真实讨论适配器或验证完整产品全部要求。
 - 实际开发工具Codex；题面工具口径待出题方确认。Git使用用户暂定署名schen与邮箱cs064210@163.com，仅配置当前仓库，实际当前时间建立基线与后续提交；无远程，历史不倒填。
 
 ## 中文前端与局部浏览器测试

@@ -235,3 +235,11 @@ live/authorization.ts通过独占新建与fsync保存绑定/出站计数，不�
 推荐保留发言→综合检查点→下一轮的串行内容决策；并行仅发生在受2/4槽控制的意愿调用。snapshot.version、小窗变化不使模型内容过期；transcriptVersion/runId/内部epoch和taskId分别承担内容/执行/取消判断。总结使用stop后新epoch与独立取消域。详细预算、公平性及失败策略不在此复制，以唯一规格第3–8节为准。
 
 当前SQLite事件是讨论内复合主键和手动加1，未来多事件事务将打破version==lastEventId；src/db读取和web/src/api.ts的硬限制必须同步扩展。5B仅后端Fake测试环境，不将产生运行态的服务接到尚未适配的4C界面并宣称兼容。5C才完成协议到页面的运行闭环。全部待执行测试见test-plan的S5矩阵。
+
+## 阶段5B/5C实际状态（覆盖上文待实施措辞）
+
+5B已实现003、DiscussionService/FakeDiscussionProvider、共享Limiter、运行存储与start/stop，前端已接受19/21/24字段联合快照；5C未修改这些业务规则或schema。4D-B真实阵容样本已完成，授权关闭，后续讨论没有真实模型适配。
+
+5C增加db/commit-notifications.ts与public-events.ts、http/events.ts及domain/public-event.ts：短事务COMMIT后唤醒订阅从SQLite读已提交事件，按讨论筛选/完整事务分页；数据库单进程所有权仍由.owner保护。没有引入任务平台、消息队列或新迁移。正式server组合SSE，live-server不变。
+
+浏览器events.ts整批应用并严格解码结果快照，discussion-stream.ts负责一条原生EventSource及有限GET恢复；controller.ts负责选择隔离/版本防覆盖/控制互斥，Studio.tsx负责已提交内容与状态呈现。App保留草稿/阵容工作区和generating轮询，新增开始/结束入口。测试仅scripts/stage5c-backend.mjs注入可控Fake与文件门闩，无生产故障接口；Vite→Express→SQLite/SSE真实链路见stage-5c-validation。
