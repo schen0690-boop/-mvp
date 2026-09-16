@@ -35,8 +35,10 @@ export class SqliteLineupStore implements LineupStore {
   private current(id: string, key: GenerationKey): boolean {
     return Boolean(this.db.prepare("SELECT 1 FROM discussions WHERE id=? AND current_generation_id=? AND generation_version=? AND status='generating_lineup'").get(id, key.generationId, key.generationVersion));
   }
-  complete(id: string, key: GenerationKey, members: LineupMember[], time: string): boolean {
-    return transaction(this.db, () => {
+  complete(id: string, key: GenerationKey, members: LineupMember[], time: string, deadline = Infinity): boolean {
+    const expired = new Error('GENERATION_DEADLINE_EXCEEDED');
+    try { return transaction(this.db, () => {
+      if (performance.now() >= deadline) return false;
       if (!this.current(id, key)) return false;
       const previous = this.db.prepare('SELECT lineup_generation_id FROM discussions WHERE id=?').get(id);
       if (previous?.lineup_generation_id !== null && previous?.lineup_generation_id !== undefined) {
@@ -47,8 +49,10 @@ export class SqliteLineupStore implements LineupStore {
       const insert = this.db.prepare(`INSERT INTO lineup_members (member_id,discussion_id,generation_id,generation_version,role,name,profession,title,stance,color,display_order,name_key,created_at)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`);
       for (const m of members) insert.run(m.memberId,id,key.generationId,key.generationVersion,m.role,m.name,m.profession,m.title,m.stance,m.color,m.displayOrder,nameKey(m.name),time);
-      this.event(id); return true;
-    });
+      this.event(id);
+      if (performance.now() >= deadline) throw expired;
+      return true;
+    }); } catch(error) { if(error===expired) return false;throw error; }
   }
   fail(id: string, key: GenerationKey, code: NoticeCode, time: string): boolean {
     return transaction(this.db, () => {

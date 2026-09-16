@@ -13,7 +13,7 @@ export interface LineupOptions { capacity?: number; diagnose?: (event: { code: s
 export interface LineupStore {
   read(id: string): StoredDiscussion | undefined;
   begin(id: string, input: { requestId: string; expectedGenerationId: string | null }, generationId: string, time: string): GenerationResult;
-  complete(id: string, key: GenerationKey, members: LineupMember[], time: string): boolean;
+  complete(id: string, key: GenerationKey, members: LineupMember[], time: string, deadline?: number): boolean;
   fail(id: string, key: GenerationKey, code: NoticeCode, time: string): boolean;
   recover(time: string): void;
   confirm(id: string, input: { generationId: string; lineupRevision: number }, time: string): { discussionId: string; snapshot: DiscussionSnapshot; replayed: boolean };
@@ -123,7 +123,10 @@ export class LineupService {
       }
       if (signal.aborted || performance.now() >= deadline) { this.fail(result,signal.aborted ? 'LINEUP_INTERRUPTED' : 'LINEUP_TIMEOUT'); return; }
       try {
-        if (!this.store.complete(result.discussionId,result,members,new Date().toISOString())) this.diagnostic(result,'STALE_GENERATION_RESULT');
+        if (!this.store.complete(result.discussionId,result,members,new Date().toISOString(),deadline)) {
+          if(performance.now()>=deadline) this.fail(result,'LINEUP_TIMEOUT');
+          else this.diagnostic(result,'STALE_GENERATION_RESULT');
+        }
       } catch { this.fail(result,'LINEUP_STORAGE_FAILED'); }
       return;
     }

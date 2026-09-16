@@ -18,10 +18,11 @@ function setup(responses: FakeResponse[]=['normal']) {
   const id=drafts.create({topic:'隔离与超时',requestId:randomUUID()}).discussionId;
   return {db,path,drafts,store,provider,service,id,diagnostics};
 }
-it('30s attempts share 60s deadline, and late A cannot overwrite B or emit an event', async()=>{
+it.each(['success','failure'])('30s attempts share 60s deadline; late A %s cannot overwrite B or emit an event', async outcome=>{
   vi.useFakeTimers({toFake:['setTimeout','clearTimeout','performance']});
   const releases: ((value:string)=>void)[]=[];
-  const delayed: FakeResponse=()=>new Promise(resolve=>releases.push(resolve));
+  const rejections: ((reason:Error)=>void)[]=[];
+  const delayed: FakeResponse=()=>new Promise((resolve,reject)=>{releases.push(resolve);rejections.push(reject);});
   const x=setup([delayed,delayed,'normal']);
   const valid=await new FakeRosterProvider().generateRoster({discussionId:x.id,topic:'x',expertCount:4,constraints:'x'},{signal:new AbortController().signal,deadline:1});
   try {
@@ -31,11 +32,29 @@ it('30s attempts share 60s deadline, and late A cannot overwrite B or emit an ev
     expect(x.provider.calls).toHaveLength(2);
     const b=x.service.generate(x.id,{requestId:randomUUID(),expectedGenerationId:a.generationId}); await x.service.idle();
     const before=x.drafts.get(x.id); expect(before.lineupGeneration?.generationId).toBe(b.generationId);
-    releases.forEach(resolve=>resolve(valid)); await Promise.resolve(); await Promise.resolve();
+    if(outcome==='success') releases.forEach(resolve=>resolve(valid)); else rejections.forEach(reject=>reject(new Error('private late error')));
+    await Promise.resolve(); await Promise.resolve();
     expect(x.drafts.get(x.id)).toEqual(before);
     expect(x.db.prepare('SELECT count(*) AS n FROM public_events').get()?.n).toBe(5);
     expect(x.diagnostics.some(e=>e.code==='STALE_GENERATION_RESULT')).toBe(true);
   } finally { releases.forEach(resolve=>resolve(valid)); }
+});
+it.each(['before','during'])('checks deadline %s the persistence transaction and leaves no partial success',async point=>{
+  vi.useFakeTimers({toFake:['performance','setTimeout','clearTimeout']});
+  const x=setup();const a=x.service.generate(x.id,{requestId:randomUUID(),expectedGenerationId:null});await x.service.idle();
+  const roles=x.drafts.get(x.id).roles;
+  const b=x.store.begin(x.id,{requestId:randomUUID(),expectedGenerationId:a.generationId},randomUUID(),new Date().toISOString());
+  const deadline=performance.now()+1000;
+  if(point==='before') await vi.advanceTimersByTimeAsync(1001);
+  else {
+    x.db.function('expire_test_clock',()=>{vi.advanceTimersByTime(1001);return 1;});
+    x.db.exec('CREATE TRIGGER injected AFTER INSERT ON lineup_members WHEN NEW.display_order=4 BEGIN SELECT expire_test_clock(); END');
+  }
+  expect(x.store.complete(x.id,b,roles,new Date().toISOString(),deadline)).toBe(false);
+  expect(x.drafts.get(x.id)).toMatchObject({status:'generating_lineup',version:4,lineupRevision:1,roles:[]});
+  expect(x.db.prepare('SELECT generation_version FROM lineup_members').all().every(r=>r.generation_version===1)).toBe(true);
+  expect(x.db.prepare('SELECT count(*) AS n FROM public_events').get()?.n).toBe(4);
+  expect(x.store.fail(x.id,b,'LINEUP_TIMEOUT',new Date().toISOString())).toBe(true);
 });
 it.each(['member','event'])('persistence %s fault rolls back the entire lineup then records safe storage failure', async point=>{
   const x=setup();

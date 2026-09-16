@@ -99,6 +99,14 @@ it('002末尾完整性检查失败时，复制和版本登记整体回滚', () =
   expect(db.prepare('SELECT COUNT(*) AS n FROM public_events').get()?.n).toBe(2);
   expect(db.prepare('PRAGMA foreign_keys').get()?.foreign_keys).toBe(1);
 });
+it('002复制遇到旧库损坏数据时中途失败也整体回滚',()=>{
+  seed();db.exec('PRAGMA ignore_check_constraints=ON');db.prepare('UPDATE discussions SET expert_count=0').run();db.exec('PRAGMA ignore_check_constraints=OFF');
+  const schema=db.prepare('SELECT * FROM sqlite_schema ORDER BY name').all(),rows=db.prepare('SELECT * FROM discussions').all(),events=db.prepare('SELECT * FROM public_events').all();
+  expect(()=>migrateDatabase(db,2)).toThrow();
+  expect(db.prepare('SELECT * FROM sqlite_schema ORDER BY name').all()).toEqual(schema);
+  expect(db.prepare('SELECT * FROM discussions').all()).toEqual(rows);expect(db.prepare('SELECT * FROM public_events').all()).toEqual(events);
+  expect(db.prepare('PRAGMA foreign_keys').get()?.foreign_keys).toBe(1);
+});
 it('002成员复合外键、顺序和主持唯一、状态组合约束实际生效', () => {
   const { created } = seed(); migrateDatabase(db, 2);
   const id = created.discussionId, generation = randomUUID(), now = new Date().toISOString();
