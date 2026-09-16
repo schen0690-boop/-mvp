@@ -4,10 +4,11 @@ import { noticeMessages, noticeOf } from '../domain/snapshot.js';
 import { parseRoster } from '../domain/lineup.js';
 import { isRuntimeStatus } from '../domain/snapshot.js';
 import { readRuntime } from './read-runtime.js';
+import {committed} from './commit-notifications.js';
 export function transaction<T>(db: DatabaseSync, fn: () => T, write = true): T {
   if (db.isTransaction) return fn();
   db.exec(write ? 'BEGIN IMMEDIATE' : 'BEGIN');
-  try { const value = fn(); db.exec('COMMIT'); return value; }
+  try { const value = fn(); db.exec('COMMIT'); if(write)committed(db); return value; }
   catch (error) { if (db.isTransaction) db.exec('ROLLBACK'); throw error; }
 }
 export function text(value: SQLOutputValue | undefined): string {

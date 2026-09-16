@@ -34,3 +34,4 @@ playwright-report/
 /evidence/stage-4d/raw/
 *.sqlite.owner
 /evidence/stage-5b/raw/
+/evidence/stage-5c/raw/

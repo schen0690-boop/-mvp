@@ -11,6 +11,7 @@ import {FakeDiscussionProvider} from './providers/fake-discussion.js';
 import {CallLimiter} from './providers/call-limiter.js';
 import {LimitedRosterProvider} from './providers/limited-roster.js';
 import {acquireDatabaseOwnership} from './db/ownership.js';
+import {SqliteEventSource} from './db/public-events.js';
 
 let release:()=>void=()=>{};
 try {
@@ -22,7 +23,7 @@ try {
   const lineup=new LineupService(new SqliteLineupStore(db),new LimitedRosterProvider(new FakeRosterProvider(),limiter),{diagnose:event=>console.error(event)});
   const discussion=new DiscussionService(new SqliteDiscussionStore(db),new FakeDiscussionProvider(),limiter);
   try { lineup.recover();discussion.recover(); } catch(error) { db.close();throw error; }
-  const server = createApp(new DraftService(new SqliteDraftStore(db)),undefined,lineup,discussion).listen(port, '127.0.0.1', () => {
+  const server = createApp(new DraftService(new SqliteDraftStore(db)),undefined,lineup,discussion,new SqliteEventSource(db)).listen(port, '127.0.0.1', () => {
     console.log(`本地服务已启动：http://127.0.0.1:${port}（阵容与讨论均使用Fake Provider，非真实AI）`);
   });
   let stopping = false;

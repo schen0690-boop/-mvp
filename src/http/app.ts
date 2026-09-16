@@ -5,10 +5,12 @@ import { isObject } from '../domain/input.js';
 import { randomUUID } from 'node:crypto';
 import type { LineupService } from '../domain/lineup-service.js';
 import type { DiscussionService } from '../domain/discussion-service.js';
+import type {SqliteEventSource} from '../db/public-events.js';
+import {serveEvents} from './events.js';
 
 export interface Diagnostic { requestId: string; code: 'INTERNAL_ERROR' }
 
-export function createApp(service: DraftService, diagnose: (event: Diagnostic) => void = event => console.error(event), lineup?: LineupService, discussion?: DiscussionService) {
+export function createApp(service: DraftService, diagnose: (event: Diagnostic) => void = event => console.error(event), lineup?: LineupService, discussion?: DiscussionService, events?:SqliteEventSource) {
   const app = express();
   app.disable('x-powered-by');
   app.disable('etag');
@@ -28,6 +30,9 @@ export function createApp(service: DraftService, diagnose: (event: Diagnostic) =
     next();
   };
   const parser=express.json({ limit: '16kb', inflate: false });
+  if(events)app.get('/api/discussions/:discussionId/events',(req,res)=>{
+    lineup?.assertAvailable(req.params.discussionId);discussion?.assertAvailable(req.params.discussionId);serveEvents(req,res,events);
+  });
   app.post('/api/discussions', jsonOnly, parser, (req, res) => {
     const result = service.create(req.body);
     lineup?.assertAvailable(result.discussionId);
@@ -64,6 +69,7 @@ export function createApp(service: DraftService, diagnose: (event: Diagnostic) =
   }
   app.use(() => { throw new AppError('NOT_FOUND', '未找到请求的资源', 404); });
   app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
+    if(res.headersSent){res.end();return;}
     const requestId = randomUUID();
     const parserFailure = isObject(error) && typeof error.type === 'string' &&
       ['entity.parse.failed', 'entity.too.large', 'encoding.unsupported', 'charset.unsupported', 'request.aborted', 'request.size.invalid'].includes(error.type);
