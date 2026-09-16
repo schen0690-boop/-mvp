@@ -258,3 +258,19 @@ P9来自本轮真实请求，完整可见正文单独归档sources/stage-4d-b-re
 文档检查实际结果：内联Node只读检查退出码0，确认仅7份授权Markdown变更、原Prompt前缀保留、29条S5用例全部为计划、预算算式一致、相对文件链接有效、代码围栏成对、新增内容无TODO/TBD；变更Markdown中的密钥形态匹配为0。git diff --check退出码0；仅有仓库既有LF/CRLF转换提醒，未修改换行全局配置。以上不等于产品测试、Mermaid渲染或语义质量已通过。
 
 本轮全部实现、迁移、U/I/S/E/Q验证均未执行；4D真实授权维持关闭、未触碰。下一步仅等用户审阅三组决定；不得以本次文档提交作为5B启动或真实讨论授权。
+
+## 阶段5B：Fake讨论执行与003（2026-09-16）
+
+P11原文来自用户附件16b71862-f30e-4936-946d-adc36f0081f7/pasted-text.txt，已完整追加sources/development-prompts.md；未复制含密钥的历史聊天。意图为把已确认阵容执行到有限终态，以真实TDD验证调度、提炼、事件事务、预算和取消。起点main/aef075d，工作区干净；项目级schen/cs064210@163.com沿用，不倒填、不推送。
+
+实际读取项目AGENTS、运行设计、architecture/contracts/test-plan、迁移/快照/Provider/期限取消/HTTP启动与前端解析及测试；只据实际接口接线。用户P11已确认5A三组决定，并允许最小前端兼容，覆盖旧5A仅5C解析运行态的划分。writing-plans生成docs/superpowers/plans/2026-09-16-stage5b.md，当前会话逐任务执行，不启动worktree/子代理。
+
+实际读取并使用的Skill根为`C:\Users\Administrator\.codex\skills\superpowers\skills\`：using-superpowers/SKILL.md（另读Codex适配参考）、writing-plans/SKILL.md、executing-plans/SKILL.md、test-driven-development/SKILL.md、systematic-debugging/SKILL.md、verification-before-completion/SKILL.md。版本沿用既有本地记录，本轮未重新核实版本或升级；“已读取/已用于任务”不等同于Skill自身执行测试。brainstorming沿用已确认5A成果，未重新启动设计审批。
+
+实现003、DiscussionProvider四能力/Fake、共享Limiter、运行存储与runner、start/stop HTTP、单库占用恢复、前端严格运行解析。每模块业务RED→最小实现→GREEN，再回归。真实调试包括：fixture换行导致历史checksum不符、测试Promise接口目标不符（两者不算业务RED）；timeout被误分类为cancelled；主持串联异常被当成提炼失败；时间分别采样引起2ms期限偏差；最终3条事务内到期测试发现已写事件后仍能提交，增加提交前期限回滚。详见stage-5b-validation.md，不为补充首次通过的回归虚构RED。
+
+实际最新验证：后端314（161单元/153集成）/前端76/旧浏览器E2E26全通过，退出0；三项类型检查、后端编译/前端构建、旧阵容HTTP冒烟均0。初轮308及补充311报告保留；最终314在期限修复后运行。前端和旧E2E没有在该最后后端修复后再次执行，记录各自真实时间。E2E硬编码曾更新4D截图，先另存5B再恢复历史原图，修改4个测试文件保存路径后26项重跑通过，未修改4D实证。
+
+最终Fake HTTP轨迹代码72fcb21，discussion=d9c1f026-79e1-4314-88f3-74a40ef978f6，run=ce56a9e1-fbf1-4ada-b3fb-838ac313d6c4；13公开发言、11增量提炼、1最终总结、73次Fake调用/168限额。真实Express/SQLite、同场重复命令、进程重开GET保持终态，两个自有进程退出0并释放占用。记录保存在evidence/stage-5b/fake-trace-final.json，不是模型质量或付费调用证据。
+
+所有数据库实验使用本轮自建临时文件；未读私有配置、未启动4D入口、未操作已关闭预算或验收库。旧适配器测试只用注入传输/本机stub。本轮无安装、依赖变更、SSE route、演播厅、真实讨论适配器。29条S5已映射实际测试或5C/Q计划；后续交付检查（至少5段真实Prompt覆盖四标记阶段、样例/初始化/API/README/测试/Git/工作流说明）继续保留，不以本轮执行器代表整个作业交付完成。完成后停止，等待5C授权。

@@ -224,3 +224,41 @@ S4-23/24的4C卡片/刷新/公开边界部分现已验证；S4-32真实模型仍
 | S5-29 R05 R06 R07 R10 R12 | Q | 未来单独真实讨论授权和预算 | 检查意愿相关性、响应依赖、引用支持、句子及总结 | 分别记录真实能力/质量及局限；不由Fake或4D阵容样本推断 | 计划 |
 
 5B核心行为依真实失败→最小实现→通过→相关回归；只有行为未实现失败才是RED。5C浏览器按业务状态/版本/可见内容等待，屏障控制网络交错，不以固定sleep证明正确。每个测试独立关闭runner、Provider等待、SSE连接和SQLite；迁移/数据库故障只用临时夹具。传输重试可能重复，测试应用幂等，不宣称SSE恰好一次。
+
+## 阶段5B实际映射（2026-09-16）
+
+以上5A表保持历史计划，当前状态以本表及[5B验证报告](stage-5b-validation.md)为准。“通过”仅指所列本地层次；同一行原计划中的S/E未实施部分不会因后端通过而自动通过。测试文件均持久化在tests/unit、tests/integration或web/tests。
+
+| 编号 | 实际覆盖文件/行为 | 当前状态及未执行部分 |
+|---|---|---|
+| S5-01 | discussion-store.test.ts、discussion-http.test.ts：确认版本、输入/状态/缺失记录 | U/I通过 |
+| S5-02 | discussion-runner.test.ts、discussion-http.test.ts：重复/并发start仅一run；终态同键重放、新键拒绝 | I通过；运行双Tab浏览器留5C |
+| S5-03 | discussion-runner.test.ts：登记失败；discussion-store.test.ts：持久化中断恢复 | I通过 |
+| S5-04 | discussion-controls.test.ts、discussion-http.test.ts：重复只读请求不增加Provider调用 | I通过；SSE/断线浏览器留5C |
+| S5-05 | fake-discussion.test.ts、discussion-controls.test.ts：不同最新发言改变申请及实际下一发言者 | U/I通过；演播厅E待5C |
+| S5-06 | discussion.test.ts排序/等待/连续限制；discussion-controls.test.ts失败候选兜底 | U/I通过 |
+| S5-07 | discussion-runner.test.ts无人申请；discussion-controls.test.ts全超时/主持失败 | I通过 |
+| S5-08 | discussion-controls.test.ts单角色失败/两尝试共享；runner迟到门闩 | I通过 |
+| S5-09 | discussion.test.ts：句界、码点、结构、角色及本场引用；runner无效输出 | U/I通过；真实语义安全不由格式测试保证 |
+| S5-10 | discussion-store.test.ts：小窗版本不废弃内容，旧source拒绝 | I通过 |
+| S5-11 | discussion-store.test.ts事件故障回滚、约束及事务内到期；controls存储故障 | I通过 |
+| S5-12 | discussion-runner.test.ts中途11次提炼、单专家；domain证据/空组规则 | U/I通过；观点UI待5C |
+| S5-13 | discussion-store.test.ts：旧来源不能覆盖新结果；迟到写入无效 | I通过 |
+| S5-14 | discussion-store.test.ts保留旧有效观点；runner连续失败有限收尾 | I通过；旧观点提示UI待5C |
+| S5-15 | discussion-runner.test.ts用户/12次/10分钟/预算收尾；store第一原因和旧epoch | U/I通过 |
+| S5-16 | discussion-runner.test.ts独立总结、迟到；HTTP重复结束和最终Fake重开读取 | I通过；总结浏览器展示待5C |
+| S5-17 | runner总结失败/零发言/60秒/迟到；store中断恢复 | I通过；前端summary不可用解码通过，完整展示待5C |
+| S5-18 | controls两场隔离/第三429/阵容共享；call-limiter.test.ts每场2全局4与有界队列 | U/I通过 |
+| S5-19 | discussion.test.ts全部N预算；store最后额度竞争/总结预留；runner期限/预算 | U/I通过，不是实际供应商费用或负载证明 |
+| S5-20 | runtime-migration.test.ts真实002升级/旧值/回滚/重开/拒绝；store外键唯一 | I通过；仅临时夹具，未升级用户库 |
+| S5-21 | ownership.test.ts占用冲突；store恢复；最终Fake进程关闭/重开 | I通过；无跨进程执行协调承诺 |
+| S5-22 | 快照与SSE间隙、完整批次消费 | 计划5C，未执行 |
+| S5-23 | SSE游标/Last-Event-ID/reset/补发 | 计划5C，未执行 |
+| S5-24 | SSE多观察者、跨场/切页回调隔离 | 计划5C，未执行（HTTP两场隔离已验证） |
+| S5-25 | SSE背压、心跳、终态补发与关闭 | 计划5C，未执行 |
+| S5-26 | 新演播厅、Transcript/观点/运行小窗/实时断线与响应式 | 计划5C，未执行；旧26E2E不替代此项 |
+| S5-27 | 全部既有254后端、原69前端与26E2E重新运行；新增runtime-api.test.ts7项 | 已通过，原19/21及新增24字段严格兼容 |
+| S5-28 | discussion-http.test.ts正常整场禁止非loopback fetch；领域白名单/错误边界；普通入口显式Fake | U/I通过；SSE/演播厅公开出口仍待5C，无真实模型请求 |
+| S5-29 | 真实讨论相关性/证据语义/总结质量 | 未执行，需未来单独授权；4D阵容实证不算讨论质量 |
+
+本轮最新后端314（单元161、集成153，其中HTTP不重复计数）、前端76、旧E2E26，退出码均0；三项类型检查/两项构建均0。详细执行时间、代码基线、分批结果和真实RED→GREEN见验证报告，未执行项不冒领。

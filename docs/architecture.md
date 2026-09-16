@@ -4,7 +4,13 @@
 
 阶段4A阵容设计已获P6确认，4B已实现Fake Provider后端与最小前端兼容，详见[lineup-design.md](lineup-design.md)及[验证记录](stage-4b-validation.md)。后续发言/调度/SSE原设计仅保留背景，不属本轮冻结范围。
 
-**阶段5A阅读入口：** 本文早期动态讨论段落仍是设计背景。新的待确认运行设计唯一正文为[discussion-runtime-design.md](discussion-runtime-design.md)，精确协议见contracts的5A节；冲突与建议在那里逐项登记，不表示现有代码已支持运行。4D已通过单样本真实阵容，但原授权关闭，5A/5B/5C不获任何真实模型额度。
+**阶段5B阅读入口：** 用户P11已确认[运行设计](discussion-runtime-design.md)的总体方案与限定；003、Fake执行器、start/stop、运行快照和最小前端消费兼容已实现，详见[5B验证](stage-5b-validation.md)。精确协议见contracts运行节；SSE及演播厅仍仅设计。4D已通过单样本真实阵容，但原授权关闭，5B/5C不获任何真实模型额度。
+
+### 阶段5B实际模块
+
+`domain/discussion.ts`校验四类公开结果和选择候选；`providers/discussion.ts`独立于RosterGenerator，`fake-discussion.ts`按当前上下文回应。`call-limiter.ts`由普通server同时注入阵容和讨论，避免分别计数突破全局限制。`domain/discussion-service.ts`负责登记唯一runner、征集/发言/串行提炼、停止和独立总结；`db/sqlite-discussion.ts`处理运行CAS、预算及原子事件，`read-runtime.ts`构造白名单快照。Provider等待不持有写事务。
+
+`schema-v3.ts`增加utterances/findings/finding_evidence/role_public_states及必要运行列，001/002不变。`db/ownership.ts`在普通服务恢复前取得本地库占用；不自动清理未知占用，不宣称跨进程协调。`web/src/runtime-snapshot.ts`严格校验新24字段联合分支；现有页面仅安全状态文本。没有SSE route、提交广播钩子或演播厅；5C须在实际提交后接线，不把持久化事件当已实现实时推送。
 
 ## 模块与数据访问边界
 

@@ -1,0 +1,60 @@
+{
+  "stage": "5B",
+  "provider": "Fake discussion only; older adapter tests use injected transport/local stubs",
+  "codeRevision": "aafcbfc1d1d45fce018c3d948fc23ca3fc75334d",
+  "startedAt": "2026-09-16T11:29:39.878Z",
+  "commands": [
+    {
+      "name": "backend tests",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=evidence/stage-5b/raw/deadline-fix/backend.json"
+      ],
+      "startedAt": "2026-09-16T11:29:39.881Z",
+      "endedAt": "2026-09-16T11:29:53.672Z",
+      "exitCode": 0,
+      "stdout": "\n RUN  v5.0.1 D:/实测文件夹\n\n ✓ tests/integration/generation.test.ts (10 tests) 846ms\n ✓ tests/integration/deepseek-pipeline.test.ts (13 tests) 1117ms\n   ✓ real adapter passes existing validators, commits and confirms; first success one request, no reasoning leaked 353ms\n ✓ tests/integration/http.test.ts (18 tests) 1624ms\n   ✓ 真实HTTP创建201、查询200，公开字段不含内部数据 510ms\n ✓ tests/integration/lineup-http.test.ts (11 tests) 1816ms\n   ✓ real Express returns captured 202, GET ready, creation replay current snapshot, and concurrent confirm only once 672ms\n ✓ tests/integration/confirm.test.ts (6 tests) 795ms\n ✓ tests/integration/generation-resilience.test.ts (9 tests) 782ms\n ✓ tests/integration/runtime-migration.test.ts (4 tests) 527ms\n ✓ tests/integration/drafts.test.ts (14 tests) 811ms\n ✓ tests/integration/deepseek-http.test.ts (5 tests) 682ms\n ✓ tests/integration/discussion-store.test.ts (10 tests) 1513ms\n ✓ tests/integration/guarded-roster.test.ts (4 tests) 445ms\n ✓ tests/integration/migrations.test.ts (12 tests) 655ms\n ✓ tests/integration/list.test.ts (8 tests) 493ms\n ✓ tests/integration/runtime.test.ts (2 tests) 281ms\n ✓ tests/unit/deepseek.test.ts (26 tests) 230ms\n ✓ tests/unit/discussion.test.ts (15 tests) 117ms\n ✓ tests/unit/live-authorization.test.ts (6 tests) 95ms\n ✓ tests/unit/lineup.test.ts (38 tests) 115ms\n ✓ tests/integration/discussion-http.test.ts (6 tests) 6555ms\n   ✓ 真实Express开始202、幂等200、终态24字段、只读GET与列表 3278ms\n   ✓ 整条Fake HTTP执行拦截所有非loopback出站，外部请求为零 2515ms\n ✓ tests/unit/fake-roster.test.ts (13 tests) 38ms\n ✓ tests/integration/schema.test.ts (1 test) 46ms\n ✓ tests/integration/ownership.test.ts (1 test) 68ms\n ✓ tests/unit/input.test.ts (38 tests) 40ms\n ✓ tests/unit/call-limiter.test.ts (3 tests) 45ms\n ✓ tests/unit/deepseek-config.test.ts (9 tests) 20ms\n ✓ tests/unit/backend-config.test.ts (1 test) 61ms\n ✓ tests/unit/fake-discussion.test.ts (2 tests) 19ms\n ✓ tests/unit/generation.test.ts (10 tests) 21ms\n ✓ tests/integration/discussion-controls.test.ts (7 tests) 10200ms\n   ✓ 两场并行/第三场429，停止A不影响B，观察无额外调用 2772ms\n   ✓ 单个角色失败可选其他有效角色，网络重试与修复共享两次 4549ms\n   ✓ 全部意愿超时只修复一次；关闭服务取消全部Fake任务与队列 504ms\n   ✓ 主持串联发言两次失败属于致命主持失败，不当成综合失败继续 571ms\n   ✓ 当前公开内容实际改变申请者与下一发言者，而非固定角色顺序 1542ms\n ✓ tests/integration/discussion-runner.test.ts (12 tests) 11823ms\n   ✓ 完整Fake轨迹：开场→12专家回应→中途观点→一次总结并保留确认时间 4984ms\n   ✓ 单专家不因公平规则卡死，不能制造两专家共识 2603ms\n   ✓ 无人申请只追问一次后有限收尾 528ms\n   ✓ 总结失败保存completed+unavailable，不伪造文本 1423ms\n   ✓ 30秒调用超时、两次共享任务期限；总结60秒降级，迟到不覆盖 945ms\n   ✓ 10分钟运行截止包含排队和调用，总结读取最终已提交内容 699ms\n\n Test Files  30 passed (30)\n      Tests  314 passed (314)\n   Start at  19:29:40\n   Duration  13.16s (tests 78%, import 15%, transform 6%, worker 1%)\n\n    Isolate  30 workers spawned · ~657ms startup each (spawn + environment, per file)\n             at least ~2.16s faster with isolate: false — reuses workers across files instead of one per file\n\nJSON report written to D:/实测文件夹/evidence/stage-5b/raw/deadline-fix/backend.json\n",
+      "stderr": ""
+    },
+    {
+      "name": "backend typecheck",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json"
+      ],
+      "startedAt": "2026-09-16T11:29:53.673Z",
+      "endedAt": "2026-09-16T11:29:54.895Z",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "backend build",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.build.json"
+      ],
+      "startedAt": "2026-09-16T11:29:54.896Z",
+      "endedAt": "2026-09-16T11:29:55.943Z",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "results": {
+    "backend": 314,
+    "backendUnit": 161,
+    "backendIntegration": 153
+  },
+  "completedAt": "2026-09-16T11:29:55.947Z"
+}

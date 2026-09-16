@@ -1,8 +1,8 @@
-# AI 圆桌讨论 MVP：阶段4D适配器与受限联调准备
+# AI 圆桌讨论 MVP：阶段5B Fake讨论执行器
 
-已完成草稿创建/查询、SQLite持久化及幂等；新增Fake阵容生成、失败重试、整套重新生成和当前版本确认。创建仍不自动生成阵容，确认不启动讨论。详情区支持生成、失败重试、重新生成、主持人/专家卡片和当前版本确认。仅使用Fake Provider，确认后显示只读阵容。
+已完成草稿创建/查询、阵容生成与确认；阶段5B新增Fake讨论执行、内容驱动调度、增量提炼和有限总结，使用HTTP开始/结束。创建不自动生成阵容，确认不自动开始讨论。现有中文页面保留阵容流程，只增加运行状态消费兼容；尚无讨论控制按钮和演播厅。
 
-**DeepSeek适配器已完成本地测试；真实联调尚未执行，等待用户配置密钥并回复“已配置”。** 讨论调度、SSE、共识和完整演播厅尚未实现。
+**4D已完成一次真实阵容联调，原授权已关闭。普通启动仅Fake，无需密钥。** 本轮未调用真实讨论模型；SSE及完整演播厅仍未实现。当前验收见[阶段5B验证](docs/stage-5b-validation.md)，不要重新执行历史4D受限入口。
 
 ## 运行
 
@@ -28,13 +28,19 @@ npm start
 
 本模块无需模型密钥；不自动读取 `.env`。例如本地另开开发库：先设置 `$env:DATABASE_PATH = 'data/drafts-dev.sqlite'`，再执行初始化/启动命令。环境探针库在 `tools/env-probe/`；本轮测试每例创建 `.tmp/stage-2/case-*` 新文件，独立进程冒烟使用 `smoke-*`，全部忽略且保留，不删除用户文件。
 
-### 001/002与已有库维护
+### 001/002/003与已有库维护
 
-空库按001→002建立；001只严格接管阶段2最终schema，002才新增阵容字段和lineup_members。未知DDL/对象或迁移历史不匹配即停止，所有待执行版本同事务，失败回滚。重复执行不重建或改变数据/迁移时间。
+空库按001→002→003建立；001严格接管阶段2最终schema，002新增阵容字段和lineup_members，003才增加讨论运行、发言、观点证据和角色状态。001/002不修改。未知DDL/对象或迁移历史不匹配即停止，所有待执行版本同事务，失败回滚。重复执行不重建或改变数据/迁移时间。
 
 对已有待迁移文件，db:init先产生新的`原文件.backup-UUID.sqlite`一致备份并验证可读，不覆盖已有备份；维护前停止全部写入者。启动不自动迁移，缺库/旧库先db:init；遗留generating在监听前记为LINEUP_INTERRUPTED失败，不自动续跑，恢复失败不监听。**本轮仅在测试自建旧schema夹具验证，没有迁移开发库或用户已有业务库。**
 
 ## 接口
+
+阶段5B新增：POST `/api/discussions/{discussionId}/start`，正文为`{"requestId":"新UUID","generationId":"当前阵容UUID","lineupRevision":1}`（必须替换实际ID/版本）；首次202、重复200，返回discussionId/runId/snapshot/replayed。POST同路径`/stop`正文`{}`，运行/收尾202、终态200快照。GET读取已保存记录，不启动runner。
+
+正常12次专家公开发言或10分钟后收尾；总结不可用也可能completed，须检查summary.status及安全提示。失败终态不能重新开播。服务启动先取得数据库`.owner`占用，再把确实中断的running/stopping记为failed/RUN_INTERRUPTED，不自动续跑。未知遗留占用文件必须由操作人先确认原进程已停止，程序不自动删除或误杀进程。
+
+阶段5B回归命令为`npm test`、`npm run test:web`、三项typecheck、两项build及`npx --no-install playwright test --config playwright.stage5b.config.ts`。最后一项运行旧26条草稿/阵容E2E，截图保存stage-5b，不能称为讨论演播厅E2E。运行状态暂靠现有手动重新加载读取；SSE和正式讨论界面留5C。
 
 | 方法与路径 | 成功响应 |
 |---|---|

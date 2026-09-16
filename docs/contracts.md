@@ -193,9 +193,9 @@ DeepSeekRosterProvider以注入fetch发送固定官方HTTPS Chat Completions；m
 
 真实验收在固定持久化授权目录绑定一组discussion/generation，仅指定话题4专家；出站前预约累计2次，成功或终结后关闭。不把验收计数变成公开字段或通用计费平台。原Fake入口及常规测试不加载私有配置。
 
-## 阶段5A运行与SSE契约草案（待确认）
+## 阶段5A设计、5B运行实现与5C SSE待实现契约
 
-领域接受条件、预算和迁移以[discussion-runtime-design.md](discussion-runtime-design.md)为唯一设计依据。以下均未实现/未验证，不授权真实调用。旧阵容19/21字段保持，新增运行联合分支，禁止把未知字段校验改成无条件忽略。
+领域接受条件、预算和迁移以[discussion-runtime-design.md](discussion-runtime-design.md)为唯一设计依据。用户P11已确认并授权5B：以下HTTP命令、24字段运行快照及公开事件持久化已实现，结果见[5B验证](stage-5b-validation.md)。SSE envelope、订阅/补发/重连/背压仍为5C计划，当前没有/events路由。不授权真实调用。旧阵容19/21字段保持，新增运行联合分支，未知字段仍严格拒绝。
 
 ### HTTP命令与重复语义
 

@@ -1,0 +1,48 @@
+{
+  "stage": "5B",
+  "provider": "Fake discussion only; older adapter tests use injected transport/local stubs",
+  "codeRevision": "aafcbfc1d1d45fce018c3d948fc23ca3fc75334d",
+  "startedAt": "2026-09-16T11:23:44.944Z",
+  "commands": [
+    {
+      "name": "E2E typecheck",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.e2e.json"
+      ],
+      "startedAt": "2026-09-16T11:23:44.947Z",
+      "endedAt": "2026-09-16T11:23:45.951Z",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "old Fake browser E2E",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/playwright/cli.js",
+        "test",
+        "--config",
+        "playwright.stage5b.config.ts"
+      ],
+      "startedAt": "2026-09-16T11:23:45.952Z",
+      "endedAt": "2026-09-16T11:25:18.548Z",
+      "exitCode": 0,
+      "stdout": "\nRunning 26 tests using 1 worker\n\n  ok  1 e2e\\drafts.spec.ts:4:1 › 真实流程：默认4专家创建、全部列表、详情与刷新读取 (2.5s)\n  ok  2 e2e\\interaction.spec.ts:16:1 › 真实流程：8位专家与active过滤，明确再次同题创建 (1.4s)\n  ok  3 e2e\\interaction.spec.ts:29:1 › 真实流程：空白/人数空值拒绝；Unicode500/501边界；HTML作为文本 (1.6s)\n  ok  4 e2e\\interaction.spec.ts:54:1 › 故障注入：服务端已保存但响应丢失，重试原请求不重复落库 (1.2s)\n  ok  5 e2e\\interaction.spec.ts:72:1 › 故障注入：提交期间重复点击，创建成功后列表失败可独立恢复 (1.3s)\n  ok  6 e2e\\interaction.spec.ts:87:1 › 故障注入：旧详情迟到不能覆盖新选择；详情失败后可重载 (1.4s)\n  ok  7 e2e\\layout.spec.ts:5:3 › 真实布局：390x844，区域访问、键盘与独立滚动 (1.9s)\n  ok  8 e2e\\layout.spec.ts:5:3 › 真实布局：1366x768，区域访问、键盘与独立滚动 (1.8s)\n  ok  9 e2e\\layout.spec.ts:5:3 › 真实布局：2560x1080，区域访问、键盘与独立滚动 (2.2s)\n  ok 10 e2e\\lineup-compat.spec.ts:3:1 › 4B消费者回归：真实HTTP状态与4C卡片一致 (1.3s)\n  ok 11 e2e\\lineup.spec.ts:17:1 › 正常闭环：4专家，确认及ready/confirmed刷新由SQLite恢复 (4.5s)\n  ok 12 e2e\\lineup.spec.ts:25:1 › 重新生成新阵容，旧generation无法确认 (5.9s)\n  ok 13 e2e\\lineup.spec.ts:31:1 › Provider失败显示安全错误，重试新代成功；失败刷新 (6.0s)\n  ok 14 e2e\\lineup.spec.ts:35:1 › 生成中刷新继续GET，不再次生成；释放受控Provider后完成 (3.9s)\n  ok 15 e2e\\lineup.spec.ts:39:1 › confirm409读取新快照并提示，不自动确认 (3.5s)\n  ok 16 e2e\\lineup.spec.ts:45:31 › 网络故障注入：confirm 500保留卡片并允许重试 (3.6s)\n  ok 17 e2e\\lineup.spec.ts:45:31 › 网络故障注入：confirm 503保留卡片并允许重试 (3.6s)\n  ok 18 e2e\\lineup.spec.ts:51:1 › 重新生成失败隐藏旧卡片且禁止确认，重试可恢复 (8.6s)\n  ok 19 e2e\\lineup.spec.ts:54:1 › 生成中切换讨论，旧结果不污染B (1.5s)\n  ok 20 e2e\\lineup.spec.ts:59:1 › 同一事件循环重复点击生成和确认，各只提交一次 (3.4s)\n  ok 21 e2e\\lineup.spec.ts:64:1 › 浏览器离线保留生成态，联网GET恢复而非POST重发 (3.9s)\n  ok 22 e2e\\lineup.spec.ts:68:1 › 两个Tab：旧Tab冲突接受新版，另一Tab确认后重新GET恢复已确认 (6.8s)\n  ok 23 e2e\\lineup.spec.ts:73:85 › 阵容布局 390x844 / 1专家长字段与键盘滚动 (4.5s)\n  ok 24 e2e\\lineup.spec.ts:73:85 › 阵容布局 1366x768 / 8专家长字段与键盘滚动 (4.0s)\n  ok 25 e2e\\lineup.spec.ts:73:85 › 阵容布局 2560x1080 / 8专家长字段与键盘滚动 (3.8s)\n  ok 26 e2e\\lineup.spec.ts:80:1 › 真实确认请求等待时禁用两个按钮，成功后恢复为只读 (3.5s)\n\n  26 passed (1.5m)\n",
+      "stderr": "[WebServer] (node:22104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:16996) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    }
+  ],
+  "results": {
+    "e2e": {
+      "startTime": "2026-09-16T11:23:46.931Z",
+      "duration": 91591.95199999999,
+      "expected": 26,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "completedAt": "2026-09-16T11:25:18.549Z"
+}

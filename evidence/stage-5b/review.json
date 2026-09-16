@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-09-16T11:37:30.026Z",
+  "changedTextFilesScanned": 60,
+  "promptHistoricalPrefixPreserved": true,
+  "P11OriginalPresent": true,
+  "publishedSchemas001002Unchanged": true,
+  "liveEntrypointAndAdapterUnchanged": true,
+  "historical4DScreenshotsAnd4DBEvidenceUnchanged": true,
+  "sensitiveShapeMatches": 0,
+  "markdownFencesAndSelectedRelativeLinksValid": true,
+  "scope": "Static review only; no model, configuration, database or product execution"
+}

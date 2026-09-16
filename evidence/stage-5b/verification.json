@@ -1,0 +1,158 @@
+{
+  "stage": "5B",
+  "provider": "Fake discussion only; older adapter tests use injected transport/local stubs",
+  "codeRevision": "aafcbfc1d1d45fce018c3d948fc23ca3fc75334d",
+  "startedAt": "2026-09-16T11:17:26.893Z",
+  "commands": [
+    {
+      "name": "backend tests",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=evidence/stage-5b/raw/backend.json"
+      ],
+      "startedAt": "2026-09-16T11:17:26.895Z",
+      "endedAt": "2026-09-16T11:17:39.055Z",
+      "exitCode": 0,
+      "stdout": "\n RUN  v5.0.1 D:/实测文件夹\n\n ✓ tests/integration/drafts.test.ts (14 tests) 626ms\n ✓ tests/integration/deepseek-pipeline.test.ts (13 tests) 921ms\n ✓ tests/integration/http.test.ts (18 tests) 1608ms\n   ✓ 真实HTTP创建201、查询200，公开字段不含内部数据 639ms\n ✓ tests/integration/lineup-http.test.ts (11 tests) 1953ms\n   ✓ real Express returns captured 202, GET ready, creation replay current snapshot, and concurrent confirm only once 674ms\n ✓ tests/integration/generation.test.ts (10 tests) 895ms\n ✓ tests/integration/generation-resilience.test.ts (9 tests) 912ms\n ✓ tests/integration/deepseek-http.test.ts (5 tests) 601ms\n ✓ tests/integration/list.test.ts (8 tests) 355ms\n ✓ tests/integration/confirm.test.ts (6 tests) 754ms\n ✓ tests/integration/runtime-migration.test.ts (4 tests) 509ms\n ✓ tests/integration/migrations.test.ts (12 tests) 416ms\n ✓ tests/integration/runtime.test.ts (2 tests) 229ms\n ✓ tests/integration/guarded-roster.test.ts (4 tests) 360ms\n ✓ tests/unit/deepseek.test.ts (26 tests) 205ms\n ✓ tests/integration/discussion-store.test.ts (7 tests) 1005ms\n ✓ tests/unit/live-authorization.test.ts (6 tests) 81ms\n ✓ tests/unit/backend-config.test.ts (1 test) 40ms\n ✓ tests/integration/discussion-http.test.ts (4 tests) 5668ms\n   ✓ 真实Express开始202、幂等200、终态24字段、只读GET与列表 2948ms\n   ✓ 整条Fake HTTP执行拦截所有非loopback出站，外部请求为零 2422ms\n ✓ tests/unit/lineup.test.ts (38 tests) 53ms\n ✓ tests/unit/discussion.test.ts (15 tests) 81ms\n ✓ tests/integration/schema.test.ts (1 test) 45ms\n ✓ tests/integration/ownership.test.ts (1 test) 47ms\n ✓ tests/unit/input.test.ts (38 tests) 40ms\n ✓ tests/unit/fake-roster.test.ts (13 tests) 42ms\n ✓ tests/unit/deepseek-config.test.ts (9 tests) 19ms\n ✓ tests/unit/generation.test.ts (10 tests) 18ms\n ✓ tests/unit/call-limiter.test.ts (3 tests) 52ms\n ✓ tests/unit/fake-discussion.test.ts (2 tests) 15ms\n ✓ tests/integration/discussion-controls.test.ts (6 tests) 7815ms\n   ✓ 两场并行/第三场429，停止A不影响B，观察无额外调用 2625ms\n   ✓ 单个角色失败可选其他有效角色，网络重试与修复共享两次 4180ms\n   ✓ 全部意愿超时只修复一次；关闭服务取消全部Fake任务与队列 410ms\n   ✓ 主持串联发言两次失败属于致命主持失败，不当成综合失败继续 335ms\n ✓ tests/integration/discussion-runner.test.ts (12 tests) 10586ms\n   ✓ 完整Fake轨迹：开场→12专家回应→中途观点→一次总结并保留确认时间 4873ms\n   ✓ 单专家不因公平规则卡死，不能制造两专家共识 2294ms\n   ✓ 无人申请只追问一次后有限收尾 391ms\n   ✓ 总结失败保存completed+unavailable，不伪造文本 985ms\n   ✓ 30秒调用超时、两次共享任务期限；总结60秒降级，迟到不覆盖 827ms\n   ✓ 10分钟运行截止包含排队和调用，总结读取最终已提交内容 689ms\n\n Test Files  30 passed (30)\n      Tests  308 passed (308)\n   Start at  19:17:27\n   Duration  11.70s (tests 79%, import 14%, transform 6%, worker 1%)\n\n    Isolate  30 workers spawned · ~557ms startup each (spawn + environment, per file)\n             at least ~1.83s faster with isolate: false — reuses workers across files instead of one per file\n\nJSON report written to D:/实测文件夹/evidence/stage-5b/raw/backend.json\n",
+      "stderr": ""
+    },
+    {
+      "name": "frontend tests",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "web/vitest.config.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=evidence/stage-5b/raw/frontend.json"
+      ],
+      "startedAt": "2026-09-16T11:17:39.056Z",
+      "endedAt": "2026-09-16T11:17:40.642Z",
+      "exitCode": 0,
+      "stdout": "\n RUN  v5.0.1 D:/实测文件夹\n\n ✓ web/tests/controller.test.ts (7 tests) 24ms\n ✓ web/tests/lineup-panel.test.tsx (9 tests) 79ms\n ✓ web/tests/lineup-controller.test.ts (28 tests) 94ms\n ✓ web/tests/lineup.test.ts (7 tests) 141ms\n ✓ web/tests/runtime-api.test.tsx (7 tests) 141ms\n ✓ web/tests/lineup-api.test.ts (7 tests) 128ms\n ✓ web/tests/api.test.ts (11 tests) 161ms\n\n Test Files  7 passed (7)\n      Tests  76 passed (76)\n   Start at  19:17:39\n   Duration  985ms (import 41%, transform 36%, tests 21%, worker 3%)\n\nJSON report written to D:/实测文件夹/evidence/stage-5b/raw/frontend.json\n",
+      "stderr": ""
+    },
+    {
+      "name": "backend typecheck",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json"
+      ],
+      "startedAt": "2026-09-16T11:17:40.643Z",
+      "endedAt": "2026-09-16T11:17:41.993Z",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "frontend typecheck",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-09-16T11:17:41.994Z",
+      "endedAt": "2026-09-16T11:17:43.394Z",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "E2E typecheck",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.e2e.json"
+      ],
+      "startedAt": "2026-09-16T11:17:43.395Z",
+      "endedAt": "2026-09-16T11:17:44.304Z",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "backend build",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.build.json"
+      ],
+      "startedAt": "2026-09-16T11:17:44.304Z",
+      "endedAt": "2026-09-16T11:17:45.268Z",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "frontend build",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "web/vite.config.ts"
+      ],
+      "startedAt": "2026-09-16T11:17:45.268Z",
+      "endedAt": "2026-09-16T11:17:46.110Z",
+      "exitCode": 0,
+      "stdout": "vite v8.3.0 building client environment for production...\ntransforming...\n✓ 25 modules transformed.\nrendering chunks...\ncomputing gzip size...\nweb/dist/index.html                   0.36 kB │ gzip:  0.29 kB\nweb/dist/assets/index-_XSms6ef.css    8.17 kB │ gzip:  2.45 kB\nweb/dist/assets/index-Bj0z0W9K.js   255.72 kB │ gzip: 79.32 kB\n\n✓ built in 229ms\n",
+      "stderr": ""
+    },
+    {
+      "name": "old lineup HTTP smoke",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "scripts/http-smoke.mjs",
+        "--lineup"
+      ],
+      "startedAt": "2026-09-16T11:17:46.110Z",
+      "endedAt": "2026-09-16T11:17:47.493Z",
+      "exitCode": 0,
+      "stdout": "{\n  \"initialization\": [\n    {\n      \"exitCode\": 0,\n      \"output\": \"数据库初始化完成；已有数据保持不变。\"\n    },\n    {\n      \"exitCode\": 0,\n      \"output\": \"数据库初始化完成；已有数据保持不变。\"\n    }\n  ],\n  \"statuses\": {\n    \"create\": 201,\n    \"get\": 200,\n    \"list\": 200,\n    \"generate\": 202,\n    \"confirm\": 200,\n    \"reopenedGet\": 200\n  },\n  \"childRuns\": [\n    {\n      \"pid\": 11396,\n      \"exitCode\": 0,\n      \"signal\": null,\n      \"output\": \"本地服务已启动：http://127.0.0.1:33113（阵容与讨论均使用Fake Provider，非真实AI）\",\n      \"stderr\": \"\"\n    },\n    {\n      \"pid\": 23728,\n      \"exitCode\": 0,\n      \"signal\": null,\n      \"output\": \"本地服务已启动：http://127.0.0.1:33113（阵容与讨论均使用Fake Provider，非真实AI）\",\n      \"stderr\": \"\"\n    }\n  ],\n  \"listenerClosed\": true,\n  \"migrationVersions\": [\n    1,\n    2,\n    3\n  ],\n  \"provider\": \"Fake only\",\n  \"databaseScope\": \".tmp/stage-4b/smoke-* (独立新建文件，保留，不触碰开发库)\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "old Fake browser E2E",
+      "executable": "D:\\nodejs\\node.exe",
+      "args": [
+        "node_modules/playwright/cli.js",
+        "test",
+        "--config",
+        "playwright.stage5b.config.ts"
+      ],
+      "startedAt": "2026-09-16T11:17:47.494Z",
+      "endedAt": "2026-09-16T11:19:19.399Z",
+      "exitCode": 0,
+      "stdout": "\nRunning 26 tests using 1 worker\n\n  ok  1 e2e\\drafts.spec.ts:4:1 › 真实流程：默认4专家创建、全部列表、详情与刷新读取 (2.7s)\n  ok  2 e2e\\interaction.spec.ts:16:1 › 真实流程：8位专家与active过滤，明确再次同题创建 (1.4s)\n  ok  3 e2e\\interaction.spec.ts:29:1 › 真实流程：空白/人数空值拒绝；Unicode500/501边界；HTML作为文本 (1.6s)\n  ok  4 e2e\\interaction.spec.ts:54:1 › 故障注入：服务端已保存但响应丢失，重试原请求不重复落库 (1.2s)\n  ok  5 e2e\\interaction.spec.ts:72:1 › 故障注入：提交期间重复点击，创建成功后列表失败可独立恢复 (1.4s)\n  ok  6 e2e\\interaction.spec.ts:87:1 › 故障注入：旧详情迟到不能覆盖新选择；详情失败后可重载 (1.5s)\n  ok  7 e2e\\layout.spec.ts:5:3 › 真实布局：390x844，区域访问、键盘与独立滚动 (2.1s)\n  ok  8 e2e\\layout.spec.ts:5:3 › 真实布局：1366x768，区域访问、键盘与独立滚动 (1.8s)\n  ok  9 e2e\\layout.spec.ts:5:3 › 真实布局：2560x1080，区域访问、键盘与独立滚动 (2.1s)\n  ok 10 e2e\\lineup-compat.spec.ts:3:1 › 4B消费者回归：真实HTTP状态与4C卡片一致 (1.1s)\n  ok 11 e2e\\lineup.spec.ts:17:1 › 正常闭环：4专家，确认及ready/confirmed刷新由SQLite恢复 (4.4s)\n  ok 12 e2e\\lineup.spec.ts:25:1 › 重新生成新阵容，旧generation无法确认 (5.9s)\n  ok 13 e2e\\lineup.spec.ts:31:1 › Provider失败显示安全错误，重试新代成功；失败刷新 (6.0s)\n  ok 14 e2e\\lineup.spec.ts:35:1 › 生成中刷新继续GET，不再次生成；释放受控Provider后完成 (4.0s)\n  ok 15 e2e\\lineup.spec.ts:39:1 › confirm409读取新快照并提示，不自动确认 (3.5s)\n  ok 16 e2e\\lineup.spec.ts:45:31 › 网络故障注入：confirm 500保留卡片并允许重试 (3.5s)\n  ok 17 e2e\\lineup.spec.ts:45:31 › 网络故障注入：confirm 503保留卡片并允许重试 (3.5s)\n  ok 18 e2e\\lineup.spec.ts:51:1 › 重新生成失败隐藏旧卡片且禁止确认，重试可恢复 (8.6s)\n  ok 19 e2e\\lineup.spec.ts:54:1 › 生成中切换讨论，旧结果不污染B (1.6s)\n  ok 20 e2e\\lineup.spec.ts:59:1 › 同一事件循环重复点击生成和确认，各只提交一次 (3.4s)\n  ok 21 e2e\\lineup.spec.ts:64:1 › 浏览器离线保留生成态，联网GET恢复而非POST重发 (3.9s)\n  ok 22 e2e\\lineup.spec.ts:68:1 › 两个Tab：旧Tab冲突接受新版，另一Tab确认后重新GET恢复已确认 (6.6s)\n  ok 23 e2e\\lineup.spec.ts:73:85 › 阵容布局 390x844 / 1专家长字段与键盘滚动 (3.8s)\n  ok 24 e2e\\lineup.spec.ts:73:85 › 阵容布局 1366x768 / 8专家长字段与键盘滚动 (3.6s)\n  ok 25 e2e\\lineup.spec.ts:73:85 › 阵容布局 2560x1080 / 8专家长字段与键盘滚动 (3.9s)\n  ok 26 e2e\\lineup.spec.ts:80:1 › 真实确认请求等待时禁用两个按钮，成功后恢复为只读 (3.9s)\n\n  26 passed (1.5m)\n",
+      "stderr": "[WebServer] (node:14144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:6568) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    }
+  ],
+  "results": {
+    "backend": 308,
+    "backendUnit": 161,
+    "backendIntegration": 147,
+    "frontend": 76,
+    "e2e": {
+      "startTime": "2026-09-16T11:17:48.392Z",
+      "duration": 90956.55600000001,
+      "expected": 26,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "completedAt": "2026-09-16T11:19:19.406Z"
+}

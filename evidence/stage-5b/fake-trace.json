@@ -1,0 +1,1418 @@
+{
+  "label": "FAKE ONLY — 非真实模型质量证据",
+  "executedAt": "2026-09-16T11:13:39.235Z",
+  "codeRevision": "aafcbfc1d1d45fce018c3d948fc23ca3fc75334d",
+  "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+  "runId": "d643fd97-140d-4a2d-9ec3-0beddeb88ba8",
+  "migrationVersions": [
+    1,
+    2,
+    3
+  ],
+  "counters": {
+    "expert_turn_count": 12,
+    "calls_used": 73,
+    "call_limit": 168,
+    "summary_calls_used": 1
+  },
+  "events": [
+    {
+      "eventId": 1,
+      "dataVersion": 1,
+      "type": "discussion.status_changed",
+      "payload": {
+        "status": "created",
+        "stopReason": null,
+        "startedAt": null,
+        "endedAt": null,
+        "confirmedLineupRevision": null,
+        "summary": null
+      }
+    },
+    {
+      "eventId": 2,
+      "dataVersion": 2,
+      "type": "discussion.status_changed",
+      "payload": {
+        "status": "generating_lineup",
+        "stopReason": null,
+        "startedAt": null,
+        "endedAt": null,
+        "confirmedLineupRevision": null,
+        "summary": null,
+        "lineupRevision": 0,
+        "lineupGeneration": {
+          "generationId": "62cbb4e5-e0df-40e5-a771-d46192a5026d",
+          "generationVersion": 1,
+          "startedAt": "2026-09-16T11:13:39.792Z",
+          "finishedAt": null
+        },
+        "confirmedAt": null,
+        "roles": [],
+        "lastNotice": null
+      }
+    },
+    {
+      "eventId": 3,
+      "dataVersion": 3,
+      "type": "discussion.status_changed",
+      "payload": {
+        "status": "awaiting_confirmation",
+        "stopReason": null,
+        "startedAt": null,
+        "endedAt": null,
+        "confirmedLineupRevision": null,
+        "summary": null,
+        "lineupRevision": 1,
+        "lineupGeneration": {
+          "generationId": "62cbb4e5-e0df-40e5-a771-d46192a5026d",
+          "generationVersion": 1,
+          "startedAt": "2026-09-16T11:13:39.792Z",
+          "finishedAt": "2026-09-16T11:13:39.802Z"
+        },
+        "confirmedAt": null,
+        "roles": [
+          {
+            "role": "moderator",
+            "name": "示例主持人",
+            "profession": "沟通",
+            "title": "主持人（Fake）",
+            "stance": "整理不同观点",
+            "memberId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+            "color": "#193455",
+            "displayOrder": 0
+          },
+          {
+            "role": "expert",
+            "name": "示例专家1",
+            "profession": "研究方向1",
+            "title": "研究员（Fake）",
+            "stance": "从角度1观察话题",
+            "memberId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+            "color": "#2157a5",
+            "displayOrder": 1
+          },
+          {
+            "role": "expert",
+            "name": "示例专家2",
+            "profession": "研究方向2",
+            "title": "研究员（Fake）",
+            "stance": "从角度2观察话题",
+            "memberId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+            "color": "#137568",
+            "displayOrder": 2
+          },
+          {
+            "role": "expert",
+            "name": "示例专家3",
+            "profession": "研究方向3",
+            "title": "研究员（Fake）",
+            "stance": "从角度3观察话题",
+            "memberId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+            "color": "#8b4c20",
+            "displayOrder": 3
+          },
+          {
+            "role": "expert",
+            "name": "示例专家4",
+            "profession": "研究方向4",
+            "title": "研究员（Fake）",
+            "stance": "从角度4观察话题",
+            "memberId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+            "color": "#734a9c",
+            "displayOrder": 4
+          }
+        ],
+        "lastNotice": null
+      }
+    },
+    {
+      "eventId": 4,
+      "dataVersion": 4,
+      "type": "discussion.status_changed",
+      "payload": {
+        "status": "lineup_confirmed",
+        "stopReason": null,
+        "startedAt": null,
+        "endedAt": null,
+        "confirmedLineupRevision": 1,
+        "summary": null,
+        "lineupRevision": 1,
+        "lineupGeneration": {
+          "generationId": "62cbb4e5-e0df-40e5-a771-d46192a5026d",
+          "generationVersion": 1,
+          "startedAt": "2026-09-16T11:13:39.792Z",
+          "finishedAt": "2026-09-16T11:13:39.802Z"
+        },
+        "confirmedAt": "2026-09-16T11:13:39.812Z",
+        "roles": [
+          {
+            "role": "moderator",
+            "name": "示例主持人",
+            "profession": "沟通",
+            "title": "主持人（Fake）",
+            "stance": "整理不同观点",
+            "memberId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+            "color": "#193455",
+            "displayOrder": 0
+          },
+          {
+            "role": "expert",
+            "name": "示例专家1",
+            "profession": "研究方向1",
+            "title": "研究员（Fake）",
+            "stance": "从角度1观察话题",
+            "memberId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+            "color": "#2157a5",
+            "displayOrder": 1
+          },
+          {
+            "role": "expert",
+            "name": "示例专家2",
+            "profession": "研究方向2",
+            "title": "研究员（Fake）",
+            "stance": "从角度2观察话题",
+            "memberId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+            "color": "#137568",
+            "displayOrder": 2
+          },
+          {
+            "role": "expert",
+            "name": "示例专家3",
+            "profession": "研究方向3",
+            "title": "研究员（Fake）",
+            "stance": "从角度3观察话题",
+            "memberId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+            "color": "#8b4c20",
+            "displayOrder": 3
+          },
+          {
+            "role": "expert",
+            "name": "示例专家4",
+            "profession": "研究方向4",
+            "title": "研究员（Fake）",
+            "stance": "从角度4观察话题",
+            "memberId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+            "color": "#734a9c",
+            "displayOrder": 4
+          }
+        ],
+        "lastNotice": null
+      }
+    },
+    {
+      "eventId": 5,
+      "dataVersion": 5,
+      "type": "discussion.status_changed",
+      "payload": {
+        "status": "running",
+        "stopReason": null,
+        "startedAt": "2026-09-16T11:13:39.823Z",
+        "endedAt": null,
+        "confirmedLineupRevision": 1,
+        "summary": null,
+        "lineupRevision": 1,
+        "lineupGeneration": {
+          "generationId": "62cbb4e5-e0df-40e5-a771-d46192a5026d",
+          "generationVersion": 1,
+          "startedAt": "2026-09-16T11:13:39.792Z",
+          "finishedAt": "2026-09-16T11:13:39.802Z"
+        },
+        "confirmedAt": "2026-09-16T11:13:39.812Z",
+        "roles": [
+          {
+            "role": "moderator",
+            "name": "示例主持人",
+            "profession": "沟通",
+            "title": "主持人（Fake）",
+            "stance": "整理不同观点",
+            "memberId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+            "color": "#193455",
+            "displayOrder": 0
+          },
+          {
+            "role": "expert",
+            "name": "示例专家1",
+            "profession": "研究方向1",
+            "title": "研究员（Fake）",
+            "stance": "从角度1观察话题",
+            "memberId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+            "color": "#2157a5",
+            "displayOrder": 1
+          },
+          {
+            "role": "expert",
+            "name": "示例专家2",
+            "profession": "研究方向2",
+            "title": "研究员（Fake）",
+            "stance": "从角度2观察话题",
+            "memberId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+            "color": "#137568",
+            "displayOrder": 2
+          },
+          {
+            "role": "expert",
+            "name": "示例专家3",
+            "profession": "研究方向3",
+            "title": "研究员（Fake）",
+            "stance": "从角度3观察话题",
+            "memberId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+            "color": "#8b4c20",
+            "displayOrder": 3
+          },
+          {
+            "role": "expert",
+            "name": "示例专家4",
+            "profession": "研究方向4",
+            "title": "研究员（Fake）",
+            "stance": "从角度4观察话题",
+            "memberId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+            "color": "#734a9c",
+            "displayOrder": 4
+          }
+        ],
+        "lastNotice": null,
+        "runtime": {
+          "runId": "d643fd97-140d-4a2d-9ec3-0beddeb88ba8",
+          "runDeadlineAt": "2026-09-16T11:23:39.823Z",
+          "stoppingAt": null,
+          "stopDeadlineAt": null
+        },
+        "roleStates": [
+          {
+            "roleId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+            "status": "idle",
+            "publicFocus": null,
+            "focusSourceTranscriptVersion": null,
+            "updatedAt": "2026-09-16T11:13:39.823Z"
+          },
+          {
+            "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+            "status": "idle",
+            "publicFocus": null,
+            "focusSourceTranscriptVersion": null,
+            "updatedAt": "2026-09-16T11:13:39.823Z"
+          },
+          {
+            "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+            "status": "idle",
+            "publicFocus": null,
+            "focusSourceTranscriptVersion": null,
+            "updatedAt": "2026-09-16T11:13:39.823Z"
+          },
+          {
+            "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+            "status": "idle",
+            "publicFocus": null,
+            "focusSourceTranscriptVersion": null,
+            "updatedAt": "2026-09-16T11:13:39.823Z"
+          },
+          {
+            "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+            "status": "idle",
+            "publicFocus": null,
+            "focusSourceTranscriptVersion": null,
+            "updatedAt": "2026-09-16T11:13:39.823Z"
+          }
+        ],
+        "synthesisState": "idle"
+      }
+    },
+    {
+      "eventId": 8,
+      "dataVersion": 8,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "a163ef75-910d-45e7-8300-dfb407cd5bd3",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+          "seq": 1,
+          "sentences": [
+            "本场Fake讨论聚焦AI 如何改善教育，请提出可验证的意见。"
+          ],
+          "replyToUtteranceIds": [],
+          "createdAt": "2026-09-16T11:13:39.854Z"
+        }
+      }
+    },
+    {
+      "eventId": 25,
+      "dataVersion": 24,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "0a9a78b1-fb5e-4009-994f-d7aed414a185",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+          "seq": 2,
+          "sentences": [
+            "针对第1条的本场Fake讨论聚焦AI 如何改善教育，请提出可，我从从角度3观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "a163ef75-910d-45e7-8300-dfb407cd5bd3"
+          ],
+          "createdAt": "2026-09-16T11:13:39.980Z"
+        }
+      }
+    },
+    {
+      "eventId": 29,
+      "dataVersion": 26,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 2,
+          "updatedAt": "2026-09-16T11:13:39.997Z",
+          "items": []
+        }
+      }
+    },
+    {
+      "eventId": 46,
+      "dataVersion": 42,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "544305ed-ab40-48da-8aea-66debafc367a",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+          "seq": 3,
+          "sentences": [
+            "针对第2条的针对第1条的本场Fake讨论聚焦AI 如何改善教，我从从角度2观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "0a9a78b1-fb5e-4009-994f-d7aed414a185"
+          ],
+          "createdAt": "2026-09-16T11:13:40.094Z"
+        }
+      }
+    },
+    {
+      "eventId": 50,
+      "dataVersion": 44,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 3,
+          "updatedAt": "2026-09-16T11:13:40.114Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "0a9a78b1-fb5e-4009-994f-d7aed414a185",
+                "544305ed-ab40-48da-8aea-66debafc367a"
+              ],
+              "positions": [],
+              "id": "12907403-487d-421c-a081-0efed7c422a6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 67,
+      "dataVersion": 60,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "4a0c6256-5f26-47bd-a032-5902fc05a648",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+          "seq": 4,
+          "sentences": [
+            "针对第3条的针对第2条的针对第1条的本场Fake讨论聚焦AI，我从从角度1观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "544305ed-ab40-48da-8aea-66debafc367a"
+          ],
+          "createdAt": "2026-09-16T11:13:40.220Z"
+        }
+      }
+    },
+    {
+      "eventId": 71,
+      "dataVersion": 62,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 4,
+          "updatedAt": "2026-09-16T11:13:40.235Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "0a9a78b1-fb5e-4009-994f-d7aed414a185",
+                "544305ed-ab40-48da-8aea-66debafc367a",
+                "4a0c6256-5f26-47bd-a032-5902fc05a648"
+              ],
+              "positions": [],
+              "id": "c1e25d1c-3362-4dc4-abaa-17a532ff528e"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 88,
+      "dataVersion": 78,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "5f3e25bd-b9a8-4fed-b4ac-5222541791c1",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+          "seq": 5,
+          "sentences": [
+            "针对第4条的针对第3条的针对第2条的针对第1条的本场Fake，我从从角度4观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "4a0c6256-5f26-47bd-a032-5902fc05a648"
+          ],
+          "createdAt": "2026-09-16T11:13:40.340Z"
+        }
+      }
+    },
+    {
+      "eventId": 92,
+      "dataVersion": 80,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 5,
+          "updatedAt": "2026-09-16T11:13:40.356Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "0a9a78b1-fb5e-4009-994f-d7aed414a185",
+                "544305ed-ab40-48da-8aea-66debafc367a",
+                "4a0c6256-5f26-47bd-a032-5902fc05a648",
+                "5f3e25bd-b9a8-4fed-b4ac-5222541791c1"
+              ],
+              "positions": [],
+              "id": "f73714a3-5665-480a-bfb4-2c7493264355"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 109,
+      "dataVersion": 96,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "73f6740d-8216-4c37-b44e-a93e9761dd7e",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+          "seq": 6,
+          "sentences": [
+            "针对第5条的针对第4条的针对第3条的针对第2条的针对第1条的，我从从角度3观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "5f3e25bd-b9a8-4fed-b4ac-5222541791c1"
+          ],
+          "createdAt": "2026-09-16T11:13:40.470Z"
+        }
+      }
+    },
+    {
+      "eventId": 113,
+      "dataVersion": 98,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 6,
+          "updatedAt": "2026-09-16T11:13:40.488Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "73f6740d-8216-4c37-b44e-a93e9761dd7e",
+                "544305ed-ab40-48da-8aea-66debafc367a",
+                "4a0c6256-5f26-47bd-a032-5902fc05a648",
+                "5f3e25bd-b9a8-4fed-b4ac-5222541791c1"
+              ],
+              "positions": [],
+              "id": "9254bfb6-902e-4b0f-b7eb-f5bae96e0214"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 130,
+      "dataVersion": 114,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "abdd4e17-099b-4d28-9375-46b89af705c5",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+          "seq": 7,
+          "sentences": [
+            "针对第6条的针对第5条的针对第4条的针对第3条的针对第2条的，我从从角度2观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "73f6740d-8216-4c37-b44e-a93e9761dd7e"
+          ],
+          "createdAt": "2026-09-16T11:13:40.609Z"
+        }
+      }
+    },
+    {
+      "eventId": 134,
+      "dataVersion": 116,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 7,
+          "updatedAt": "2026-09-16T11:13:40.629Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "73f6740d-8216-4c37-b44e-a93e9761dd7e",
+                "abdd4e17-099b-4d28-9375-46b89af705c5",
+                "4a0c6256-5f26-47bd-a032-5902fc05a648",
+                "5f3e25bd-b9a8-4fed-b4ac-5222541791c1"
+              ],
+              "positions": [],
+              "id": "7caa8864-f05b-4457-913e-d3b057c7a3fe"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 151,
+      "dataVersion": 132,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "1d5683a4-5e6d-4cdb-b91e-b3787099a413",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+          "seq": 8,
+          "sentences": [
+            "针对第7条的针对第6条的针对第5条的针对第4条的针对第3条的，我从从角度1观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "abdd4e17-099b-4d28-9375-46b89af705c5"
+          ],
+          "createdAt": "2026-09-16T11:13:40.747Z"
+        }
+      }
+    },
+    {
+      "eventId": 155,
+      "dataVersion": 134,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 8,
+          "updatedAt": "2026-09-16T11:13:40.765Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "73f6740d-8216-4c37-b44e-a93e9761dd7e",
+                "abdd4e17-099b-4d28-9375-46b89af705c5",
+                "1d5683a4-5e6d-4cdb-b91e-b3787099a413",
+                "5f3e25bd-b9a8-4fed-b4ac-5222541791c1"
+              ],
+              "positions": [],
+              "id": "64758fac-b45a-463b-9bd8-3b61b12a49b0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 172,
+      "dataVersion": 150,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+          "seq": 9,
+          "sentences": [
+            "针对第8条的针对第7条的针对第6条的针对第5条的针对第4条的，我从从角度4观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "1d5683a4-5e6d-4cdb-b91e-b3787099a413"
+          ],
+          "createdAt": "2026-09-16T11:13:40.883Z"
+        }
+      }
+    },
+    {
+      "eventId": 176,
+      "dataVersion": 152,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 9,
+          "updatedAt": "2026-09-16T11:13:40.904Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "73f6740d-8216-4c37-b44e-a93e9761dd7e",
+                "abdd4e17-099b-4d28-9375-46b89af705c5",
+                "1d5683a4-5e6d-4cdb-b91e-b3787099a413",
+                "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab"
+              ],
+              "positions": [],
+              "id": "b24c2064-6a3b-4937-b914-fb5c4e7aa058"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 193,
+      "dataVersion": 168,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "6e0bce50-1113-472f-bab4-f53a02cc29ad",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+          "seq": 10,
+          "sentences": [
+            "针对第9条的针对第8条的针对第7条的针对第6条的针对第5条的，我从从角度3观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab"
+          ],
+          "createdAt": "2026-09-16T11:13:41.028Z"
+        }
+      }
+    },
+    {
+      "eventId": 197,
+      "dataVersion": 170,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 10,
+          "updatedAt": "2026-09-16T11:13:41.047Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "6e0bce50-1113-472f-bab4-f53a02cc29ad",
+                "abdd4e17-099b-4d28-9375-46b89af705c5",
+                "1d5683a4-5e6d-4cdb-b91e-b3787099a413",
+                "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab"
+              ],
+              "positions": [],
+              "id": "98bc5d8a-25d9-49a8-b286-05ec3b910d4f"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 214,
+      "dataVersion": 186,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "98b35cb9-fefa-4665-afae-023e0571797f",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+          "seq": 11,
+          "sentences": [
+            "针对第10条的针对第9条的针对第8条的针对第7条的针对第6条的，我从从角度2观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "6e0bce50-1113-472f-bab4-f53a02cc29ad"
+          ],
+          "createdAt": "2026-09-16T11:13:41.174Z"
+        }
+      }
+    },
+    {
+      "eventId": 218,
+      "dataVersion": 188,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 11,
+          "updatedAt": "2026-09-16T11:13:41.194Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "6e0bce50-1113-472f-bab4-f53a02cc29ad",
+                "98b35cb9-fefa-4665-afae-023e0571797f",
+                "1d5683a4-5e6d-4cdb-b91e-b3787099a413",
+                "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab"
+              ],
+              "positions": [],
+              "id": "fb10e2dd-14e4-43b9-b6ed-30e828322339"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 235,
+      "dataVersion": 204,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "e7cf2d7f-d0fb-4e5a-9dd3-b66fa7114d00",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+          "seq": 12,
+          "sentences": [
+            "针对第11条的针对第10条的针对第9条的针对第8条的针对第7条，我从从角度1观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "98b35cb9-fefa-4665-afae-023e0571797f"
+          ],
+          "createdAt": "2026-09-16T11:13:41.324Z"
+        }
+      }
+    },
+    {
+      "eventId": 239,
+      "dataVersion": 206,
+      "type": "synthesis.updated",
+      "payload": {
+        "synthesis": {
+          "sourceTranscriptVersion": 12,
+          "updatedAt": "2026-09-16T11:13:41.344Z",
+          "items": [
+            {
+              "kind": "consensus",
+              "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+              "evidenceUtteranceIds": [
+                "6e0bce50-1113-472f-bab4-f53a02cc29ad",
+                "98b35cb9-fefa-4665-afae-023e0571797f",
+                "e7cf2d7f-d0fb-4e5a-9dd3-b66fa7114d00",
+                "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab"
+              ],
+              "positions": [],
+              "id": "31ca42e1-3f96-4c8f-be86-46cd2f4b7ba2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eventId": 256,
+      "dataVersion": 222,
+      "type": "utterance.created",
+      "payload": {
+        "utterance": {
+          "id": "70d7ab7d-db2e-4111-aa05-5f3db3df2bd2",
+          "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+          "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+          "seq": 13,
+          "sentences": [
+            "针对第12条的针对第11条的针对第10条的针对第9条的针对第8，我从从角度4观察话题角度建议先做小规模验证。"
+          ],
+          "replyToUtteranceIds": [
+            "e7cf2d7f-d0fb-4e5a-9dd3-b66fa7114d00"
+          ],
+          "createdAt": "2026-09-16T11:13:41.481Z"
+        }
+      }
+    },
+    {
+      "eventId": 258,
+      "dataVersion": 222,
+      "type": "discussion.status_changed",
+      "payload": {
+        "status": "stopping",
+        "stopReason": "turn_limit",
+        "startedAt": "2026-09-16T11:13:39.823Z",
+        "endedAt": null,
+        "confirmedLineupRevision": 1,
+        "summary": null,
+        "lineupRevision": 1,
+        "lineupGeneration": {
+          "generationId": "62cbb4e5-e0df-40e5-a771-d46192a5026d",
+          "generationVersion": 1,
+          "startedAt": "2026-09-16T11:13:39.792Z",
+          "finishedAt": "2026-09-16T11:13:39.802Z"
+        },
+        "confirmedAt": "2026-09-16T11:13:39.812Z",
+        "roles": [
+          {
+            "role": "moderator",
+            "name": "示例主持人",
+            "profession": "沟通",
+            "title": "主持人（Fake）",
+            "stance": "整理不同观点",
+            "memberId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+            "color": "#193455",
+            "displayOrder": 0
+          },
+          {
+            "role": "expert",
+            "name": "示例专家1",
+            "profession": "研究方向1",
+            "title": "研究员（Fake）",
+            "stance": "从角度1观察话题",
+            "memberId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+            "color": "#2157a5",
+            "displayOrder": 1
+          },
+          {
+            "role": "expert",
+            "name": "示例专家2",
+            "profession": "研究方向2",
+            "title": "研究员（Fake）",
+            "stance": "从角度2观察话题",
+            "memberId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+            "color": "#137568",
+            "displayOrder": 2
+          },
+          {
+            "role": "expert",
+            "name": "示例专家3",
+            "profession": "研究方向3",
+            "title": "研究员（Fake）",
+            "stance": "从角度3观察话题",
+            "memberId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+            "color": "#8b4c20",
+            "displayOrder": 3
+          },
+          {
+            "role": "expert",
+            "name": "示例专家4",
+            "profession": "研究方向4",
+            "title": "研究员（Fake）",
+            "stance": "从角度4观察话题",
+            "memberId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+            "color": "#734a9c",
+            "displayOrder": 4
+          }
+        ],
+        "lastNotice": null,
+        "runtime": {
+          "runId": "d643fd97-140d-4a2d-9ec3-0beddeb88ba8",
+          "runDeadlineAt": "2026-09-16T11:23:39.823Z",
+          "stoppingAt": "2026-09-16T11:13:41.481Z",
+          "stopDeadlineAt": "2026-09-16T11:14:41.481Z"
+        },
+        "roleStates": [
+          {
+            "roleId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+            "status": "idle",
+            "publicFocus": null,
+            "focusSourceTranscriptVersion": null,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          },
+          {
+            "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+            "status": "idle",
+            "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+            "focusSourceTranscriptVersion": 12,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          },
+          {
+            "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+            "status": "idle",
+            "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+            "focusSourceTranscriptVersion": 12,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          },
+          {
+            "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+            "status": "idle",
+            "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+            "focusSourceTranscriptVersion": 12,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          },
+          {
+            "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+            "status": "idle",
+            "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+            "focusSourceTranscriptVersion": 12,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          }
+        ],
+        "synthesisState": "ready"
+      }
+    },
+    {
+      "eventId": 259,
+      "dataVersion": 223,
+      "type": "summary.ready",
+      "payload": {
+        "summary": {
+          "status": "ready",
+          "text": "本场Fake讨论已保存13条发言，最后关注针对第12条的针对第11条的针对第10条的针对第。仍需真实证据检验，不能据此认定讨论质量已验证。",
+          "sourceTranscriptVersion": 13
+        }
+      }
+    },
+    {
+      "eventId": 260,
+      "dataVersion": 223,
+      "type": "discussion.status_changed",
+      "payload": {
+        "status": "completed",
+        "stopReason": "turn_limit",
+        "startedAt": "2026-09-16T11:13:39.823Z",
+        "endedAt": "2026-09-16T11:13:41.500Z",
+        "confirmedLineupRevision": 1,
+        "summary": {
+          "status": "ready",
+          "text": "本场Fake讨论已保存13条发言，最后关注针对第12条的针对第11条的针对第10条的针对第。仍需真实证据检验，不能据此认定讨论质量已验证。",
+          "sourceTranscriptVersion": 13
+        },
+        "lineupRevision": 1,
+        "lineupGeneration": {
+          "generationId": "62cbb4e5-e0df-40e5-a771-d46192a5026d",
+          "generationVersion": 1,
+          "startedAt": "2026-09-16T11:13:39.792Z",
+          "finishedAt": "2026-09-16T11:13:39.802Z"
+        },
+        "confirmedAt": "2026-09-16T11:13:39.812Z",
+        "roles": [
+          {
+            "role": "moderator",
+            "name": "示例主持人",
+            "profession": "沟通",
+            "title": "主持人（Fake）",
+            "stance": "整理不同观点",
+            "memberId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+            "color": "#193455",
+            "displayOrder": 0
+          },
+          {
+            "role": "expert",
+            "name": "示例专家1",
+            "profession": "研究方向1",
+            "title": "研究员（Fake）",
+            "stance": "从角度1观察话题",
+            "memberId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+            "color": "#2157a5",
+            "displayOrder": 1
+          },
+          {
+            "role": "expert",
+            "name": "示例专家2",
+            "profession": "研究方向2",
+            "title": "研究员（Fake）",
+            "stance": "从角度2观察话题",
+            "memberId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+            "color": "#137568",
+            "displayOrder": 2
+          },
+          {
+            "role": "expert",
+            "name": "示例专家3",
+            "profession": "研究方向3",
+            "title": "研究员（Fake）",
+            "stance": "从角度3观察话题",
+            "memberId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+            "color": "#8b4c20",
+            "displayOrder": 3
+          },
+          {
+            "role": "expert",
+            "name": "示例专家4",
+            "profession": "研究方向4",
+            "title": "研究员（Fake）",
+            "stance": "从角度4观察话题",
+            "memberId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+            "color": "#734a9c",
+            "displayOrder": 4
+          }
+        ],
+        "lastNotice": null,
+        "runtime": {
+          "runId": "d643fd97-140d-4a2d-9ec3-0beddeb88ba8",
+          "runDeadlineAt": "2026-09-16T11:23:39.823Z",
+          "stoppingAt": "2026-09-16T11:13:41.481Z",
+          "stopDeadlineAt": "2026-09-16T11:14:41.481Z"
+        },
+        "roleStates": [
+          {
+            "roleId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+            "status": "idle",
+            "publicFocus": null,
+            "focusSourceTranscriptVersion": null,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          },
+          {
+            "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+            "status": "idle",
+            "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+            "focusSourceTranscriptVersion": 12,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          },
+          {
+            "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+            "status": "idle",
+            "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+            "focusSourceTranscriptVersion": 12,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          },
+          {
+            "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+            "status": "idle",
+            "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+            "focusSourceTranscriptVersion": 12,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          },
+          {
+            "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+            "status": "idle",
+            "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+            "focusSourceTranscriptVersion": 12,
+            "updatedAt": "2026-09-16T11:13:41.481Z"
+          }
+        ],
+        "synthesisState": "ready"
+      }
+    }
+  ],
+  "finalSnapshot": {
+    "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+    "topic": "AI 如何改善教育？",
+    "expertCount": 4,
+    "status": "completed",
+    "version": 223,
+    "lastEventId": 260,
+    "createdAt": "2026-09-16T11:13:39.769Z",
+    "updatedAt": "2026-09-16T11:13:41.500Z",
+    "lineupRevision": 1,
+    "confirmedLineupRevision": 1,
+    "transcriptVersion": 13,
+    "roles": [
+      {
+        "role": "moderator",
+        "name": "示例主持人",
+        "profession": "沟通",
+        "title": "主持人（Fake）",
+        "stance": "整理不同观点",
+        "memberId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+        "color": "#193455",
+        "displayOrder": 0
+      },
+      {
+        "role": "expert",
+        "name": "示例专家1",
+        "profession": "研究方向1",
+        "title": "研究员（Fake）",
+        "stance": "从角度1观察话题",
+        "memberId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+        "color": "#2157a5",
+        "displayOrder": 1
+      },
+      {
+        "role": "expert",
+        "name": "示例专家2",
+        "profession": "研究方向2",
+        "title": "研究员（Fake）",
+        "stance": "从角度2观察话题",
+        "memberId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+        "color": "#137568",
+        "displayOrder": 2
+      },
+      {
+        "role": "expert",
+        "name": "示例专家3",
+        "profession": "研究方向3",
+        "title": "研究员（Fake）",
+        "stance": "从角度3观察话题",
+        "memberId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+        "color": "#8b4c20",
+        "displayOrder": 3
+      },
+      {
+        "role": "expert",
+        "name": "示例专家4",
+        "profession": "研究方向4",
+        "title": "研究员（Fake）",
+        "stance": "从角度4观察话题",
+        "memberId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+        "color": "#734a9c",
+        "displayOrder": 4
+      }
+    ],
+    "utterances": [
+      {
+        "id": "a163ef75-910d-45e7-8300-dfb407cd5bd3",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+        "seq": 1,
+        "sentences": [
+          "本场Fake讨论聚焦AI 如何改善教育，请提出可验证的意见。"
+        ],
+        "replyToUtteranceIds": [],
+        "createdAt": "2026-09-16T11:13:39.854Z"
+      },
+      {
+        "id": "0a9a78b1-fb5e-4009-994f-d7aed414a185",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+        "seq": 2,
+        "sentences": [
+          "针对第1条的本场Fake讨论聚焦AI 如何改善教育，请提出可，我从从角度3观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "a163ef75-910d-45e7-8300-dfb407cd5bd3"
+        ],
+        "createdAt": "2026-09-16T11:13:39.980Z"
+      },
+      {
+        "id": "544305ed-ab40-48da-8aea-66debafc367a",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+        "seq": 3,
+        "sentences": [
+          "针对第2条的针对第1条的本场Fake讨论聚焦AI 如何改善教，我从从角度2观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "0a9a78b1-fb5e-4009-994f-d7aed414a185"
+        ],
+        "createdAt": "2026-09-16T11:13:40.094Z"
+      },
+      {
+        "id": "4a0c6256-5f26-47bd-a032-5902fc05a648",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+        "seq": 4,
+        "sentences": [
+          "针对第3条的针对第2条的针对第1条的本场Fake讨论聚焦AI，我从从角度1观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "544305ed-ab40-48da-8aea-66debafc367a"
+        ],
+        "createdAt": "2026-09-16T11:13:40.220Z"
+      },
+      {
+        "id": "5f3e25bd-b9a8-4fed-b4ac-5222541791c1",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+        "seq": 5,
+        "sentences": [
+          "针对第4条的针对第3条的针对第2条的针对第1条的本场Fake，我从从角度4观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "4a0c6256-5f26-47bd-a032-5902fc05a648"
+        ],
+        "createdAt": "2026-09-16T11:13:40.340Z"
+      },
+      {
+        "id": "73f6740d-8216-4c37-b44e-a93e9761dd7e",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+        "seq": 6,
+        "sentences": [
+          "针对第5条的针对第4条的针对第3条的针对第2条的针对第1条的，我从从角度3观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "5f3e25bd-b9a8-4fed-b4ac-5222541791c1"
+        ],
+        "createdAt": "2026-09-16T11:13:40.470Z"
+      },
+      {
+        "id": "abdd4e17-099b-4d28-9375-46b89af705c5",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+        "seq": 7,
+        "sentences": [
+          "针对第6条的针对第5条的针对第4条的针对第3条的针对第2条的，我从从角度2观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "73f6740d-8216-4c37-b44e-a93e9761dd7e"
+        ],
+        "createdAt": "2026-09-16T11:13:40.609Z"
+      },
+      {
+        "id": "1d5683a4-5e6d-4cdb-b91e-b3787099a413",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+        "seq": 8,
+        "sentences": [
+          "针对第7条的针对第6条的针对第5条的针对第4条的针对第3条的，我从从角度1观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "abdd4e17-099b-4d28-9375-46b89af705c5"
+        ],
+        "createdAt": "2026-09-16T11:13:40.747Z"
+      },
+      {
+        "id": "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+        "seq": 9,
+        "sentences": [
+          "针对第8条的针对第7条的针对第6条的针对第5条的针对第4条的，我从从角度4观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "1d5683a4-5e6d-4cdb-b91e-b3787099a413"
+        ],
+        "createdAt": "2026-09-16T11:13:40.883Z"
+      },
+      {
+        "id": "6e0bce50-1113-472f-bab4-f53a02cc29ad",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+        "seq": 10,
+        "sentences": [
+          "针对第9条的针对第8条的针对第7条的针对第6条的针对第5条的，我从从角度3观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab"
+        ],
+        "createdAt": "2026-09-16T11:13:41.028Z"
+      },
+      {
+        "id": "98b35cb9-fefa-4665-afae-023e0571797f",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+        "seq": 11,
+        "sentences": [
+          "针对第10条的针对第9条的针对第8条的针对第7条的针对第6条的，我从从角度2观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "6e0bce50-1113-472f-bab4-f53a02cc29ad"
+        ],
+        "createdAt": "2026-09-16T11:13:41.174Z"
+      },
+      {
+        "id": "e7cf2d7f-d0fb-4e5a-9dd3-b66fa7114d00",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+        "seq": 12,
+        "sentences": [
+          "针对第11条的针对第10条的针对第9条的针对第8条的针对第7条，我从从角度1观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "98b35cb9-fefa-4665-afae-023e0571797f"
+        ],
+        "createdAt": "2026-09-16T11:13:41.324Z"
+      },
+      {
+        "id": "70d7ab7d-db2e-4111-aa05-5f3db3df2bd2",
+        "discussionId": "294e8b0a-c101-4d5a-a31d-42ce6f73f3fa",
+        "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+        "seq": 13,
+        "sentences": [
+          "针对第12条的针对第11条的针对第10条的针对第9条的针对第8，我从从角度4观察话题角度建议先做小规模验证。"
+        ],
+        "replyToUtteranceIds": [
+          "e7cf2d7f-d0fb-4e5a-9dd3-b66fa7114d00"
+        ],
+        "createdAt": "2026-09-16T11:13:41.481Z"
+      }
+    ],
+    "synthesis": {
+      "sourceTranscriptVersion": 12,
+      "updatedAt": "2026-09-16T11:13:41.344Z",
+      "items": [
+        {
+          "kind": "consensus",
+          "text": "这些Fake发言均建议先做小规模验证，尚不能代表全体一致。",
+          "evidenceUtteranceIds": [
+            "6e0bce50-1113-472f-bab4-f53a02cc29ad",
+            "98b35cb9-fefa-4665-afae-023e0571797f",
+            "e7cf2d7f-d0fb-4e5a-9dd3-b66fa7114d00",
+            "9c8d2ea8-e0b4-4b22-b473-9a3833af8aab"
+          ],
+          "positions": [],
+          "id": "31ca42e1-3f96-4c8f-be86-46cd2f4b7ba2"
+        }
+      ]
+    },
+    "summary": {
+      "status": "ready",
+      "text": "本场Fake讨论已保存13条发言，最后关注针对第12条的针对第11条的针对第10条的针对第。仍需真实证据检验，不能据此认定讨论质量已验证。",
+      "sourceTranscriptVersion": 13
+    },
+    "lastNotice": null,
+    "stopReason": "turn_limit",
+    "startedAt": "2026-09-16T11:13:39.823Z",
+    "endedAt": "2026-09-16T11:13:41.500Z",
+    "lineupGeneration": {
+      "generationId": "62cbb4e5-e0df-40e5-a771-d46192a5026d",
+      "generationVersion": 1,
+      "startedAt": "2026-09-16T11:13:39.792Z",
+      "finishedAt": "2026-09-16T11:13:39.802Z"
+    },
+    "confirmedAt": "2026-09-16T11:13:39.812Z",
+    "runtime": {
+      "runId": "d643fd97-140d-4a2d-9ec3-0beddeb88ba8",
+      "runDeadlineAt": "2026-09-16T11:23:39.823Z",
+      "stoppingAt": "2026-09-16T11:13:41.481Z",
+      "stopDeadlineAt": "2026-09-16T11:14:41.481Z"
+    },
+    "synthesisState": "ready",
+    "roleStates": [
+      {
+        "roleId": "eeffa9c4-7b58-4e25-9149-c65cd341117c",
+        "status": "idle",
+        "publicFocus": null,
+        "focusSourceTranscriptVersion": null,
+        "updatedAt": "2026-09-16T11:13:41.481Z"
+      },
+      {
+        "roleId": "c014237e-1fd6-4739-94bc-08ef3f5000c5",
+        "status": "idle",
+        "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+        "focusSourceTranscriptVersion": 12,
+        "updatedAt": "2026-09-16T11:13:41.481Z"
+      },
+      {
+        "roleId": "4fc31f97-c499-4203-bb69-1f3ce212f30b",
+        "status": "idle",
+        "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+        "focusSourceTranscriptVersion": 12,
+        "updatedAt": "2026-09-16T11:13:41.481Z"
+      },
+      {
+        "roleId": "00731fdf-fad0-421f-988d-bb4771373c1d",
+        "status": "idle",
+        "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+        "focusSourceTranscriptVersion": 12,
+        "updatedAt": "2026-09-16T11:13:41.481Z"
+      },
+      {
+        "roleId": "cd884d49-8638-40b4-8b77-d4fbe36fa930",
+        "status": "idle",
+        "publicFocus": "关注第12条：针对第11条的针对第10条的针对第9条的针对第8",
+        "focusSourceTranscriptVersion": 12,
+        "updatedAt": "2026-09-16T11:13:41.481Z"
+      }
+    ]
+  },
+  "processes": [
+    {
+      "pid": 11084,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "pid": 6320,
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "listenerClosed": true,
+  "ownershipReleased": true,
+  "databaseScope": ".tmp/stage-5b/http-*"
+}
