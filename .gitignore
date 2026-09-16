@@ -26,3 +26,9 @@ playwright-report/
 /evidence/stage-4b/raw/
 
 /evidence/stage-4c/raw/
+
+# Stage 4D: backend secrets and durable live-call authorization
+.env.backend.local
+!.env.backend.example
+/.local/
+/evidence/stage-4d/raw/
