@@ -3,15 +3,16 @@ import type { DraftService } from '../domain/drafts.js';
 import { AppError, invalidInput } from '../domain/errors.js';
 import { isObject } from '../domain/input.js';
 import { randomUUID } from 'node:crypto';
+import type { LineupService } from '../domain/lineup-service.js';
 
 export interface Diagnostic { requestId: string; code: 'INTERNAL_ERROR' }
 
-export function createApp(service: DraftService, diagnose: (event: Diagnostic) => void = event => console.error(event)) {
+export function createApp(service: DraftService, diagnose: (event: Diagnostic) => void = event => console.error(event), lineup?: LineupService) {
   const app = express();
   app.disable('x-powered-by');
   app.disable('etag');
   app.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
-  app.post('/api/discussions', (req, _res, next) => {
+  const jsonOnly = (req: Request, _res: Response, next: NextFunction) => {
     if (!req.is('application/json')) invalidInput('请求正文须使用application/json');
     const origin = req.get('origin');
     if (origin) {
@@ -24,17 +25,31 @@ export function createApp(service: DraftService, diagnose: (event: Diagnostic) =
       if (!allowed) invalidInput('请求来源不受支持');
     }
     next();
-  }, express.json({ limit: '16kb', inflate: false }), (req, res) => {
+  };
+  const parser=express.json({ limit: '16kb', inflate: false });
+  app.post('/api/discussions', jsonOnly, parser, (req, res) => {
     const result = service.create(req.body);
+    lineup?.assertAvailable(result.discussionId);
     res.status(result.replayed ? 200 : 201).json(result);
   });
   app.get('/api/discussions', (req, res) => {
+    lineup?.assertAvailable();
     if (Object.keys(req.query).some(key => key !== 'status')) invalidInput('列表含未声明的参数');
     res.json(service.list(req.query.status));
   });
   app.get('/api/discussions/:discussionId', (req, res) => {
+    lineup?.assertAvailable(req.params.discussionId);
     res.json(service.get(req.params.discussionId));
   });
+  if(lineup){
+    app.post('/api/discussions/:discussionId/lineup',jsonOnly,parser,(req,res)=>{
+      const result=lineup.generate(req.params.discussionId,req.body);
+      res.status(result.snapshot.status==='generating_lineup'?202:200).json(result);
+    });
+    app.post('/api/discussions/:discussionId/lineup/confirm',jsonOnly,parser,(req,res)=>{
+      res.json(lineup.confirm(req.params.discussionId,req.body));
+    });
+  }
   app.use(() => { throw new AppError('NOT_FOUND', '未找到请求的资源', 404); });
   app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
     const requestId = randomUUID();
@@ -43,9 +58,10 @@ export function createApp(service: DraftService, diagnose: (event: Diagnostic) =
     const known = error instanceof AppError ? error : parserFailure || error instanceof URIError
       ? new AppError('INVALID_INPUT', '请求JSON格式或正文大小不符合要求', 400) : undefined;
     if (!known) diagnose({ requestId, code: 'INTERNAL_ERROR' });
+    const retryable=!known || known.status>=500 || known.status===429;
     res.status(known?.status ?? 500).json({ error: {
       code: known?.code ?? 'INTERNAL_ERROR', message: known?.message ?? '服务暂时无法完成请求，请重试',
-      retryable: !known, action: known ? 'none' : 'try_again', requestId
+      retryable, action: retryable ? 'try_again' : 'none', requestId
     } });
   });
   return app;

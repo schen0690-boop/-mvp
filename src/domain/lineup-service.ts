@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { DiscussionSnapshot, NoticeCode } from './snapshot.js';
 import type { LineupMember } from './lineup.js';
-import { enrichRoster, parseRoster, validateGenerate, RosterValidationError } from './lineup.js';
+import { enrichRoster, parseRoster, validateGenerate, validateConfirm, RosterValidationError } from './lineup.js';
 import { validateUuid } from './input.js';
 import { AppError } from './errors.js';
 import type { RosterGenerator } from '../providers/roster.js';
@@ -129,6 +129,10 @@ export class LineupService {
     }
   }
   async idle(): Promise<void> { await Promise.all(this.tasks.keys()); }
+  confirm(id: unknown, body: unknown): { discussionId: string; snapshot: DiscussionSnapshot; replayed: boolean } {
+    const discussionId=validateUuid(id), input=validateConfirm(body);this.assertAvailable(discussionId);
+    return this.storage(()=>this.store.confirm(discussionId,input,new Date().toISOString()));
+  }
   async close(): Promise<void> {
     this.closing = true; for (const controller of this.tasks.values()) controller.abort(); await this.idle();
   }

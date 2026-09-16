@@ -2,14 +2,19 @@ import { openConfiguredDatabase } from './runtime.js';
 import { DraftService } from './domain/drafts.js';
 import { SqliteDraftStore } from './db/sqlite-drafts.js';
 import { createApp } from './http/app.js';
+import { LineupService } from './domain/lineup-service.js';
+import { SqliteLineupStore } from './db/sqlite-lineup.js';
+import { FakeRosterProvider } from './providers/fake-roster.js';
 
 try {
   const rawPort = process.env.PORT ?? '3000';
   const port = Number(rawPort);
   if (!/^\d+$/.test(rawPort) || !Number.isInteger(port) || port < 1 || port > 65535) throw new Error('INVALID_PORT');
   const db = openConfiguredDatabase();
-  const server = createApp(new DraftService(new SqliteDraftStore(db))).listen(port, '127.0.0.1', () => {
-    console.log(`草稿服务已启动：http://127.0.0.1:${port}`);
+  const lineup=new LineupService(new SqliteLineupStore(db),new FakeRosterProvider(),{diagnose:event=>console.error(event)});
+  try { lineup.recover(); } catch(error) { db.close();throw error; }
+  const server = createApp(new DraftService(new SqliteDraftStore(db)),undefined,lineup).listen(port, '127.0.0.1', () => {
+    console.log(`本地服务已启动：http://127.0.0.1:${port}（阵容使用Fake Provider，非真实AI）`);
   });
   server.once('error', () => {
     db.close();
@@ -20,7 +25,7 @@ try {
   const close = () => {
     if (stopping) return;
     stopping = true;
-    server.close(() => db.close());
+    server.close(() => { void lineup.close().then(()=>db.close()); });
     server.closeAllConnections();
   };
   process.once('SIGINT', close);

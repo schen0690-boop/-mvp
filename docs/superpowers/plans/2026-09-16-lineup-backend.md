@@ -74,9 +74,9 @@
 
 输入：当前generationId+lineupRevision；输出{discussionId,snapshot,replayed}。正确ready→confirmed；旧版本/失败/生成中409；同版重复200且时间/事件不变。
 
-- [ ] 先用真实ready记录写RED：确认后status=confirmed，startedAt=null、utterances=[]、synthesis=null；竞态确认/regen只有一个成功。
-- [ ] `npm test -- tests/integration/confirm.test.ts`看到未实现失败，再实现事务核对双版本及状态。
-- [ ] 同组GREEN及generation回归；与G一起形成实际完整提交。
+- [x] 先用真实ready记录写RED：确认后status=confirmed，startedAt=null、utterances=[]、synthesis=null；竞态确认/regen只有一个成功。
+- [x] `npm test -- tests/integration/confirm.test.ts`看到未实现失败，再实现事务核对双版本及状态。
+- [x] 同组GREEN及generation回归；与G一起形成实际完整提交。
 
 ## G. HTTP、启动与安全错误
 
@@ -84,9 +84,9 @@
 
 接口：createApp保留原草稿调用方式，可注入LineupService；新增/lineup及/lineup/confirm路由；GET和创建重放返回当前快照。生产入口显式使用Fake并说明不是AI；恢复遗留生成在监听前完成。
 
-- [ ] 真实Express+SQLite+Fake先RED：202/200/400/404/409/429/503、跨站拒绝、异步失败GET200、安全字段；未挂路由时404是有效路由RED。
-- [ ] 添加最小路由、同源JSON保护及分类错误；绝不返回原始provider/SQL/堆栈。
-- [ ] `npm test -- tests/integration/lineup-http.test.ts tests/integration/http.test.ts tests/integration/confirm.test.ts` GREEN，再全后端回归/类型检查，提交confirm+HTTP。
+- [x] 真实Express+SQLite+Fake先RED：202/200/400/404/409/429/503、跨站拒绝、异步失败GET200、安全字段；未挂路由时404是有效路由RED。
+- [x] 添加最小路由、同源JSON保护及分类错误；绝不返回原始provider/SQL/堆栈。
+- [x] `npm test -- tests/integration/lineup-http.test.ts tests/integration/http.test.ts tests/integration/confirm.test.ts` GREEN，再全后端回归/类型检查，提交confirm+HTTP。
 
 ## H. 最小前端消费者兼容
 

@@ -64,7 +64,22 @@ export class SqliteLineupStore implements LineupStore {
       for(const r of rows) this.fail(text(r.id),{generationId:text(r.current_generation_id),generationVersion:integer(r.generation_version)},'LINEUP_INTERRUPTED',time);
     });
   }
-  confirm(_id: string, _input: { generationId: string; lineupRevision: number }, _time: string): { discussionId: string; snapshot: import('../domain/snapshot.js').DiscussionSnapshot; replayed: boolean } { throw new Error('NOT_IMPLEMENTED'); }
+  confirm(id: string, input: { generationId: string; lineupRevision: number }, time: string) {
+    return transaction(this.db,()=>{
+      const record=this.read(id);if(!record) throw new AppError('NOT_FOUND','未找到讨论',404);
+      const s=record.snapshot;
+      if(s.status!=='awaiting_confirmation' && s.status!=='lineup_confirmed') throw new AppError('LINEUP_NOT_READY','阵容尚未就绪，无法确认',409);
+      if(s.lineupGeneration?.generationId!==input.generationId || s.lineupRevision!==input.lineupRevision || s.lineupGeneration.generationVersion!==input.lineupRevision) throw new AppError('STALE_LINEUP','阵容版本已更新，请刷新',409);
+      const replayed=s.status==='lineup_confirmed';
+      if(!replayed){
+        this.db.prepare(`UPDATE discussions SET status='lineup_confirmed',confirmed_lineup_revision=lineup_revision,confirmed_at=?,
+          version=version+1,last_event_id=last_event_id+1,updated_at=? WHERE id=?`).run(time,time,id);
+        this.event(id);
+      }
+      const snapshot=this.read(id)?.snapshot;if(!snapshot) throw new Error('MISSING_DISCUSSION');
+      return {discussionId:id,snapshot,replayed};
+    });
+  }
   private event(id: string): void {
     const s = readSnapshot(this.db, id); if (!s) throw new Error('MISSING_DISCUSSION');
     const payload = { status: s.status, stopReason: s.stopReason, startedAt: s.startedAt, endedAt: s.endedAt,
