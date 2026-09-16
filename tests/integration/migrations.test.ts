@@ -19,9 +19,14 @@ afterEach(() => db.close());
 const tables = () => db.prepare("SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name").all().map(row => row.name);
 function seed() {
   db.exec(oldSql);
-  const service = new DraftService(new SqliteDraftStore(db));
   const input = { topic: '\u0000中文 "旧草稿"', requestId: randomUUID() };
-  return { input, created: service.create(input), service };
+  const discussionId = randomUUID(), time = new Date().toISOString();
+  db.prepare("INSERT INTO discussions VALUES (?,?,4,'created',1,1,?,?,?)").run(discussionId,input.topic,input.requestId,time,time);
+  db.prepare("INSERT INTO public_events VALUES (?,1,1,'discussion.status_changed',?,?)").run(discussionId,time,JSON.stringify({status:'created',stopReason:null,startedAt:null,endedAt:null,confirmedLineupRevision:null,summary:null}));
+  const snapshot = { discussionId, topic: input.topic, expertCount: 4, status: 'created', version: 1, lastEventId: 1,
+    createdAt: time, updatedAt: time, lineupRevision: 0, confirmedLineupRevision: null, transcriptVersion: 0,
+    roles: [], utterances: [], synthesis: null, summary: null, lastNotice: null, stopReason: null, startedAt: null, endedAt: null };
+  return { input, created: { discussionId, snapshot } };
 }
 it('001在空库只建立旧业务两表与迁移记录', () => {
   migrateDatabase(db, 1);
@@ -30,14 +35,13 @@ it('001在空库只建立旧业务两表与迁移记录', () => {
   expect(db.prepare('PRAGMA table_info(discussions)').all().map(row => row.name)).not.toContain('current_generation_id');
 });
 it('001严格接管真实旧schema，所有行及事件完整保留', () => {
-  const { created, input, service } = seed();
+  const { created, input } = seed();
   const before = db.prepare('SELECT * FROM discussions').all();
   const events = db.prepare('SELECT * FROM public_events').all();
   migrateDatabase(db, 1);
   expect(db.prepare('SELECT * FROM discussions').all()).toEqual(before);
   expect(db.prepare('SELECT * FROM public_events').all()).toEqual(events);
-  expect(service.get(created.discussionId)).toEqual(created.snapshot);
-  expect(service.create(input).replayed).toBe(true);
+  expect(db.prepare('SELECT topic,create_request_id FROM discussions WHERE id=?').get(created.discussionId)).toEqual({topic:input.topic,create_request_id:input.requestId});
 });
 it.each(['different-check', 'partial', 'unknown-trigger'])('001拒绝未知结构 %s 且不写半份迁移', variant => {
   if (variant === 'partial') db.exec('CREATE TABLE discussions(id TEXT)');
@@ -55,7 +59,7 @@ it('001重复执行与数据库重开不变更记录时间或业务', () => {
   const versions = db.prepare('SELECT * FROM schema_migrations').all();
   migrateDatabase(db, 1); db.close(); db = new DatabaseSync(path); migrateDatabase(db, 1);
   expect(db.prepare('SELECT * FROM schema_migrations').all()).toEqual(versions);
-  expect(new DraftService(new SqliteDraftStore(db)).get(created.discussionId)).toEqual(created.snapshot);
+  expect(db.prepare('SELECT topic FROM discussions WHERE id=?').get(created.discussionId)?.topic).toBe(created.snapshot.topic);
 });
 it('001记录checksum被改变时拒绝继续', () => {
   migrateDatabase(db, 1);

@@ -63,10 +63,10 @@
 
 接口：LineupStore.read(id)、begin(id,input,generationId,time)、complete(id,generation,members,time)、fail(id,generation,code,time)、recover(time)、confirm(id,input,time)。LineupService.generate(id,body)同步返回受理/重放；异步运行Provider；close()取消自有任务并等待本地终结，供服务关停使用；assertAvailable(id?)屏蔽不可持久化状态。
 
-- [ ] RED：真实DB的created→generating→ready、重试预算/分类、容量、无事务等待、regen失败旧成员留库但GET为空、A迟到/B有效、成员及事件故障回滚、恢复中断。
-- [ ] 每一组先运行`npm test -- tests/integration/generation.test.ts tests/unit/generation.test.ts`确认业务RED再最小实现；不一次实现后补测试。
-- [ ] repository短事务CAS、公开状态事件原子写入；service保持当前任务/取消/两次总预算/单调总期限/故障标记，Fake不绕过校验；无通用队列。
-- [ ] 同组GREEN，`npm test`回归；真实事务/故障测试与unit分别标明；提交generation。
+- [x] RED：真实DB的created→generating→ready、重试预算/分类、容量、无事务等待、regen失败旧成员留库但GET为空、A迟到/B有效、成员及事件故障回滚、恢复中断。
+- [x] 每一组先运行`npm test -- tests/integration/generation.test.ts tests/unit/generation.test.ts`确认业务RED再最小实现；不一次实现后补测试。
+- [x] repository短事务CAS、公开状态事件原子写入；service保持当前任务/取消/两次总预算/单调总期限/故障标记，Fake不绕过校验；无通用队列。
+- [x] 同组GREEN，`npm test`回归；真实事务/故障测试与unit分别标明；提交generation。
 
 ## F. confirm service
 
