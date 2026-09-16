@@ -11,7 +11,7 @@ import { existsSync } from 'node:fs';
 import { setTimeout as delay } from 'node:timers/promises';
 const file = process.env.DATABASE_PATH;
 if (!file) throw new Error('E2E_DATABASE_REQUIRED');
-const within = relative(resolve('.tmp/stage-4c'), resolve(file));
+const within = relative(resolve('.tmp/stage-4d'), resolve(file));
 if (!within || within.startsWith('..') || isAbsolute(within)) throw new Error('E2E_DATABASE_OUTSIDE_SCOPE');
 await initializeConfiguredDatabase(file);
 // Test-only provider composition. No production route/config accepts these controls.
@@ -19,7 +19,7 @@ const calls=new Map();
 const provider=new FakeRosterProvider([async(input,context)=>{
   const n=(calls.get(input.discussionId)??0)+1;calls.set(input.discussionId,n);
   const gate=/\[gate:([a-f0-9-]{36})\]/.exec(input.topic);
-  if(gate&&n===1)while(!existsSync(resolve('.tmp/stage-4c/gates',gate[1])))await delay(30,undefined,{signal:context.signal});
+  if(gate&&n===1)while(!existsSync(resolve('.tmp/stage-4d/gates',gate[1])))await delay(30,undefined,{signal:context.signal});
   const mode=input.topic.includes('[retry]')&&n<=2?'transport':input.topic.includes('[regen-fail]')&&n>=2&&n<=3?'few':'normal';
   const raw=await new FakeRosterProvider([mode]).generateRoster(input,context);
   if(!input.topic.includes('[long]'))return raw;

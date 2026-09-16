@@ -78,8 +78,8 @@ test('故障注入：提交期间重复点击，创建成功后列表失败可�
   await expect(page.getByRole('status').filter({hasText:'草稿已保存'})).toContainText('列表更新失败');
   await expect(detail(page).getByText(topic,{exact:true})).toBeVisible();
   expect(posts).toBe(1); expect(await records(page,topic)).toHaveLength(1);
-  mkdirSync('evidence/stage-4c/screenshots',{recursive:true});
-  await page.screenshot({path:'evidence/stage-4c/screenshots/1366x768-list-error.png'});
+  mkdirSync('evidence/stage-4d/screenshots',{recursive:true});
+  await page.screenshot({path:'evidence/stage-4d/screenshots/1366x768-list-error.png'});
   failList = false; await page.getByRole('button',{name:'重新加载列表'}).click();
   await expect(list(page).getByRole('button',{name:topic,exact:true})).toBeVisible(); expect(posts).toBe(1);
   await expect(page.locator('body')).not.toContainText('SQL内部故障');

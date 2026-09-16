@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
-const shots='evidence/stage-4c/screenshots';
+const shots='evidence/stage-4d/screenshots';
 const detail=(page:Page)=>page.getByRole('region',{name:'草稿详情'});
 const action=(page:Page,name:string)=>detail(page).getByRole('button',{name,exact:true});
 async function create(page:Page,topic='阵容流程',count=4){
@@ -12,7 +12,7 @@ async function create(page:Page,topic='阵容流程',count=4){
 async function ready(page:Page){await expect(action(page,'确认阵容')).toBeVisible();await expect(detail(page).locator('.member-card')).not.toHaveCount(0);}
 async function generate(page:Page){await action(page,'生成阵容').click();await ready(page);}
 async function snap(page:Page,id:string){const res=await page.request.get(`/api/discussions/${id}`);expect(res.status()).toBe(200);return res.json();}
-function release(gate:string){mkdirSync('.tmp/stage-4c/gates',{recursive:true});writeFileSync(`.tmp/stage-4c/gates/${gate}`,'release',{flag:'wx'});}
+function release(gate:string){mkdirSync('.tmp/stage-4d/gates',{recursive:true});writeFileSync(`.tmp/stage-4d/gates/${gate}`,'release',{flag:'wx'});}
 async function shot(page:Page,name:string){mkdirSync(shots,{recursive:true});await page.screenshot({path:`${shots}/${name}.png`});}
 test('正常闭环：4专家，确认及ready/confirmed刷新由SQLite恢复',async({page})=>{
   const id=await create(page);await generate(page);await expect(detail(page).locator('.member-card')).toHaveCount(5);await shot(page,'desktop-4');
