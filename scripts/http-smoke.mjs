@@ -101,7 +101,7 @@ try {
 await assert.rejects(fetch(`${base}/api/discussions`, { signal: AbortSignal.timeout(3000) }));
 const db=new DatabaseSync(databasePath,{readOnly:true});
 let migrationVersions;
-try { migrationVersions=db.prepare('SELECT id FROM schema_migrations ORDER BY id').all().map(r=>r.id);assert.deepEqual(migrationVersions,[1,2]); }
+try { migrationVersions=db.prepare('SELECT id FROM schema_migrations ORDER BY id').all().map(r=>r.id);assert.deepEqual(migrationVersions,[1,2,3]); }
 finally { db.close(); }
 console.log(JSON.stringify({ initialization, statuses, childRuns, listenerClosed: true,
   migrationVersions, provider:withLineup?'Fake only':'not called',

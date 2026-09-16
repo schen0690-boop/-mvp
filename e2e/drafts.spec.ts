@@ -17,6 +17,6 @@ test('真实流程：默认4专家创建、全部列表、详情与刷新读取'
   await page.getByRole('button', { name: '全部讨论', exact: true }).click();
   await list.getByRole('button', { name: topic, exact: true }).click();
   await expect(detail.getByText(topic, { exact: true })).toBeVisible();
-  mkdirSync('evidence/stage-4d/screenshots',{recursive:true});
-  await page.screenshot({path:'evidence/stage-4d/screenshots/1366x768-normal.png'});
+  mkdirSync('evidence/stage-5b/screenshots',{recursive:true});
+  await page.screenshot({path:'evidence/stage-5b/screenshots/1366x768-normal.png'});
 });

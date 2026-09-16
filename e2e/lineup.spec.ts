@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
-const shots='evidence/stage-4d/screenshots';
+const shots='evidence/stage-5b/screenshots';
 const detail=(page:Page)=>page.getByRole('region',{name:'草稿详情'});
 const action=(page:Page,name:string)=>detail(page).getByRole('button',{name,exact:true});
 async function create(page:Page,topic='阵容流程',count=4){
