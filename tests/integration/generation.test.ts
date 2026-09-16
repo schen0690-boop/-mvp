@@ -97,3 +97,19 @@ it('keeps no SQLite write transaction while awaiting provider', async () => {
   release(await new FakeRosterProvider().generateRoster(call.input, call.context));
   await x.service.idle(); expect(x.drafts.get(another.discussionId).status).toBe('created');
 });
+it('two active discussions can finish out of order without mixing topic, count, generation or members',async()=>{
+  const releases=new Map<string,(value:string)=>void>();
+  const provider=new FakeRosterProvider([(input)=>new Promise(resolve=>releases.set(input.discussionId,resolve))]);
+  const x=setup(provider);const other=x.drafts.create({topic:'第二场不同话题',expertCount:1,requestId:randomUUID()});
+  const a=x.service.generate(x.id,{requestId:randomUUID(),expectedGenerationId:null});
+  const b=x.service.generate(other.discussionId,{requestId:randomUUID(),expectedGenerationId:null});
+  const second=provider.calls.find(c=>c.input.discussionId===other.discussionId);if(!second)throw new Error('missing second');
+  releases.get(other.discussionId)?.(await new FakeRosterProvider().generateRoster(second.input,second.context));
+  await expect.poll(()=>x.drafts.get(other.discussionId).status).toBe('awaiting_confirmation');
+  expect(x.drafts.get(x.id).status).toBe('generating_lineup');
+  const first=provider.calls.find(c=>c.input.discussionId===x.id);if(!first)throw new Error('missing first');
+  releases.get(x.id)?.(await new FakeRosterProvider().generateRoster(first.input,first.context));await x.service.idle();
+  expect(x.drafts.get(x.id).roles).toHaveLength(5);expect(x.drafts.get(other.discussionId).roles).toHaveLength(2);
+  expect(a.generationId).not.toBe(b.generationId);expect(first.input.topic).toBe(x.original.topic);expect(second.input.topic).toBe('第二场不同话题');
+  expect(x.drafts.get(other.discussionId).lineupGeneration?.generationId).toBe(b.generationId);
+});

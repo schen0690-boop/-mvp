@@ -66,3 +66,7 @@ Transcript默认只在用户已接近底部时跟随新发言；用户向上阅�
 - 冲突后GET刷新当前状态，不自动更换版本重提命令；禁用按钮依据真实请求/讨论状态。
 - GET active集合保持原约定（generating_lineup/awaiting_confirmation/running/stopping），failed/confirmed在全部列表；每条显示准确中文状态，不将待确认标成正在发言。
 - 九色候选由系统分配，数值对比度已计算，成员卡片实际UI及色觉辨识未验证，4C验收后方可称已验证。现有主色/字体/三区滚动保持。
+
+## 4B消费者兼容实际状态
+
+已实现created=草稿、generating_lineup=阵容生成中、awaiting_confirmation=阵容待确认、lineup_generation_failed=阵容生成失败、lineup_confirmed=阵容已确认。详情明确讨论尚未开始，失败只显示固定安全notice。未新增按钮、卡片、确认或重新生成交互，也无自动轮询。原三区布局/滚动保持，原9项E2E回归通过；新增1项经真实API生成/确认后检查中文状态。4C完整阵容UX仍是后续计划。

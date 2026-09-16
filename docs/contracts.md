@@ -1,8 +1,8 @@
-# HTTP 与 SSE 契约草案
+# HTTP 已实现契约与后续 SSE 草案
 
-阶段1A协议草案在阶段2局部落实：仅POST创建、GET单条与列表已实现，其余HTTP/SSE仍为设计，未实现。技术基线已确认，默认运行参数/总结句数已在阶段1B获得用户确认；其余具体路径、字段、校验阈值和错误码仍为C类设计建议。使用 `/api` 前缀；所有正文 UTF-8，JSON 是传输格式，不是直接显示给用户的文本。
+当前：草稿创建/查询及阶段4B阵容生成/确认HTTP已实现；运行/停止/SSE仍为未来设计。用户P6确认4A阵容设计，阵容当前字段以本文末节和[lineup-design.md](lineup-design.md)为准。所有正文UTF-8，JSON是API传输格式，不直接作为页面文本。
 
-阶段4A待确认提案：阵容字段和HTTP增量以本文末节及[lineup-design.md](lineup-design.md)为准。旧确认即启动设计已撤销为本轮推荐基线；运行/SSE段仅为后续设计背景，本轮不新增其接口。
+阶段2/3小节保留其历史背景；下方“阶段4B阵容HTTP增量”覆盖新状态、版本、错误和前端解析。确认与开始严格分离，本轮不新增运行接口。
 
 ## 标识、版本与公开类型
 
@@ -118,7 +118,7 @@ HTTP错误体只含 error：code、message、retryable、action、requestId。re
 - 写操作仅application/json；无Origin的本地客户端允许；带Origin只允许HTTP同源loopback，未启用跨域访问。公开响应均no-store。未实现路径返回安全404。
 - 话题1–500码点规则由运行时执行；SQLite仅做1–2000字节的存储保护，避免其文本length在U+0000处停止造成与业务规则不一致。正文不是页面渲染，后续UI仍须文本转义。
 
-## 阶段3浏览器消费者约定（HTTP字段与后端不变）
+## 阶段3浏览器消费者约定（历史基线；4B解码扩展见末节）
 
 - 前端topic按trim后Unicode码点1–500校验，不使用UTF-16 maxlength；人数选择1–8，默认4，不含主持人。未知响应字段/缺字段、非草稿状态、不一致ID/人数/话题均拒绝显示；当前客户端只接受阶段2草稿DTO，扩展生命周期时须同步更新校验。
 - 每次逻辑提交使用crypto.randomUUID；忙碌时表单禁用并同步防重入；失败重试保持不可变正文/ID；编辑输入或成功后明确再次创建生成新ID。201首次和200重放都显示同一服务端快照；409显示冲突并保留原ID，不静默轮换。
@@ -127,9 +127,9 @@ HTTP错误体只含 error：code、message、retryable、action、requestId。re
 - 列表和详情各有本地查询代次，防旧响应及finally覆盖；该代次不是服务端version或eventId，不写入API。
 - 本轮浏览器采用固定安全中文文案映射HTTP错误状态；不信任或直接渲染响应error.message、HTML或原始JSON。成功正文需运行时校验，话题通过React文本节点显示。本地时间显示只转换格式，API仍使用UTC ISO毫秒。
 
-## 阶段4A阵容HTTP增量（待确认、未实现）
+## 阶段4B阵容HTTP增量（P6已确认并实现）
 
-详细领域和事务条件见[lineup-design.md](lineup-design.md)。不改变已有创建/单条/列表路径；新增两个写操作，不新增任务查询或发言API。写操作统一应用JSON对象、16KiB、拒绝未知字段、同源loopback Origin保护；这些保护当前只装在创建路由，4B必须明确覆盖新增路由。
+详细领域和事务条件见[lineup-design.md](lineup-design.md)。不改变已有创建/单条/列表路径；新增两个写操作，不新增任务查询或发言API。写操作统一应用JSON对象、16KiB、拒绝未知字段、同源loopback Origin保护；这些保护已覆盖创建和两个阵容POST路由。
 
 ### 请求与返回
 
@@ -149,7 +149,7 @@ generationId与requestId均为UUID：前者服务端UUIDv4，后者客户端UUID
 
 - **status=created**：保留阶段3严格19字段及初始值，省略新键；已迁移旧草稿通过同一路径读取仍是该形态。
 - **其他四个阵容状态**：保留原19键，新增lineupGeneration和confirmedAt两个键。lineupGeneration精确为{generationId,generationVersion,startedAt,finishedAt}，映射current_generation_id/generation_version/generation_started_at/generation_finished_at；startedAt非null，finishedAt生成中null、其余非null。此处nested startedAt是生成时间，外层startedAt仍为null（讨论未运行）。
-- lineupRevision映射lineup_revision；confirmedLineupRevision映射confirmed_lineup_revision；confirmedAt映射confirmed_at，仅lineup_confirmed非null。roles仅ready/confirmed返回LineupMember八公开字段，按displayOrder排序；生成中/失败返回[]，即使DB保留上版也不投影。ready/confirmed时lineupRevision=lineupGeneration.generationVersion；生成/失败时lineupRevision≤该值。
+- lineupRevision映射lineup_revision；confirmedLineupRevision映射confirmed_lineup_revision；confirmedAt映射confirmed_at，仅lineup_confirmed非null。roles仅ready/confirmed返回LineupMember八公开字段，按displayOrder排序；生成中/失败返回[]，即使DB保留上版也不投影。ready/confirmed时lineupRevision=lineupGeneration.generationVersion；生成/失败时保留最后成功revision；当前可达状态中严格小于新generationVersion。
 - transcriptVersion=0，utterances=[]，synthesis/summary/stopReason/外层startedAt/endedAt均null。lastNotice仅失败时由固定错误码映射{code,message,retryable,action}，其他状态null。version/lastEventId不再限定1，均正安全整数；createdAt不变，updatedAt由实际公开事务推进。
 - 不公开generation_request_id/generation_base_id、旧隐藏成员、name_key、Provider内容、attempt计数、异常栈、库路径。成员只有memberId/role/name/profession/title/stance/color/displayOrder；没有id/kind别名或虚构运行状态。
 - 创建同requestId重放时仍返回当前discussion快照，讨论可能已进入阵容状态；新版创建响应解码必须允许该联合类型，不能强断言created。新建草稿的首次201仍严格created。讨论topic/count不可被阵容命令改变。
@@ -165,3 +165,11 @@ generationId与requestId均为UUID：前者服务端UUIDv4，后者客户端UUID
 Provider超时、传输/结构/业务错误发生在202之后：不补写HTTP错误、不统一500，而是落为lineup_generation_failed，GET200带安全notice。已知永久配置失败用LINEUP_PROVIDER_CONFIGURATION（retryable=false/action=none）；暂时不可用用LINEUP_PROVIDER_UNAVAILABLE（true/try_again）；其他LINEUP_TIMEOUT/LINEUP_INVALID_STRUCTURE/LINEUP_INVALID_MEMBERS/LINEUP_STORAGE_FAILED/LINEUP_INTERRUPTED均true/try_again。客户端按允许的code映射文案，不显示任意error.message或Provider正文。
 
 同时无法保存结果与失败状态时，事务回滚并由内存标记当前讨论不可用，相关请求503；既有持久化generating状态由下一次启动恢复，不在GET内写库或虚构failed。该故障需要处理本地存储问题；重复GET不会修复磁盘。迟到结果仅内部分类STALE_GENERATION_RESULT，无公开事件/notice。原有created错误契约保持不变。
+
+### 4B可运行示例与实际边界
+
+首次生成：POST `/api/discussions/{discussionId}/lineup`，body `{"requestId":"新UUID","expectedGenerationId":null}`。202正文恰好五字段：discussionId、generationId、generationVersion、snapshot、replayed。即使Fake快速成功，受理响应仍是当时生成中快照，随后GET取得实际当前状态。
+
+确认：POST `/api/discussions/{discussionId}/lineup/confirm`，body `{"generationId":"GET当前UUID","lineupRevision":1}`；用GET中的实际revision替代示例1。200含discussionId、snapshot、replayed；snapshot.status=lineup_confirmed，外层startedAt仍null。失败重试/重新生成复用/lineup路径，但必须新requestId及当前expectedGenerationId。占位字符串不能作为真实请求ID。
+
+当前Provider仅Fake。默认演示成功，不提供浏览器选择异常模式的接口。失败模式只能由测试注入Provider；不开放调试接口。可执行全链路示例：`node scripts/http-smoke.mjs --lineup`（先build，独立新库与进程）。公开事件已落库但没有SSE或事件读取HTTP。

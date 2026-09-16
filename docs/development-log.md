@@ -157,3 +157,33 @@ brainstorming检查清单：上下文已读取；本轮无必须以交互视觉�
 本轮未执行：业务测试、类型检查/构建、正式迁移、模型调用、阵容UI、浏览器验证。阶段2/3通过记录仍是历史结果，本轮没有复跑。下一步只等待用户确认三组设计决定，未获确认不得进入4B或writing-plans。原工具口径与真实模型资料仍待核实，不阻塞本轮供应商无关设计。
 
 本轮文档自检实际退出0：32条S4编号唯一且全为计划，32条原R编号保留；相对链接存在、围栏成对、修改设计无占位符、所检查的高置信度敏感形态无命中。旧Prompt前缀55983字节哈希不变，附件原始11753字节完整出现在新增归档；业务代码/依赖/测试/探针及阶段2、3历史报告对HEAD无差异。git diff --check退出0（只有既有CRLF换行提示）。自审补充总期限计时器的失败CAS，避免“只丢弃到期结果却遗留生成中”；并注明旧lineup.ready属于未来SSE背景，4B只复用状态事件。Mermaid未渲染，迁移SQL与所有未来用例未执行，不据文档检查宣称产品通过。
+
+## 阶段4B：阵容后端、非破坏迁移与Fake TDD（2026-09-16）
+
+P6真实用户消息已逐字追加到[sources/development-prompts.md](sources/development-prompts.md)，来源为当前会话JSONL，具体路径、SHA-256和原归档前缀68138字节指纹见evidence/stage-4b/source.json。检查器已核对当前原文与会话一致、旧前缀不变，没有改写P0–P5。应用角色Prompt不算开发Prompt。
+
+本轮意图：把用户已确认4A设计落为正式迁移、运行时校验、Fake Provider、生成/确认服务、两个HTTP接口及最小前端兼容。先writing-plans形成docs/superpowers/plans/2026-09-16-lineup-backend.md并自检，再当前会话A–I顺序实施。没有额外代理/worktree，不安装依赖/Skills、不接真实模型、不自动进入4C。
+
+实际问题与修正：参数化测试数组展开影响断言输入，修正包装后再业务RED；新版业务读取不能用于旧schema建数，夹具改冻结旧DDL/INSERT；补丁相似片段定位和闭合括号错误单独保留准备失败记录，不算业务RED；提交前自查新增总期限事务内校验，先两项失败再修复。最后发现两处截图路径遗漏，另存本轮结果并从Git恢复原图，重跑10项E2E；历史阶段3证据无差异。没有为凑过程记录编造模型故障。
+
+已确认并落实：lineup命名；确认独立且不启动；失败专用状态；生成中不替换；重新生成一受理旧版就不可确认；失败留旧行但不公开；当前代次+成功revision+双版本确认；001严格旧schema、002新增功能；新状态最小消费者兼容。系统ID/色板/顺序/时间均后端生成；每代次最多两次调用共享网络/修复预算。文档/验收来源仍区分题面A与用户B，不把设计参数说成原题数字。
+
+### 实际Skills（均使用既有本地文件）
+
+| 名称 | SKILL.md路径 | 文件存在/已读取 | 已用于任务 | 执行已验证 |
+|---|---|---|---|---|
+| writing-plans | C:\Users\Administrator\.codex\skills\superpowers\skills\writing-plans\SKILL.md | 是/是 | 4B九个小任务与独立验证计划 | 计划已保存；无Skill安装脚本 |
+| executing-plans | C:\Users\Administrator\.codex\skills\superpowers\skills\executing-plans\SKILL.md | 是/是 | 当前会话顺序执行；用户明确授权优先于代理/worktree默认流程 | 实际任务及命令证据已记录 |
+| test-driven-development | C:\Users\Administrator\.codex\skills\superpowers\skills\test-driven-development\SKILL.md | 是/是 | 001/002、校验/Fake、生成/确认/HTTP/前端RED→GREEN | 真实Vitest输出、退出码和源码哈希 |
+| systematic-debugging | C:\Users\Administrator\.codex\skills\superpowers\skills\systematic-debugging\SKILL.md | 是/是 | 参数化/夹具/补丁/输出路径问题先定位再修正 | 对应用例及回归已执行 |
+| verification-before-completion | C:\Users\Administrator\.codex\skills\superpowers\skills\verification-before-completion\SKILL.md | 是/是 | 最终类型/构建/测试/进程冒烟/来源范围检查 | 结果见stage-4b-validation |
+
+另实际读取test-driven-development同目录testing-anti-patterns.md，用于保持正常SQLite/HTTP链路真实、仅Provider边界Fake。可得版本沿用已归档本地6.1.0/f268f7c953744036f0fa7e9d4b73535c04e57cb8，本轮未重新审计版本或转用6.3.0缓存。未启用frontend-design、安全或界面规范审查Skill，也未执行Skill自带远程脚本。
+
+最终190后端（99单元/91集成）、25前端、10局部Edge E2E通过；三套类型检查、两端构建、草稿/阵容两组独立进程冒烟退出0。S4-01–31映射真实测试，S4-23/24完整4C UI部分与S4-32真实模型保持未执行。完整证据及代表性RED见[阶段4B验证记录](stage-4b-validation.md)。生产源码构建哈希与最后测试源文件核对，不引用旧探针成功来替代业务验证。
+
+Git继续使用已明确暂定的项目级schen / cs064210@163.com。保留2ae575a之前全部历史，按001、002、domain/provider、generation、confirm/HTTP、前端兼容和期限修复实际提交；收尾文档/证据随后提交。无远程仓库/推送、无历史改写或倒填时间。
+
+尚未执行：真实模型协议/ID/价格/取消与能力检查、完整阵容UI、讨论调度/发言/共识/SSE、完整产品E2E和人工讨论质量、跨进程协调/磁盘断电验证、官方支持OS迁移、漏洞审计。实际开发工具仍Codex，题面关于其他工具的口径仍需出题方确认。
+
+后续交付核查：P0–P6为可取得的真实开发请求，不能据条数宣称全部交付完成；四阶段覆盖需结合实际产物，仍缺5组正式话题+对应阵容样例及1–1.5页完整工作流说明等最终材料。4B测试数据不冒充高质量样例。下一步建议4C阵容前端交互与Fake局部E2E，等待用户新授权，不自动接真实模型。

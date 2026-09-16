@@ -27,7 +27,7 @@
 
 文件：新增src/db/schema-v2.ts；修改src/db/migrations.ts、database.ts、runtime.ts、init-db.ts；扩展migrations.test.ts和schema.test.ts；新增tests/integration/runtime.test.ts。
 
-接口：initializeDatabase(db)迁移到最新；openConfiguredDatabase(path, initialize=false)启动只检查，初始化显式迁移。schema-v2导出固定SQL，migrations控制事务。新增字段与lineup_members严格遵循lineup-design，成员表仅保留最后成功整组，历史成功在公开事件留存。
+接口：initializeDatabase(db)迁移到最新；openConfiguredDatabase(path)（只检查）；initializeConfiguredDatabase(path)（显式备份和迁移）启动只检查，初始化显式迁移。schema-v2导出固定SQL，migrations控制事务。新增字段与lineup_members严格遵循lineup-design，成员表仅保留最后成功整组，历史成功在公开事件留存。
 
 - [x] 从001 fixture迁移写RED：`expect(tableNames).toContain('lineup_members')`；注入002记录写失败要求整事务回滚；约束实插、旧字段字节/事件、重开、重复迁移都验证。
 - [x] `npm test -- tests/integration/migrations.test.ts tests/integration/runtime.test.ts`；只行为未实现失败计RED。
@@ -102,10 +102,10 @@
 
 文件：docs/stage-4b-validation.md、contracts/architecture/test-plan/development-log及README；evidence/stage-4b命令JSON；scripts范围/来源检查；playwright配置仅调整测试初始化和本轮输出位置，原测试逻辑保持。
 
-- [ ] 最终`npm run typecheck`、`npm run typecheck:web`、`npm run typecheck:e2e`、`npm test`、`npm run test:web`、`npm run build`、`npm run build:web`、`npm run test:e2e`，独立库启动真实HTTP冒烟。
-- [ ] S4-01–31映射真实测试，4C UI和S4-32真实模型保持未执行；不可将未来检查凑成通过数量。
-- [ ] 检查源码/锁文件/Prompt前缀、实际Git署名/暂存无数据库密钥或临时包，关闭自有服务；按事实提交文档与证据。
-- [ ] 报告退出码、RED→GREEN、迁移范围、旧阵容不可确认、Fake局限；到4B停止。
+- [x] 最终`npm run typecheck`、`npm run typecheck:web`、`npm run typecheck:e2e`、`npm test`、`npm run test:web`、`npm run build`、`npm run build:web`、`npm run test:e2e`，独立库启动真实HTTP冒烟。
+- [x] S4-01–31映射真实测试，4C UI和S4-32真实模型保持未执行；不可将未来检查凑成通过数量。
+- [x] 检查源码/锁文件/Prompt前缀、实际Git署名/暂存无数据库密钥或临时包，关闭自有服务；按事实提交文档与证据。
+- [x] 报告退出码、RED→GREEN、迁移范围、旧阵容不可确认、Fake局限；到4B停止。
 
 ## 计划自检与执行方式
 

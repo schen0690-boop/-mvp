@@ -63,10 +63,12 @@ it('confirmation event failure rolls back time and state, then exact request can
 it('startup recovery changes only interrupted generations and refuses partial recovery',async()=>{
   const x=setup(); const a=x.service.generate(x.id,{requestId:randomUUID(),expectedGenerationId:null});await x.service.idle();x.service.confirm(x.id,{generationId:a.generationId,lineupRevision:1});
   const confirmed=x.drafts.get(x.id); const created=x.drafts.create({topic:'草稿',requestId:randomUUID()}).snapshot;
+  const readyId=x.drafts.create({topic:'保持待确认',requestId:randomUUID()}).discussionId;
+  x.service.generate(readyId,{requestId:randomUUID(),expectedGenerationId:null});await x.service.idle();const ready=x.drafts.get(readyId);
   const pending=x.drafts.create({topic:'遗留生成',requestId:randomUUID()}).discussionId;
   x.store.begin(pending,{requestId:randomUUID(),expectedGenerationId:null},randomUUID(),new Date().toISOString());
   x.db.exec("CREATE TRIGGER injected BEFORE INSERT ON public_events WHEN json_extract(NEW.payload,'$.lastNotice.code')='LINEUP_INTERRUPTED' BEGIN SELECT RAISE(ABORT,'private'); END");
   expect(()=>x.service.recover()).toThrow('存储');expect(x.drafts.get(pending).status).toBe('generating_lineup');
   x.db.exec('DROP TRIGGER injected');x.service.recover();expect(x.drafts.get(pending).lastNotice?.code).toBe('LINEUP_INTERRUPTED');
-  expect(x.drafts.get(x.id)).toEqual(confirmed);expect(x.drafts.get(created.discussionId)).toEqual(created);expect(x.provider.calls).toHaveLength(1);
+  expect(x.drafts.get(x.id)).toEqual(confirmed);expect(x.drafts.get(created.discussionId)).toEqual(created);expect(x.drafts.get(readyId)).toEqual(ready);expect(x.provider.calls).toHaveLength(2);
 });

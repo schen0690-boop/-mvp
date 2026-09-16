@@ -61,11 +61,16 @@ it('001重复执行与数据库重开不变更记录时间或业务', () => {
   expect(db.prepare('SELECT * FROM schema_migrations').all()).toEqual(versions);
   expect(db.prepare('SELECT topic FROM discussions WHERE id=?').get(created.discussionId)?.topic).toBe(created.snapshot.topic);
 });
-it('001记录checksum被改变时拒绝继续', () => {
+it('001记录checksum被改变或编号缺号时拒绝继续', () => {
   migrateDatabase(db, 1);
+  const checksum=db.prepare('SELECT checksum FROM schema_migrations WHERE id=1').get()?.checksum;
+  if(typeof checksum!=='string')throw new Error('missing checksum');
   db.prepare("UPDATE schema_migrations SET checksum = 'modified'").run();
   expect(() => migrateDatabase(db, 1)).toThrow('MIGRATION_HISTORY_MISMATCH');
   expect(() => assertCurrentSchema(db)).toThrow('MIGRATION_HISTORY_MISMATCH');
+  db.prepare('UPDATE schema_migrations SET checksum=? WHERE id=1').run(checksum);
+  db.prepare('UPDATE schema_migrations SET id=2 WHERE id=1').run();
+  expect(()=>migrateDatabase(db,2)).toThrow('MIGRATION_HISTORY_MISMATCH');
 });
 
 it('002从空库依次建立两版本，仅必要表', () => {

@@ -2,7 +2,7 @@
 
 阶段1A架构在1B按用户授权修订。技术路线、默认限制及运行/收尾重启语义为B类已确认基线；调度细节仍为C类建议，待确认项见 [需求登记](requirements.md)。契约的唯一字段定义见 [contracts.md](contracts.md)。
 
-阶段4A阵容子系统提案见[lineup-design.md](lineup-design.md)，待用户确认；下文与阵容有关的设计按该提案修订，尚未实现。后续发言/调度/SSE原设计仅保留背景，不属本轮冻结范围。
+阶段4A阵容设计已获P6确认，4B已实现Fake Provider后端与最小前端兼容，详见[lineup-design.md](lineup-design.md)及[验证记录](stage-4b-validation.md)。后续发言/调度/SSE原设计仅保留背景，不属本轮冻结范围。
 
 ## 模块与数据访问边界
 
@@ -36,7 +36,7 @@ erDiagram
 | 实体 | 最小字段与约束 | 持久化策略 |
 |---|---|---|
 | Discussion | id、topic、expertCount、status、version、lineupRevision、confirmedLineupRevision、transcriptVersion、lastEventId、synthesisSourceTranscriptVersion、synthesisUpdatedAt、runEpoch、createdAt/updatedAt/startedAt/endedAt、stopReason、createRequestId及输入指纹、lastNotice | 状态/计数持久化；runEpoch、输入指纹为内部字段；创建 requestId 唯一 |
-| LineupMember（snapshot.roles） | memberId、role(moderator/expert)、name、profession、title、stance、color、displayOrder；内部discussion_id/generation_id/generation_version/name_key/created_at | 阶段4A提案；整组替换，生成代次和确认存Discussion；不提前增加运行status/publicFocus |
+| LineupMember（snapshot.roles） | memberId、role(moderator/expert)、name、profession、title、stance、color、displayOrder；内部discussion_id/generation_id/generation_version/name_key/created_at | 4B已实现；整组替换，生成代次和确认存Discussion；不提前增加运行status/publicFocus |
 | Utterance | id、discussionId、roleId、seq、sentences、replyToUtteranceIds、createdAt | 已校验的公开发言追加保存，不修改历史正文；discussionId+seq 唯一 |
 | Finding | id、discussionId、kind(consensus/disagreement)、text、sourceTranscriptVersion | 保存当前有效的一组条目；每次合格综合原子替换，旧版在公开事件中留痕 |
 | FindingEvidence | findingId、discussionId、utteranceId | 至少一条引用；分歧建议至少两个不同角色的相异发言，不能仅凭模型标签认定存在分歧 |
@@ -53,7 +53,7 @@ transcriptVersion 每新增一条普通公开发言加 1，与最后一条 seq �
 
 五组样例将保存为可审阅的 SQL/JSON 数据及初始化入口：每组一个不同话题、一个主持人、expertCount 位专家，字段完整、立场差异合理。若补充 transcript，必须标注为样例而非真实模型运行证据；样例不会在运行模式里作为预生成剧本播放。
 
-## 生命周期与确认边界（阶段4A待确认提案）
+## 生命周期与确认边界（4A已确认，4B实现阵容子集）
 
 ```mermaid
 stateDiagram-v2
@@ -148,7 +148,7 @@ sequenceDiagram
 
 用户点击结束后不再接受专家发言；总结含排队/调用/重试的总等待不超过进入stopping后60秒，超期取消并标记unavailable；总结迟到也不能覆盖已结束状态。故 UI 先显示“正在结束”，然后才显示最终总结或失败提示。致命错误或进程中断为 failed，不能包装成正常完成。
 
-**D07 已确认重启语义：** created、awaiting_confirmation、lineup_confirmed、lineup_generation_failed、completed、failed保持已有数据与状态；仅确实中断的running/stopping在下一次后端启动接收请求之前转为failed，runEpoch+1、角色状态重置idle，并保存公开中断事件。generating_lineup不归为运行中断失败；阶段4A提案修订此前C细节：恢复为lineup_generation_failed、使旧生成任务失效并给LINEUP_INTERRUPTED，由用户重新请求。保留已有阵容/发言/综合，提示“上次运行中断，可查看记录并新建讨论”。不自动续跑、不复原远端任务、不提供同一讨论二次运行。旧观察者重连得到修正后的快照/事件。
+**D07 已确认重启语义：** created、awaiting_confirmation、lineup_confirmed、lineup_generation_failed、completed、failed保持已有数据与状态；仅确实中断的running/stopping在下一次后端启动接收请求之前转为failed，runEpoch+1、角色状态重置idle，并保存公开中断事件。generating_lineup不归为运行中断失败；4B已按P6确认落实：恢复为lineup_generation_failed、使旧生成任务失效并给LINEUP_INTERRUPTED，由用户重新请求。保留已有阵容/发言/综合，提示“上次运行中断，可查看记录并新建讨论”。不自动续跑、不复原远端任务、不提供同一讨论二次运行。旧观察者重连得到修正后的快照/事件。
 
 模型调用始终在数据库事务之外；只在读取一致快照、申请状态迁移、验证并落盘结果时用短事务。前端只有在持久化成功后收到公开事件，无法提交的结果不得先展示。
 
@@ -186,4 +186,17 @@ erDiagram
   }
 ```
 
-图中generation不另建实体：当前尝试与最后成功阵容的ID/版本分别存在Discussion中。模型输出先解析/结构与业务验证/规范化，再由系统补字段，最后CAS短事务写整组成员及状态事件；Provider等待不持有写事务。所有4A规格待确认，本轮只做文档自查。
+图中generation不另建实体：当前尝试与最后成功阵容的ID/版本分别存在Discussion中。模型输出先解析/结构与业务验证/规范化，再由系统补字段，最后CAS短事务写整组成员及状态事件；Provider等待不持有写事务。4A已获确认；4B只实现阵容链路，未来讨论协调/SSE仍未实现。
+
+## 4B实际文件与执行边界
+
+| 模块 | 实际入口 | 已落实接口/职责 |
+|---|---|---|
+| migration | src/db/migrations.ts、schema-v1.ts、schema-v2.ts | migrateDatabase(默认2)、assertCurrentSchema；001严格接管、002迁移 |
+| 维护与运行 | src/runtime.ts、init-db.ts、server.ts | 显式备份/初始化；启动只校验并恢复中断生成；回环监听 |
+| 领域 | src/domain/lineup.ts、lineup-service.ts、snapshot.ts | 候选结构/业务校验；generate、confirm、recover、close；固定notice和DTO |
+| SQLite | src/db/sqlite-lineup.ts、read-discussion.ts | begin/complete/fail/confirm/recover；事务内白名单快照和状态事件 |
+| Provider | src/providers/roster.ts、fake-roster.ts | generateRoster(input,context)；只有Fake，最多两次调用由service控制 |
+| HTTP/前端 | src/http/app.ts、web/src/api.ts、App.tsx | 两个新POST、GET扩展、严格19/21字段解析和中文状态 |
+
+模型调用不跨数据库事务。每次状态变更一条discussion.status_changed，故4B的version与lastEventId数值相等；后续多事件设计仍须另行实现/验证。创建不调用Provider；确认不调度讨论。遗留generating在监听前原子转失败，不续跑；失败状态写入也失败则拒绝相关读取/操作，启动恢复失败则不监听。没有跨进程所有权锁，禁止多个后端共享一个运行库是运行前提。
