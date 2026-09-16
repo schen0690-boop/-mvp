@@ -40,10 +40,10 @@
 
 接口：parseRoster(raw: unknown, expertCount: number): CandidateMember[]；enrichRoster(candidates): LineupMember[]；validateGenerate(input): {requestId,expectedGenerationId}；validateConfirm(input): {generationId,lineupRevision}。snapshot类型为旧created与新增四态联合，成员八公开字段。
 
-- [ ] RED验证`parseRoster(valid,4)`结果及少/多专家、空/重复/系统字段、非法role、UTF边界、错误分类、系统顺序颜色。
-- [ ] `npm test -- tests/unit/lineup.test.ts`；先运行抛未实现的校验骨架。
-- [ ] 实现parse→结构→业务→trim→系统补字段；分类LINEUP_INVALID_STRUCTURE/MEMBERS；安全notice枚举和纯公开快照校验。
-- [ ] 同组GREEN，类型检查和旧输入测试回归；整理后复验。
+- [x] RED验证`parseRoster(valid,4)`结果及少/多专家、空/重复/系统字段、非法role、UTF边界、错误分类、系统顺序颜色。
+- [x] `npm test -- tests/unit/lineup.test.ts`；先运行抛未实现的校验骨架。
+- [x] 实现parse→结构→业务→trim→系统补字段；分类LINEUP_INVALID_STRUCTURE/MEMBERS；安全notice枚举和纯公开快照校验。
+- [x] 同组GREEN，类型检查和旧输入测试回归；整理后复验。
 
 ## D. FakeRosterProvider
 
@@ -51,9 +51,11 @@
 
 接口：RosterGenerator.generateRoster(input:{discussionId,topic,expertCount,constraints}, context:{signal,deadline,repairIssues?}): Promise<string>；Fake构造时注入模式序列或受控响应函数，默认正常候选，绝不网络访问。
 
-- [ ] 先以生产parseRoster验证Fake正常与所有异常模式，断言`expect(parseRoster(await fake.generateRoster(input,context),4)).toHaveLength(5)`；屏障控制迟到，无固定sleep。
-- [ ] 骨架RED，实现确定性候选/错误/等待/忽略取消的可控边界，再运行同组GREEN。
-- [ ] `npm test -- tests/unit/lineup.test.ts tests/unit/fake-roster.test.ts`回归并提交领域/provider。
+- [x] 先以生产parseRoster验证Fake正常与所有异常模式，断言`expect(parseRoster(await fake.generateRoster(input,context),4)).toHaveLength(5)`；屏障控制迟到，无固定sleep。
+- [x] 骨架RED，实现确定性候选/错误/等待/忽略取消的可控边界，再运行同组GREEN。
+- [x] `npm test -- tests/unit/lineup.test.ts tests/unit/fake-roster.test.ts`回归并提交领域/provider。
+
+公开snapshot类型和校验随E/H真实消费者接入，避免无调用方实现。C已完成候选及HTTP输入校验。
 
 ## E. generation service、存储与恢复
 
