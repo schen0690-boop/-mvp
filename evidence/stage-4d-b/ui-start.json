@@ -1,0 +1,10 @@
+{
+  "startedAt": "2026-09-16T09:30:43.773Z",
+  "codeVersion": "0a39fada64ee118e26278d557e03097c7329359b",
+  "frontend": "http://127.0.0.1:41851",
+  "backend": "http://127.0.0.1:41852",
+  "topic": "AI 如何改善教育？",
+  "expertCount": 4,
+  "steps": {},
+  "posts": []
+}

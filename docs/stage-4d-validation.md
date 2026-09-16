@@ -3,7 +3,7 @@
 ## 授权及实施顺序
 
 A：配置/提示词→原生fetch适配器→重试/取消局部修正→持久化一次性验收保护→本地HTTP stub/正式业务集成→回归/构建。每项先行为RED，再GREEN，按实际完成提交。
-B：必须待用户在.env.backend.local配置并回复“已配置”。指定“AI 如何改善教育？”、4专家另加主持人；唯一discussion/generation，累计最多2次真实请求，首次成功即关闭；无Hello/余额/模型列表探测。当前真实请求0，授权未激活。
+B：必须待用户在.env.backend.local配置并回复“已配置”。指定“AI 如何改善教育？”、4专家另加主持人；唯一discussion/generation，累计最多2次真实请求，首次成功即关闭；无Hello/余额/模型列表探测。4D-A结束时真实请求0、授权未激活；4D-B最终结果见末节（1次成功、授权已关闭）。
 
 ## 官方依据（2026-09-16读取）
 
@@ -59,7 +59,7 @@ JSON guide直接抓取曾超时，随后通过官方同页搜索索引取得内�
 
 一次性保护不新增业务表：固定.local目录绑定discussion/generation，request-1/2文件先独占创建并fsync再发请求；结果不明也保留预约。白名单结果仅耗时/HTTP/finish/id/model/usage/outcome；无usage则不生成usage字段。成功复用既有parseRoster检查后关闭（业务层随后仍按原流程校验和事务提交）；永久错误、第二次失败、停止也关闭。重跑不清零，closed和残留server.lock不得自动删除。未发送阶段不创建真实授权目录。
 
-## B：真实联调未执行，停在密钥交接
+## B交接时的历史状态（4D-A结束时；最新结果见下节）
 
 | 项目 | 当前事实 |
 |---|---|
@@ -75,3 +75,94 @@ JSON guide直接抓取曾超时，随后通过官方同页搜索索引取得内�
 ### 发送编号与指标归属补强
 
 收尾发现使用authorization.count记录异步完成指标可能错配请求：第一次超时返回诊断时，第二次预约已存在。新增结果文件断言先失败（发送编号未随调用传递，未生成应有的result-1）；按预约时的acceptanceAttempt把指标固定到具体请求，4项组合测试通过。指标与实际请求一一对应，不用当前总次数猜测。原final-*证据保留为修复前运行，修复后最终使用verified-*全套记录。
+
+## 4D-B实际执行：单样本真实阵容联调通过
+
+执行日期2026-09-16，Asia/Shanghai。用户本轮先明确确认“此前密钥已撤销，当前本地配置使用未公开的新密钥”；此后才启动真实环境。未查看、输出、比对或更改私有配置，未测试旧密钥。此次沿用原同一份累计两次授权，不增加额度。
+
+### 入口与前置检查
+
+- 产品代码版本：`0a39fada64ee118e26278d557e03097c7329359b`。本轮没有修改src/web/tests、依赖或适配器。
+- 启动前Git干净，config:check退出0且只报告密钥已配置；私有配置忽略且未跟踪；`.local/stage-4d-live`不存在，41851/41852空闲。
+- 后端实际命令`npm run live:stage4d`，127.0.0.1:41852；前端`WEB_API_TARGET=http://127.0.0.1:41852`与`npm run dev:web -- --port 41851`，127.0.0.1:41851。只读GET空列表验证代理链路。监听进程分别15520/10380。
+- 独立验收库`.local/stage-4d-live/discussions.sqlite`由现有入口首次建立，001/002迁移均登记；未接触原业务库。原预算目录由现有机制一次初始化，绑定与预约均保留。
+- 固定官方端点`https://api.deepseek.com/chat/completions`，deepseek-flash、thinking.disabled、stream=false、json_object、max_tokens=4096；来源为已核对的生产配置校验及实际适配器，不打开私有文件。
+- 独立Headless Edge非持久化上下文；没有下载/安装，未访问日常浏览器资料。一次性脚本不通过会重跑的Playwright测试runner执行，不加重试。
+
+### 唯一样本与真实调用
+
+话题“AI 如何改善教育？”，4专家另加1主持人。
+
+| 字段 | 实际值 |
+|---|---|
+| discussionId | 5e88ffe2-05ae-446a-97b7-8e9a72f5d9c8 |
+| generationId | 9a00202f-8dd4-4ab3-9272-fa8152003d02 |
+| generationVersion / lineupRevision / confirmedLineupRevision | 1 / 1 / 1 |
+| 最终状态 / version / lastEventId | lineup_confirmed / 4 / 4 |
+| 页面主流程时间（UTC） | 2026-09-16T09:30:43.773Z 至 09:31:46.790Z |
+| 第1次预约时间（UTC） | 2026-09-16T09:30:46.650Z |
+| 第1次结果 | HTTP 200，finish_reason=stop，1830ms，正文通过原结构/业务校验 |
+| 请求 / 响应模型 | deepseek-flash / deepseek-flash |
+| 供应商返回请求标识 | bbcd4786-d135-4f42-9149-f2809a032bf6 |
+| prompt_tokens / completion_tokens / total_tokens | 347 / 248 / 595 |
+| prompt_cache_hit_tokens / prompt_cache_miss_tokens | 0 / 347 |
+| 保守预算预约 / 有证据实际请求 / 成功响应 | 1 / 1 / 1 |
+| 第2次请求 | 未发送；不存在request-2文件 |
+| 关闭原因与时间 | valid_result，2026-09-16T09:30:48.485Z；未用1次权限已关闭 |
+
+上述usage是实际返回字段，不代表已核对账单，不估造费用。没有结果未知的请求、模型探针、模型列表、余额查询或第三次验证请求。
+
+### 公开阵容人工审查
+
+全部姓名明确标注“（虚构）”。以下仅为经过现有校验的公开内容摘要，完整白名单见`evidence/stage-4d-b/terminal.json`。
+
+| 角色 | 姓名 | 职业 / 头衔 | 关注点 |
+|---|---|---|---|
+| 主持人 | 林知言 | 公共议题沟通 / 圆桌讨论主持人 | 中立梳理问题和不同观点 |
+| 专家 | 周明川 | 教育技术研究 / 智能学习系统研究员 | 个性化学习、即时反馈及效果验证 |
+| 专家 | 许静仪 | 教育政策与公平 / 教育公平政策研究者 | 数字鸿沟、资源分配及校际区域不平等 |
+| 专家 | 陈立平 | 教师教育与课堂实践 / 师范院校教学法教授 | 教师辅助、师生互动和教学自主性 |
+| 专家 | 赵文澜 | 教育数据伦理 / 学习分析与隐私伦理专家 | 学生数据保护、透明与问责 |
+
+判断：专业背景与话题相关，四种关注点有合理差异；该判断只适用于此阵容，不代表讨论质量或事实准确性已经验证。未为优化姓名/措辞再次生成。ID、配色与顺序由已有enrichRoster生成，脚本核对5个唯一ID、系统配色与0–4顺序，模型仅提供候选公开字段。
+
+### 保存、页面与恢复验证
+
+| 步骤 | 实际结果 |
+|---|---|
+| 页面创建 | POST /api/discussions 一次，201，草稿独立保存 |
+| 页面生成 | POST /api/discussions/{id}/lineup 一次，202，绑定上述唯一代次 |
+| 校验与保存 | 原parseRoster与事务链路形成awaiting_confirmation，5成员完整，无手工入库 |
+| 展示 | 页面逐成员姓名/职业/头衔/立场与GET相符；未显示隐藏推理、内部错误或原始JSON |
+| 确认 | 人工阅读公开阵容后，页面确认一次，HTTP 200，进入lineup_confirmed |
+| 刷新 | 页面刷新后的完整snapshot与确认后相等；成员、代次和revision保持不变 |
+| 停服后读取 | 只读重新打开同一SQLite，通过实际DraftService读取已确认结果；4个公开事件、version/lastEventId均4，外键检查空、integrity_check=ok |
+
+页面只有创建、生成、确认三个POST；后续补充完整成员截图仅GET同一讨论，没有第二次生成。初次待确认/已确认/刷新截图为1600×1400，完整成员补图为1600×2200。
+
+- [待确认截图](../evidence/stage-4d-b/awaiting-confirmation.png)
+- [已确认截图](../evidence/stage-4d-b/confirmed.png)
+- [刷新后已确认截图](../evidence/stage-4d-b/refreshed-confirmed.png)
+- [同一阵容完整成员截图](../evidence/stage-4d-b/confirmed-all-members.png)
+- [最终安全指标与数据库核验](../evidence/stage-4d-b/verified-live.json)
+- [单次页面流程记录](../evidence/stage-4d-b/ui-result.json)
+
+### 本轮检查、运行问题与收尾
+
+| 实际命令/动作 | 结果 | 退出码 |
+|---|---|---|
+| npm run config:check | 密钥已配置，无网络；前置和收尾各检查一次 | 0 |
+| node node_modules/typescript/bin/tsc -p tsconfig.build.json | 后端编译（等价npm run build） | 0 |
+| node --check scripts/stage4d-live-ui.mjs | 单次验收脚本语法 | 0 |
+| node scripts/stage4d-live-ui.mjs | 唯一UI真实样本通过，浏览器关闭 | 0 |
+| 只读补充截图命令 | 同一已确认阵容，独立上下文关闭 | 0 |
+| node scripts/check-stage4d-live.mjs | 只读重开库、计数、终态、源码/忽略/历史前缀检查 | 0 |
+| 终端Ctrl+C关闭两个自有服务 | 监听均退出，server.lock由原关闭逻辑移除；授权保持关闭 | 终端包装退出1（主动中断，非业务失败） |
+
+人工审阅标记第一次写入误用PowerShell Set-Content不支持的-NoClobber，命令退出1；改为FileMode.CreateNew后退出0。期间同一浏览器等待审阅，无重发创建/生成、无代码修复或预算变更。没有把这项操作错误冒称产品TDD RED。
+
+既有254后端、69前端、26 Fake E2E和三套类型检查/前端构建本轮没有重跑，沿用4D-A记录。未改生产代码，新增仅验收脚本、脱敏证据、Prompt与文档。
+
+收尾没有清空预算/绑定/数据库，私有配置保持用户原样；没有未决模型调用。两个验收端口无监听，所有本轮浏览器上下文关闭。源码版本未变，Git仅提交本轮脱敏产物，不推送。
+
+结论：**单样本真实阵容联调通过**。不代表其他话题、全部1–8人数、长期可靠性、生产负载或完整产品E2E通过；不是五组交付样例已完成。讨论调度、SSE、共识、演播厅未实现。本轮调用权限已经关闭，不得重启或清理记录来再次生成。

@@ -1,0 +1,26 @@
+{
+  "startedAt": "2026-09-16T09:30:43.773Z",
+  "codeVersion": "0a39fada64ee118e26278d557e03097c7329359b",
+  "frontend": "http://127.0.0.1:41851",
+  "backend": "http://127.0.0.1:41852",
+  "topic": "AI 如何改善教育？",
+  "expertCount": 4,
+  "steps": {
+    "created": true,
+    "accepted": true,
+    "generatedSavedDisplayed": true,
+    "confirmed": true,
+    "refreshed": true
+  },
+  "posts": [
+    "/api/discussions",
+    "/api/discussions/5e88ffe2-05ae-446a-97b7-8e9a72f5d9c8/lineup",
+    "/api/discussions/5e88ffe2-05ae-446a-97b7-8e9a72f5d9c8/lineup/confirm"
+  ],
+  "discussionId": "5e88ffe2-05ae-446a-97b7-8e9a72f5d9c8",
+  "generationId": "9a00202f-8dd4-4ab3-9272-fa8152003d02",
+  "terminalStatus": "awaiting_confirmation",
+  "outcome": "single_sample_passed",
+  "browserClosed": true,
+  "endedAt": "2026-09-16T09:31:46.790Z"
+}

@@ -1,0 +1,56 @@
+{
+  "verifiedAt": "2026-09-16T09:33:40.571Z",
+  "discussionId": "5e88ffe2-05ae-446a-97b7-8e9a72f5d9c8",
+  "generationId": "9a00202f-8dd4-4ab3-9272-fa8152003d02",
+  "lineupRevision": 1,
+  "confirmedLineupRevision": 1,
+  "status": "lineup_confirmed",
+  "version": 4,
+  "lastEventId": 4,
+  "migrations": [
+    {
+      "id": 1,
+      "name": "001_draft_baseline"
+    },
+    {
+      "id": 2,
+      "name": "002_lineup"
+    }
+  ],
+  "eventCount": 4,
+  "readOnlyDatabaseReopen": true,
+  "databaseIntegrity": "ok",
+  "budgetReservations": 1,
+  "evidencedRequests": 1,
+  "successfulResponses": 1,
+  "unusedAuthorizationClosed": true,
+  "closed": {
+    "reason": "valid_result",
+    "closedAt": "2026-09-16T09:30:48.485Z"
+  },
+  "request": {
+    "attempt": 1,
+    "reservedAt": "2026-09-16T09:30:46.650Z",
+    "requestedModel": "deepseek-flash"
+  },
+  "response": {
+    "attempt": 1,
+    "httpStatus": 200,
+    "elapsedMs": 1830,
+    "outcome": "content_received",
+    "finishReason": "stop",
+    "responseModel": "deepseek-flash",
+    "requestId": "bbcd4786-d135-4f42-9149-f2809a032bf6",
+    "usage": {
+      "prompt_tokens": 347,
+      "completion_tokens": 248,
+      "total_tokens": 595,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 347
+    }
+  },
+  "productionSourcesUnchanged": true,
+  "privateConfigIgnoredUntracked": true,
+  "historicalPromptPrefixPreserved": true,
+  "uiScriptSha256": "869c2afa3ee4a61c1d3485330e452bbb3a34a92e919301e9d95547dc9e520928"
+}

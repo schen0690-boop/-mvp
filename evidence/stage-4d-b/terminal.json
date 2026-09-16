@@ -1,0 +1,68 @@
+{
+  "discussionId": "5e88ffe2-05ae-446a-97b7-8e9a72f5d9c8",
+  "topic": "AI 如何改善教育？",
+  "expertCount": 4,
+  "status": "awaiting_confirmation",
+  "version": 3,
+  "lastEventId": 3,
+  "lineupRevision": 1,
+  "lineupGeneration": {
+    "generationId": "9a00202f-8dd4-4ab3-9272-fa8152003d02",
+    "generationVersion": 1,
+    "startedAt": "2026-09-16T09:30:46.629Z",
+    "finishedAt": "2026-09-16T09:30:48.488Z"
+  },
+  "roles": [
+    {
+      "memberId": "db7badfe-9af7-4942-a54d-f36f669df275",
+      "role": "moderator",
+      "name": "林知言（虚构）",
+      "profession": "公共议题沟通",
+      "title": "圆桌讨论主持人",
+      "stance": "中立梳理AI与教育关系的核心问题与不同观点",
+      "color": "#193455",
+      "displayOrder": 0
+    },
+    {
+      "memberId": "92b9c8bf-4801-4f6a-9a5e-04e3957118bc",
+      "role": "expert",
+      "name": "周明川（虚构）",
+      "profession": "教育技术研究",
+      "title": "智能学习系统研究员",
+      "stance": "主张用AI实现个性化学习路径与即时反馈，但强调需验证学习效果",
+      "color": "#2157a5",
+      "displayOrder": 1
+    },
+    {
+      "memberId": "b08ee33d-0115-4544-9e5f-7202a837e4c8",
+      "role": "expert",
+      "name": "许静仪（虚构）",
+      "profession": "教育政策与公平",
+      "title": "教育公平政策研究者",
+      "stance": "关注AI资源分配与数字鸿沟，警惕技术加剧校际与区域不平等",
+      "color": "#137568",
+      "displayOrder": 2
+    },
+    {
+      "memberId": "f1e3d279-2672-4d60-ae9b-3c2026516a18",
+      "role": "expert",
+      "name": "陈立平（虚构）",
+      "profession": "教师教育与课堂实践",
+      "title": "师范院校教学法教授",
+      "stance": "认为AI应作为教师助手而非替代者，重视师生互动与教学自主性",
+      "color": "#8b4c20",
+      "displayOrder": 3
+    },
+    {
+      "memberId": "b1476b7d-0d5f-4c15-959e-e7c5b4921ecc",
+      "role": "expert",
+      "name": "赵文澜（虚构）",
+      "profession": "教育数据伦理",
+      "title": "学习分析与隐私伦理专家",
+      "stance": "强调学生数据保护、算法透明与问责，主张伦理先行于技术部署",
+      "color": "#734a9c",
+      "displayOrder": 4
+    }
+  ],
+  "lastNotice": null
+}

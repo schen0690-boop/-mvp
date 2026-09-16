@@ -1,0 +1,17 @@
+{
+  "discussionId": "5e88ffe2-05ae-446a-97b7-8e9a72f5d9c8",
+  "topic": "AI 如何改善教育？",
+  "expertCount": 4,
+  "status": "generating_lineup",
+  "version": 2,
+  "lastEventId": 2,
+  "lineupRevision": 0,
+  "lineupGeneration": {
+    "generationId": "9a00202f-8dd4-4ab3-9272-fa8152003d02",
+    "generationVersion": 1,
+    "startedAt": "2026-09-16T09:30:46.629Z",
+    "finishedAt": null
+  },
+  "roles": [],
+  "lastNotice": null
+}
