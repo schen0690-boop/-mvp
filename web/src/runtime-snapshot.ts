@@ -15,7 +15,7 @@ function check(d:Record<string,unknown>,baseValid:(v:unknown)=>v is DiscussionSn
  if(!baseValid(base)||!nonnegative(d.version)||d.version<5||!nonnegative(d.lastEventId)||d.lastEventId<d.version||
   !timestamp(d.updatedAt)||!timestamp(d.confirmedAt)||!timestamp(d.startedAt)||d.confirmedAt>d.startedAt||d.startedAt>d.updatedAt||
   !nonnegative(d.transcriptVersion)||!Array.isArray(d.utterances)||d.utterances.length!==d.transcriptVersion)return false;
- if(!isObject(runtime)||!exactKeys(runtime,['runId','runDeadlineAt','stoppingAt','stopDeadlineAt'])||!uuid(runtime.runId)||!timestamp(runtime.runDeadlineAt)||Date.parse(runtime.runDeadlineAt)!==Date.parse(d.startedAt)+600000)return false;
+ if(!isObject(runtime)||!exactKeys(runtime,['runId','runDeadlineAt','stoppingAt','stopDeadlineAt'])||!uuid(runtime.runId)||!timestamp(runtime.runDeadlineAt)||![120000,600000].includes(Date.parse(runtime.runDeadlineAt)-Date.parse(d.startedAt)))return false;
  const terminal=d.status==='completed'||d.status==='failed',stopped=runtime.stoppingAt!==null;
  if(terminal?(!timestamp(d.endedAt)||d.endedAt<d.startedAt||d.endedAt>d.updatedAt):d.endedAt!==null)return false;
  if(stopped){

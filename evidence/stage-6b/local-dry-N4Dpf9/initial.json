@@ -1,0 +1,59 @@
+{
+  "discussionId": "5fb40150-b266-493d-8320-b8a5215322c4",
+  "topic": "AI 如何改善教育？",
+  "expertCount": 2,
+  "status": "lineup_confirmed",
+  "version": 4,
+  "lastEventId": 4,
+  "createdAt": "2026-09-16T14:08:56.174Z",
+  "updatedAt": "2026-09-16T14:08:56.193Z",
+  "lineupRevision": 1,
+  "confirmedLineupRevision": 1,
+  "transcriptVersion": 0,
+  "roles": [
+    {
+      "role": "moderator",
+      "name": "林知远（虚构）",
+      "profession": "教育议题主持",
+      "title": "圆桌主持人",
+      "stance": "澄清概念，要求意见回应已有发言，并区分实证与假设。",
+      "memberId": "48dd516d-cf74-4712-8023-9e4dbff9ea71",
+      "color": "#193455",
+      "displayOrder": 0
+    },
+    {
+      "role": "expert",
+      "name": "陈思敏（虚构）",
+      "profession": "基础教育教学研究",
+      "title": "课堂实践研究员",
+      "stance": "关注教师工作负担、学习反馈和可评估的课堂效果，主张小范围试点。",
+      "memberId": "b54a1b71-73ec-47bd-ae5d-022885ededa9",
+      "color": "#2157a5",
+      "displayOrder": 1
+    },
+    {
+      "role": "expert",
+      "name": "周衡（虚构）",
+      "profession": "教育公平与数据治理",
+      "title": "教育政策研究员",
+      "stance": "关注资源差异、学生隐私与偏差风险，要求说明弱势学生的参与条件。",
+      "memberId": "f6655748-335b-41da-a3ff-4c3cc124125b",
+      "color": "#137568",
+      "displayOrder": 2
+    }
+  ],
+  "utterances": [],
+  "synthesis": null,
+  "summary": null,
+  "lastNotice": null,
+  "stopReason": null,
+  "startedAt": null,
+  "endedAt": null,
+  "lineupGeneration": {
+    "generationId": "9f92d780-942b-4ead-b227-8319d3d7a2dc",
+    "generationVersion": 1,
+    "startedAt": "2026-09-16T14:08:56.181Z",
+    "finishedAt": "2026-09-16T14:08:56.188Z"
+  },
+  "confirmedAt": "2026-09-16T14:08:56.193Z"
+}

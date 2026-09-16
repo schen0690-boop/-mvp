@@ -9,6 +9,9 @@ export function input():DiscussionInput{
 }
 export const context=()=>({signal:new AbortController().signal,deadline:performance.now()+30000,runId:crypto.randomUUID(),epoch:1,taskId:crypto.randomUUID(),attemptNo:1,sourceTranscriptVersion:3});
 export const completion=(value:unknown)=>({choices:[{index:0,finish_reason:'stop',message:{role:'assistant',content:JSON.stringify(value)}}]});
+it('安全metric记录请求/响应模型、发送时刻和业务校验结果',async()=>{
+ const metrics:unknown[]=[],i=input();const p=new DeepSeekDiscussionProvider(config,async()=>Response.json({...completion({text:'仍需课堂验证。'}),model:'deepseek-flash'}),m=>metrics.push(m));await p.summarize({...i,member:i.roles[0]!,stopReason:'user_requested'},context());expect(metrics[0]).toMatchObject({requestedModel:'deepseek-flash',responseModel:'deepseek-flash',startedAt:expect.any(String),validResult:true});
+});
 it('意愿可明确不申请；四种操作发送独立任务JSON并使用不同输出上限',async()=>{
  const i=input(),outputs=[{wantsToSpeak:false,intent:'answer',replyToUtteranceIds:[],publicFocus:null},{sentences:['回应当前观点。'],replyToUtteranceIds:[i.utterances[2]!.id]},{items:[]},{text:'尚有争议需要验证。'}];
  const send=vi.fn(async()=>Response.json(completion(outputs.shift())));const p=new DeepSeekDiscussionProvider(config,send);

@@ -1,0 +1,101 @@
+{
+  "discussionId": "f17566d1-20a4-48ab-ba7d-3d1be51e65d2",
+  "topic": "AI 如何改善教育？",
+  "expertCount": 2,
+  "status": "running",
+  "version": 16,
+  "lastEventId": 17,
+  "createdAt": "2026-09-16T14:10:15.694Z",
+  "updatedAt": "2026-09-16T14:10:18.215Z",
+  "lineupRevision": 1,
+  "confirmedLineupRevision": 1,
+  "transcriptVersion": 1,
+  "roles": [
+    {
+      "role": "moderator",
+      "name": "林知远（虚构）",
+      "profession": "教育议题主持",
+      "title": "圆桌主持人",
+      "stance": "澄清概念，要求意见回应已有发言，并区分实证与假设。",
+      "memberId": "c4b0f0f1-aa3a-4e8f-ac04-d7c459396535",
+      "color": "#193455",
+      "displayOrder": 0
+    },
+    {
+      "role": "expert",
+      "name": "陈思敏（虚构）",
+      "profession": "基础教育教学研究",
+      "title": "课堂实践研究员",
+      "stance": "关注教师工作负担、学习反馈和可评估的课堂效果，主张小范围试点。",
+      "memberId": "cecdbfdd-3aaa-4ec9-b378-0480713a852b",
+      "color": "#2157a5",
+      "displayOrder": 1
+    },
+    {
+      "role": "expert",
+      "name": "周衡（虚构）",
+      "profession": "教育公平与数据治理",
+      "title": "教育政策研究员",
+      "stance": "关注资源差异、学生隐私与偏差风险，要求说明弱势学生的参与条件。",
+      "memberId": "169f8ca6-8b30-425c-b2e0-96a897775783",
+      "color": "#137568",
+      "displayOrder": 2
+    }
+  ],
+  "utterances": [
+    {
+      "id": "ee66f57b-eec8-4b3f-bb9f-356a14abafd4",
+      "discussionId": "f17566d1-20a4-48ab-ba7d-3d1be51e65d2",
+      "roleId": "c4b0f0f1-aa3a-4e8f-ac04-d7c459396535",
+      "seq": 1,
+      "sentences": [
+        "请围绕课堂效果与教育公平提出可验证的意见。"
+      ],
+      "replyToUtteranceIds": [],
+      "createdAt": "2026-09-16T14:10:18.111Z"
+    }
+  ],
+  "synthesis": null,
+  "summary": null,
+  "lastNotice": null,
+  "stopReason": null,
+  "startedAt": "2026-09-16T14:10:18.045Z",
+  "endedAt": null,
+  "lineupGeneration": {
+    "generationId": "b0f1e663-b3f7-44d9-a06a-e7a1485b6e31",
+    "generationVersion": 1,
+    "startedAt": "2026-09-16T14:10:15.699Z",
+    "finishedAt": "2026-09-16T14:10:15.704Z"
+  },
+  "confirmedAt": "2026-09-16T14:10:15.707Z",
+  "runtime": {
+    "runId": "7d6c43be-4fee-42ef-91ba-534581d24973",
+    "runDeadlineAt": "2026-09-16T14:12:18.045Z",
+    "stoppingAt": null,
+    "stopDeadlineAt": null
+  },
+  "synthesisState": "idle",
+  "roleStates": [
+    {
+      "roleId": "c4b0f0f1-aa3a-4e8f-ac04-d7c459396535",
+      "status": "idle",
+      "publicFocus": null,
+      "focusSourceTranscriptVersion": null,
+      "updatedAt": "2026-09-16T14:10:18.116Z"
+    },
+    {
+      "roleId": "cecdbfdd-3aaa-4ec9-b378-0480713a852b",
+      "status": "idle",
+      "publicFocus": "关注第1条的课堂证据",
+      "focusSourceTranscriptVersion": 1,
+      "updatedAt": "2026-09-16T14:10:18.165Z"
+    },
+    {
+      "roleId": "169f8ca6-8b30-425c-b2e0-96a897775783",
+      "status": "preparing",
+      "publicFocus": "关注第1条的课堂证据",
+      "focusSourceTranscriptVersion": 1,
+      "updatedAt": "2026-09-16T14:10:18.215Z"
+    }
+  ]
+}

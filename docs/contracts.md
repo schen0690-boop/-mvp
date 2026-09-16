@@ -286,3 +286,9 @@ SSE持久化消息envelope为{discussionId,eventId,dataVersion,type,occurredAt,p
 固定官方地址、deepseek-flash、thinking.disabled、stream=false、json_object、无tools，禁止重定向；完整响应及正文读取受原30秒/任务期限和取消信号约束。HTTP400/401/403等永久错误为configuration；408/429及可恢复5xx为transport；其他分类沿用timeout/cancelled/filtered和invalid_structure/invalid_content。恢复/修复仍共享runner两次尝试，无第三层调用。缺失usage为“未取得”，诊断只白名单operation/taskId/attempt/status/耗时/finish_reason/usage/outcome。
 
 正常入口显式Fake；独立DISCUSSION_PROVIDER配置仅经明确组合入口注入，不从私有文件自动启用。deepseek缺配置/缺显式transport即失败，无Fake回退。本轮官方请求0，stub不放宽生产Base URL限制。见[验证与6B待授权方案](stage-6a-validation.md)。
+
+## 6B受限验收补充（P14）
+
+仅后端受控SqliteDiscussionStore acceptance绑定唯一discussion/run，可设2次专家成功提交/普通120000ms；客户端start字段不变，不能指定参数。runDeadlineAt从running提交时间计算，排队/重试计入；总结仍60000ms且独立取消。第二次专家提交原子进入stopping，不再提炼；首次专家后仍由原runner提炼一次。正常12/600000及003的B(N)不改。前端快照运行期限严格接受600000或此次120000，其他不接受。
+
+独立固定授权目录不可变slot限制20=普通18+唯一总结2，在唯一传输之前持久化。普通预算不足抛CallBudgetError由runner转已有预算收尾，不额外重试；已预约未知结果不退还。公开快照中的callLimit为程序技术上限，不代表真实授权金额/次数；实际请求授权查看6B验证记录。无新增HTTP业务字段、schema或SSE事件。授权记录含代码版本/绑定/固定参数，重启只中断恢复而不续跑，终态后关闭。

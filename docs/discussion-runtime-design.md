@@ -262,3 +262,7 @@ SSE的Last-Event-ID、UTF-8和终止重连语义参考[WHATWG Server-sent events
 `discussionMessages`逐项复制同场角色、已提交发言、既有观点及覆盖版本，system仅含固定规则，user为安全序列化的数据。没有全局可变上下文、工具、外部记忆或额外摘要调用。输入上限/每任务token限额和解析错误见contracts阶段6A补充；总结读取最终transcript而非仅旧提炼结果。结构校验能约束角色ID、字段、句数和引用存在性，不能证明语义相关性、证据支持度或完全抵御提示注入。
 
 本地验证组合为正式runner→四能力适配器→受限HTTP stub→正式SQLite/事件/SSE→现有演播厅。stub按实际任务及当前公开内容构造响应，保留协调器选人、检查点和事务行为。响应是确定性的测试数据，不用于真实讨论质量宣称。[6A记录](stage-6a-validation.md)包括6B短样本建议；当前12专家发言/10分钟等并无专用短验收配置，6B需另行批准最小参数化及独立一次性授权保护。本轮未实施或启用。
+
+## 6B实现补充：受控短参数
+
+P14批准独立一次验收入口，不替换正常Fake服务。Store构造acceptance限定唯一discussion/run/2expert/120000ms和开始前claim；运行服务依据已持久化deadline计时，仍沿用原调度、公平规则、中途提炼、独立总结取消域与迟到保护。003和默认B(N)保持不变。独立DiscussionAuthorization使用wx+fsync发送预约，GuardedDiscussionProvider包装原四能力适配器并检查绑定/状态/代次/内容版本/参数。普通18和总结2是额外真实授权上限；不新增通用计费或任务平台。固定路径锚点禁止重新准备，进程中断不自动续跑；本地取消不能证明供应商不计费。详见stage-6b-validation及contracts补充。

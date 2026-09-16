@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 import {randomUUID} from 'node:crypto';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
-const root='evidence/stage-6a';mkdirSync(root+'/screenshots',{recursive:true});
+const root=process.env.E2E_LOCAL_EVIDENCE_ROOT??'evidence/stage-6a';mkdirSync(root+'/screenshots',{recursive:true});
 for(const failed of [false,true])test(`真实适配器经本地HTTP替身验证：${failed?'总结降级':'完整流程与刷新'}`,async({page})=>{
  const token=randomUUID();await page.goto('/');await page.getByLabel('讨论话题',{exact:true}).fill(`AI如何改善教育？ [local:${token}]${failed?' [summary-fail]':''}`);await page.getByLabel('专家人数',{exact:true}).selectOption('2');await page.getByRole('button',{name:'创建草稿',exact:true}).click();await page.getByRole('button',{name:'生成阵容',exact:true}).click();await page.getByRole('button',{name:'确认阵容',exact:true}).click();
  const id=new URL(page.url()).searchParams.get('discussion')!;let streamed=false;page.on('response',r=>{if(r.url().includes('/events?')&&r.headers()['content-type']?.includes('text/event-stream'))streamed=true;});await page.getByRole('button',{name:'开始讨论',exact:true}).click();await expect(page.getByTestId('utterance')).toHaveCount(3);await expect(page.getByTestId('finding')).not.toHaveCount(0);await expect(page.getByTestId('discussion-status')).toHaveText('讨论运行中');await expect(page.locator('.fake-label')).toHaveText('真实适配器经本地 HTTP 替身验证');expect(streamed).toBe(true);

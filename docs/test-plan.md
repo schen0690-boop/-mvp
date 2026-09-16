@@ -295,3 +295,7 @@ S4-23/24的4C卡片/刷新/公开边界部分现已验证；S4-32真实模型仍
 |页面/SSE/刷新|e2e-local/discussion-adapter.spec.ts|真实前端+后端+SQLite+SSE+HTTP stub；开场/专家/中途观点后释放观察门闩，看到结束总结，刷新同一快照；另验证总结unavailable|
 |既有流程|全部后端、前端及原37 E2E|默认Fake；阵容共享传输26单元/5HTTP/13pipeline等继续运行；截图写本阶段目录，保留旧证据|
 |未来真实质量|未执行|6B独立授权后，人工审查真实语义相关性、角色差异、证据支持、争议保留；不将stub输出计为通过|
+
+## 6B已执行补充
+
+短期限/绑定/第二专家收尾：tests/integration/short-discussion.test.ts；18+2/并行争额/重开/关闭/唯一总结task：tests/unit/discussion-authorization.test.ts；正式适配器HTTP传输计数/确定性失败/重试修复/取消/普通耗尽总结：tests/integration/guarded-discussion.test.ts；120秒严格快照与来源标签：web/tests/runtime-api.test.tsx、provider-label.test.ts；完整受保护本地短流程：scripts/stage6b-dry-run.mjs。实际数量、退出码、真实调用与本地测试区别见stage-6b-validation。本阶段不以本地边界测试证明供应商计费或长期语义质量。

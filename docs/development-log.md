@@ -320,3 +320,9 @@ P13来自本轮用户真实消息，完整文字归档sources/stage-6a-request.m
 资源收尾：自建测试服务/浏览器退出，41861/41862/41871/41872无监听；Windows关闭进程树残留3个本轮owner文件，经绝对路径及PID不存活核对后删除owner，临时数据库保留。私有配置check-ignore成功且Git未跟踪（ls-files退出1属预期）；变更文本密钥形态扫描0，历史Prompt前缀保留，旧4D/5C实证和锁文件/runner不改，diff检查0。详见cleanup/source-and-scope。
 
 已按实际内容提交核心适配器与本地界面接入，随后提交文档和证据；全部当前时间，不改写历史、不推送。6B只建议2专家/2次专家发言/1次中途提炼、正常9次路径、总硬上限20含总结预留2、普通120秒/收尾60秒；当前未有短验收配置/一次授权入口，需另行批准最小参数化及本地保护TDD，不能直接执行。没有使用或重启4D预算。真实语义相关性、证据支持/提示注入稳健性、真实token费用/延迟/长期负载仍未验证。停止于6A。
+
+## 阶段6B：准备与本地验证（2026-09-16）
+
+P14原附件逐字归档sources/stage-6b-request.md；阶段6A f4b2022起点干净，身份沿用schen/cs064210@163.com。已有using-superpowers、writing-plans、TDD、systematic-debugging、verification-before-completion实际用于本轮，路径为C:\Users\Administrator\.codex\skills\superpowers\skills下各同名SKILL.md，using-superpowers另读Codex接口参考；无安装/版本更新/子代理/worktree。当前会话按阶段计划执行，授权无需重复申请。
+
+新增绑定短参数、独立固定授权、受限入口/预置阵容/安全配置检查和一次浏览器执行脚本；指标仅扩展白名单。默认流程、003、4D库/预算/私有文件不修改。代表业务RED→GREEN见stage-6b-validation；本地发现前端120秒快照不兼容，先失败测试后最小解析修复。最后代码修改后完整371后端/90前端/37Fake E2E/2本地HTTP E2E/1短流程/三类型两构建均退出0；本地阶段官方请求0。准备代码提交后才开始真实run，过程中冻结源码/提示词/参数。

@@ -1,6 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import type {DiscussionStore,StartResult,RunState,RunKey} from './discussion-store.js';
 import type {DiscussionProvider,DiscussionContext} from '../providers/discussion.js';
+import {CallBudgetError} from '../providers/discussion.js';
 import type {DiscussionSnapshot} from './snapshot.js';
 import type {LineupMember} from './lineup.js';
 import {exactKeys,validateConfirm} from './lineup.js';
@@ -28,7 +29,7 @@ export class DiscussionService {
   let resolveDone!:()=>void;const done=new Promise<void>(resolve=>{resolveDone=resolve;});
   const entry:Runner={ordinary:new AbortController(),summary:new AbortController(),done,runId:result.runId,timer:setTimeout(()=>{
    try{if(this.state(discussionId).snapshot.status==='running')this.requestStop(discussionId,'duration_limit');}catch{this.fail(discussionId,'RUNTIME_STORAGE_FAILED');}
-  },600000)};
+  },Math.max(0,Date.parse(result.snapshot.runtime!.runDeadlineAt)-Date.now()))};
   // No await before registration: POST is the sole runner creation path.
   this.runners.set(discussionId,entry);
   const complete=()=>{clearTimeout(entry.timer);entry.ordinary.abort();entry.summary.abort();this.runners.delete(discussionId);resolveDone();};
@@ -81,6 +82,7 @@ export class DiscussionService {
     if(signal.aborted||performance.now()>=deadline||!this.valid(key,summary))throw new ControlError('stale');
     return parse(raw);
    }catch(e){
+    if(e instanceof CallBudgetError)throw new ControlError('budget');
     if(e instanceof AppError||e instanceof ControlError||signal.aborted||attemptNo===2||performance.now()>=deadline||e instanceof ProviderError&&!e.retryable||e instanceof Error&&e.message==='local_capacity')throw e;
     issues=e instanceof DiscussionValidationError?[{path:'result',rule:e.kind}]:undefined;
    }finally{

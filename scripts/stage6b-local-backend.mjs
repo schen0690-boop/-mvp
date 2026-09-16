@@ -1,0 +1,27 @@
+// Dry run of the short protected composition; only a local HTTP stub is injected.
+import express from 'express';
+import {mkdirSync,mkdtempSync,writeFileSync} from 'node:fs';
+import {resolve,join} from 'node:path';
+import {randomUUID} from 'node:crypto';
+import {startDiscussionStub} from './lib/discussion-stub.mjs';
+import {presetRoster} from '../dist/live/stage6b-settings.js';
+import {DiscussionAuthorization} from '../dist/live/discussion-authorization.js';
+import {GuardedDiscussionProvider} from '../dist/live/guarded-discussion.js';
+import {restrictStage6bWrites} from '../dist/live/stage6b-http.js';
+import {initializeConfiguredDatabase,openConfiguredDatabase} from '../dist/runtime.js';
+import {createApp} from '../dist/http/app.js';
+import {DraftService} from '../dist/domain/drafts.js';
+import {SqliteDraftStore} from '../dist/db/sqlite-drafts.js';
+import {SqliteLineupStore} from '../dist/db/sqlite-lineup.js';
+import {SqliteDiscussionStore} from '../dist/db/sqlite-discussion.js';
+import {SqliteEventSource} from '../dist/db/public-events.js';
+import {LineupService} from '../dist/domain/lineup-service.js';
+import {DiscussionService} from '../dist/domain/discussion-service.js';
+mkdirSync('.tmp/stage-6b',{recursive:true});const root=mkdtempSync(resolve('.tmp/stage-6b/dry-')),file=join(root,'test.sqlite');await initializeConfiguredDatabase(file);const db=openConfiguredDatabase(file),stub=await startDiscussionStub();globalThis.fetch=async()=>{throw Error('EXTERNAL_NETWORK_FORBIDDEN');};
+const drafts=new DraftService(new SqliteDraftStore(db)),id=drafts.create({topic:'AI 如何改善教育？',expertCount:2,requestId:randomUUID()}).discussionId,lineup=new LineupService(new SqliteLineupStore(db),{generateRoster:async()=>JSON.stringify(presetRoster)});
+const g=lineup.generate(id,{requestId:randomUUID(),expectedGenerationId:null});await lineup.idle();lineup.confirm(id,{generationId:g.generationId,lineupRevision:g.generationVersion});
+const binding={authorizationId:randomUUID(),discussionId:id,runId:randomUUID(),generationId:g.generationId,lineupRevision:1};const auth=new DiscussionAuthorization(join(root,'authorization'),binding);writeFileSync(join(root,'prepared.json'),JSON.stringify({...binding,codeRevision:'local-dry-run'}));
+const store=new SqliteDiscussionStore(db,{discussionId:id,runId:binding.runId,expertTurns:2,runDurationMs:120000,beforeStart:()=>auth.claim()});const discussion=new DiscussionService(store,new GuardedDiscussionProvider(auth,{baseUrl:'https://api.deepseek.com',model:'deepseek-flash',apiKey:'local-stub-credential',maxTokens:4096},stub.transport,()=>store.state(id)));
+const app=express();app.use(restrictStage6bWrites(auth));app.use(createApp(drafts,undefined,undefined,discussion,new SqliteEventSource(db)));const server=app.listen(41882,'127.0.0.1',()=>{console.log(JSON.stringify({localRoot:root}));process.send?.({localRoot:root});});
+const watch=setInterval(()=>{if(['completed','failed'].includes(drafts.get(id).status))auth.close('terminal');},50);
+let closing=false;const stop=()=>{if(closing)return;closing=true;clearInterval(watch);auth.close('shutdown');server.closeAllConnections();server.close(()=>{void Promise.all([discussion.close(),lineup.close()]).finally(async()=>{await stub.close();db.close();process.disconnect?.();});});};process.on('message',m=>{if(m==='shutdown')stop();});process.once('SIGTERM',stop);process.once('SIGINT',stop);

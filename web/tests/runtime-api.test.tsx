@@ -14,6 +14,10 @@ function runtime(status:'running'|'stopping'|'completed'|'failed'):DiscussionSna
   summary:status==='completed'?{status:'unavailable',text:null,sourceTranscriptVersion:1}:null,lastNotice:status==='completed'?runtimeNotice('SUMMARY_UNAVAILABLE'):status==='failed'?runtimeNotice('RUN_INTERRUPTED'):null};
 }
 it.each(['running','stopping','completed','failed'] as const)('严格接收新运行状态%s，确认时间不改、版本不相等',status=>{const s=runtime(status);expect(decodeSnapshot(s)).toEqual(s);expect(statusLabels[status]).toBeTruthy();});
+it('接受服务端120秒验收期限，仍拒绝任意时长',()=>{
+ const s=runtime('running');s.runtime!.runDeadlineAt=new Date(Date.parse(s.startedAt!)+120000).toISOString();expect(decodeSnapshot(s)).toEqual(s);
+ for(const duration of [0,119999,600001]){s.runtime!.runDeadlineAt=new Date(Date.parse(s.startedAt!)+duration).toISOString();expect(()=>decodeSnapshot(s)).toThrow('返回的数据不符合约定');}
+});
 it('运行字段仍严格校验，不能靠放开旧断言任意接受',()=>{
  const s=runtime('completed');
  for(const invalid of [{...s,lastEventId:s.version-1},{...s,transcriptVersion:2},{...s,confirmedAt:s.updatedAt},{...s,summary:{status:'ready',text:null,sourceTranscriptVersion:1}},{...s,runtime:{...s.runtime,taskId:'internal'}},{...s,roleStates:[]},{...s,utterances:[{...s.utterances[0],roleId:crypto.randomUUID()}]},{...s,endedAt:null},{...s,lastNotice:{...s.lastNotice,message:'private diagnostic'}}])expect(()=>decodeSnapshot(invalid)).toThrow('返回的数据不符合约定');

@@ -190,3 +190,25 @@ node scripts/stage6a-verify.mjs
 最后一条顺序执行全部测试、类型/构建、旧37项Fake E2E及2项本地HTTP适配器E2E；回归截图重定向到 `evidence/stage-6a`，不覆盖历史实证。本地接入使用 `.tmp/stage-6a/browser-*` 独立SQLite，前端41871/后端41872、HTTP stub随机loopback端口、虚拟凭据；Playwright采用已安装Edge，retries=0，不下载浏览器。端口占用即失败，不复用未知服务。测试入口无公开故障控制接口；文件门闩仅用于观察已发生的中途状态，不预生成整场脚本。后端Vitest默认禁止非loopback fetch；本地入口将唯一注入transport映射到stub，其余fetch禁止。
 
 `VITE_DISCUSSION_DEMO=local-http` 只在该测试前端显示“真实适配器经本地 HTTP 替身验证”，不是Provider选择或调用授权。应用提示词见 `src/providers/discussion-prompt.ts`；规则及限制、真实开发Prompt、证据和待授权6B建议见 [6A验证记录](docs/stage-6a-validation.md)。私有配置、数据库、原始测试输出均不提交。
+
+## 阶段6B：一次性真实短讨论入口
+
+仅P14授权的一次验收，不能当作普通开发启动命令反复执行。固定项目`.local/stage-6b-live/discussions.sqlite`，授权在同目录`authorization/`，项目`.local/stage-6b-once.json`为不可覆盖锚点；不受当前工作目录影响，不复用4D。先完成并提交准备代码，再执行：
+
+```powershell
+npm run config:stage6b
+npm run prepare:stage6b
+npm run live:stage6b
+# 单独前端终端；后端41882，前端41881，均loopback
+$env:WEB_API_TARGET = 'http://127.0.0.1:41882'
+$env:VITE_DISCUSSION_DEMO = 'live-short'
+npm run dev:web -- --port 41881
+# 服务就绪后仅执行一次；不得自动重跑
+node scripts/stage6b-live-ui.mjs
+```
+
+安全检查仅报告非敏感设置及密钥是否配置；程序读取现有`.env.backend.local`，不修改它。prepare只接受不存在的固定目录/锚点，固定虚构阵容经原有校验、保存和确认。live要求准备时Git版本一致、独占数据库、绑定discussion/run；只开放该讨论start/stop写操作。页面标签明确预置阵容与真实讨论来源。开始后不得重新初始化、重置预算或更换run；观察仅GET/SSE。
+
+2次专家发言、120秒普通、60秒收尾仅作用于受限run。默认仍12次/10分钟；003中技术预算B(2)=112保持，独立授权更严格限制为普通18+总结2。每次发送前不可变slot+fsync，取消/未知不返还；唯一总结task最多两次；一次适配器调用一次传输。终态/退出关闭授权并保留记录。未使用额度不能用于另一场；重启不续跑。`--read-only`浏览器恢复只GET/刷新，不点start。
+
+本地回归命令`node scripts/stage6b-verify.mjs`不读私有配置或请求官方服务，含独立临时库/HTTP替身短流程；真实执行结果见[6B验证记录](docs/stage-6b-validation.md)。不要删除预算文件以清理环境，不提交验收数据库/原始授权记录。

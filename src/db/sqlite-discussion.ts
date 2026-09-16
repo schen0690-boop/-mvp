@@ -8,7 +8,9 @@ import {readSnapshot,transaction,text,integer,nullableText} from './read-discuss
 interface Event {type:string;payload:unknown}
 const now=()=>new Date().toISOString();
 export class SqliteDiscussionStore implements DiscussionStore {
- constructor(private readonly db:DatabaseSync){}
+ constructor(private readonly db:DatabaseSync,private readonly acceptance?:{discussionId:string;runId:string;expertTurns:2;runDurationMs:120000;beforeStart:()=>void}){
+  if(acceptance&&(acceptance.expertTurns!==2||acceptance.runDurationMs!==120000))throw new Error('INVALID_ACCEPTANCE_LIMITS');
+ }
  state:DiscussionStore['state']=id=>transaction(this.db,()=>{
   const snapshot=readSnapshot(this.db,id);if(!snapshot)return undefined;
   const r=this.db.prepare('SELECT * FROM discussions WHERE id=?').get(id)!;
@@ -16,6 +18,7 @@ export class SqliteDiscussionStore implements DiscussionStore {
    requestId:nullableText(r.start_request_id),callsUsed:integer(r.calls_used),callLimit:integer(r.call_limit),summaryCallsUsed:integer(r.summary_calls_used),expertTurns:integer(r.expert_turn_count)};
  },false);
  begin:DiscussionStore['begin']=(id,input)=>transaction(this.db,()=>{
+  if(this.acceptance&&id!==this.acceptance.discussionId)throw new AppError('INVALID_STATE','验收仅允许绑定讨论',409);
   const st=this.state(id);if(!st)throw new AppError('NOT_FOUND','未找到讨论',404);
   const s=st.snapshot,bound=s.lineupGeneration?.generationId===input.generationId&&s.lineupRevision===input.lineupRevision&&s.confirmedLineupRevision===input.lineupRevision;
   const result=(replayed:boolean)=>({discussionId:id,runId:text(this.db.prepare('SELECT run_id FROM discussions WHERE id=?').get(id)?.run_id),snapshot:this.state(id)!.snapshot,replayed});
@@ -26,9 +29,10 @@ export class SqliteDiscussionStore implements DiscussionStore {
   if(s.status!=='lineup_confirmed')return result(true);
   if(integer(this.db.prepare("SELECT COUNT(*) AS n FROM discussions WHERE status IN ('running','stopping')").get()?.n)>=2)throw new AppError('CAPACITY_REACHED','讨论运行容量已满',429);
   if(s.roles.length!==s.expertCount+1||s.roles.filter(m=>m.role==='moderator').length!==1)throw new Error('INVALID_CONFIRMED_ROLES');
-  const time=now(),runId=randomUUID();
+  this.acceptance?.beforeStart();
+  const time=now(),runId=this.acceptance?.runId??randomUUID();
   this.db.prepare("UPDATE discussions SET status='running',run_id=?,start_request_id=?,run_epoch=1,started_at=?,run_deadline_at=?,call_limit=? WHERE id=? AND status='lineup_confirmed'")
-   .run(runId,input.requestId,time,new Date(Date.parse(time)+600000).toISOString(),callBudget(s.expertCount),id);
+   .run(runId,input.requestId,time,new Date(Date.parse(time)+(this.acceptance?.runDurationMs??600000)).toISOString(),callBudget(s.expertCount),id);
   for(const m of s.roles)this.db.prepare("INSERT INTO role_public_states VALUES (?,?,'idle',NULL,NULL,?)").run(id,m.memberId,time);
   this.events(id,[{type:'discussion.status_changed',payload:null}],time);return result(false);
  });
@@ -73,7 +77,7 @@ export class SqliteDiscussionStore implements DiscussionStore {
   this.db.prepare("UPDATE role_public_states SET status='speaking',updated_at=? WHERE discussion_id=? AND member_id=?").run(time,u.discussionId,roleId);
   const role=this.state(u.discussionId)!.snapshot.roleStates!.find(r=>r.roleId===roleId)!;
   const events:Event[]=[{type:'utterance.created',payload:{utterance:u}},{type:'role.status_changed',payload:{roleId,status:role.status,publicFocus:role.publicFocus,focusSourceTranscriptVersion:role.focusSourceTranscriptVersion}}];
-  if(member.role==='expert'&&s.expertTurns+1>=12){this.stopMutation(u.discussionId,'turn_limit',time);events.push({type:'discussion.status_changed',payload:null});}
+  if(member.role==='expert'&&s.expertTurns+1>=(this.acceptance?.expertTurns??12)){this.stopMutation(u.discussionId,'turn_limit',time);events.push({type:'discussion.status_changed',payload:null});}
   this.events(u.discussionId,events,time);return true;
  });
  synthesisStatus:DiscussionStore['synthesisStatus']=(key,status)=>transaction(this.db,()=>{
