@@ -81,7 +81,7 @@ export function App() {
         <div className="pane-title"><div className="title-row"><h2 id="detail-heading">草稿详情</h2>{state.selectedId && <button className="quiet" disabled={state.detailLoading} onClick={() => void controller.select(state.selectedId)}>重新加载详情</button>}</div><p>查看已保存的讨论准备</p></div>
         <div className="pane-scroll">
           {state.detailLoading ? <p className="empty" role="status">正在读取草稿…</p> : state.detailError ? <p className="error" role="alert">详情加载失败：{state.detailError}</p> : detail ? <>
-            <div className="detail-state"><span className="badge">{statusLabels[detail.status]}</span><span>{detail.status==='created'?'已保存':'讨论尚未开始'}</span></div>
+            <div className="detail-state"><span className="badge">{statusLabels[detail.status]}</span><span>{detail.startedAt?'已开始的讨论记录':detail.status==='created'?'已保存':'讨论尚未开始'}</span></div>
             <h3 className="topic-title">{detail.topic}</h3>
             <dl className="metadata"><div><dt>专家人数</dt><dd>{detail.expertCount} 位专家（不含主持人）</dd></div>
               <div><dt>创建时间</dt><dd>{time(detail.createdAt)}</dd></div><div><dt>更新时间</dt><dd>{time(detail.updatedAt)}</dd></div></dl>

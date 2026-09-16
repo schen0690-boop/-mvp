@@ -3,6 +3,8 @@ import { colors, parseRoster } from '../../src/domain/lineup.js';
 import { noticeMessages, noticeOf, type DiscussionStatus } from '../../src/domain/snapshot.js';
 import { isObject, validateCreateDraft, validateUuid } from '../../src/domain/input.js';
 import { validateGenerate, validateConfirm } from '../../src/domain/lineup.js';
+import {isRuntimeStatus} from '../../src/domain/snapshot.js';
+import {isRuntimeSnapshot} from './runtime-snapshot.js';
 export type { DraftListItem, DraftSnapshot };
 export interface CreateInput { topic: string; expertCount: number; requestId: string }
 export interface CreateResult { discussionId: string; snapshot: DraftSnapshot; replayed: boolean }
@@ -35,10 +37,10 @@ function validId(value: unknown): value is string {
 }
 export const statusLabels: Record<DiscussionStatus,string> = {
   created:'草稿', generating_lineup:'阵容生成中', awaiting_confirmation:'阵容待确认',
-  lineup_generation_failed:'阵容生成失败', lineup_confirmed:'阵容已确认'
+  lineup_generation_failed:'阵容生成失败', lineup_confirmed:'阵容已确认',running:'讨论运行中',stopping:'正在收尾',completed:'讨论已结束',failed:'讨论已中断'
 };
 function status(value: unknown): value is DiscussionStatus {
-  return value === 'created' || value === 'generating_lineup' || value === 'awaiting_confirmation' || value === 'lineup_generation_failed' || value === 'lineup_confirmed';
+  return value === 'created' || value === 'generating_lineup' || value === 'awaiting_confirmation' || value === 'lineup_generation_failed' || value === 'lineup_confirmed'||isRuntimeStatus(value);
 }
 function positive(value: unknown): value is number { return typeof value==='number' && Number.isSafeInteger(value) && value>0; }
 function isItem(value: unknown): value is DraftListItem {
@@ -50,6 +52,7 @@ function isItem(value: unknown): value is DraftListItem {
 function isSnapshot(value: unknown): value is DraftSnapshot {
   if (!isObject(value) || !isItem(value)) return false;
   const data: Record<string, unknown> = value;
+  if(isRuntimeStatus(value.status))return isRuntimeSnapshot(data,isSnapshot);
   const nullFields = ['synthesis','summary','stopReason','startedAt','endedAt'];
   const baseKeys = ['discussionId','topic','expertCount','status','version','updatedAt','createdAt','lastEventId',
     'lineupRevision','confirmedLineupRevision','transcriptVersion','roles','utterances','lastNotice',...nullFields];
@@ -149,7 +152,7 @@ export function createApi(transport: typeof fetch = fetch): Api {
       if (status !== 200 || !isObject(body) || !keys(body,['items']) || !Array.isArray(body.items) ||
           !body.items.every((item: unknown) => isObject(item) && isItem(item) && keys(item,['discussionId','topic','expertCount','status','version','updatedAt']))) throw protocolError();
       const items = body.items.filter(isItem);
-      if (new Set(items.map(item => item.discussionId)).size !== items.length || (filter === 'active' && items.some(item=>item.status!=='generating_lineup' && item.status!=='awaiting_confirmation'))) throw protocolError();
+      if (new Set(items.map(item => item.discussionId)).size !== items.length || (filter === 'active' && items.some(item=>!['generating_lineup','awaiting_confirmation','running','stopping'].includes(item.status)))) throw protocolError();
       return items;
     }
   };
