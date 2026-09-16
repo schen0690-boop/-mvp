@@ -2,13 +2,22 @@ import type { DraftListItem, DraftSnapshot } from '../../src/domain/drafts.js';
 import { colors, parseRoster } from '../../src/domain/lineup.js';
 import { noticeMessages, noticeOf, type DiscussionStatus } from '../../src/domain/snapshot.js';
 import { isObject, validateCreateDraft, validateUuid } from '../../src/domain/input.js';
+import { validateGenerate, validateConfirm } from '../../src/domain/lineup.js';
 export type { DraftListItem, DraftSnapshot };
 export interface CreateInput { topic: string; expertCount: number; requestId: string }
 export interface CreateResult { discussionId: string; snapshot: DraftSnapshot; replayed: boolean }
+export interface GenerateInput { requestId: string; expectedGenerationId: string | null }
+export interface ConfirmInput { generationId: string; lineupRevision: number }
+export interface GenerateResult extends CreateResult { generationId: string; generationVersion: number }
+export class ApiError extends Error {
+  constructor(message: string, readonly status: number) { super(message); }
+}
 export interface Api {
   create(input: CreateInput): Promise<CreateResult>;
   list(filter: 'active' | 'all'): Promise<DraftListItem[]>;
-  get(id: string): Promise<DraftSnapshot>;
+  get(id: string, signal?: AbortSignal): Promise<DraftSnapshot>;
+  generate(id: string, input: GenerateInput): Promise<GenerateResult>;
+  confirm(id: string, input: ConfirmInput): Promise<CreateResult>;
 }
 export function formInput(topic: string, count: string, id: string): CreateInput {
   if (!/^[1-8]$/.test(count)) throw new Error('请选择1至8位专家');
@@ -92,18 +101,35 @@ export function decodeSnapshot(value: unknown): DraftSnapshot {
 export function createApi(transport: typeof fetch = fetch): Api {
   async function request(path: string, init?: RequestInit): Promise<{ status: number; body: unknown }> {
     let response: Response;
-    try { response = await transport(path, { ...init, signal: AbortSignal.timeout(10000) }); }
-    catch { throw new Error('网络连接中断，结果尚未确认。可重试原请求'); }
+    try { response = await transport(path, { ...init, signal: init?.signal ? AbortSignal.any([init.signal,AbortSignal.timeout(10000)]) : AbortSignal.timeout(10000) }); }
+    catch { throw new ApiError('网络连接中断，结果尚未确认。可重试原请求',0); }
     if (!response.ok) {
-      if (response.status === 409) throw new Error('请求标识冲突，请检查原请求；不会自动更换标识');
-      if (response.status === 404) throw new Error('未找到这条讨论，可返回列表重新选择');
-      if (response.status === 400) throw new Error('请求参数不符合要求，请检查话题与人数');
-      throw new Error('服务暂时不可用，请重试');
+      if (response.status === 409) throw new ApiError('请求标识冲突，请检查原请求；不会自动更换标识',409);
+      if (response.status === 404) throw new ApiError('未找到这条讨论，可返回列表重新选择',404);
+      if (response.status === 400) throw new ApiError('请求参数不符合要求，请检查话题与人数',400);
+      throw new ApiError('服务暂时不可用，请重试',response.status);
     }
     try { return { status: response.status, body: await response.json() }; }
     catch { throw protocolError(); }
   }
   return {
+    async generate(id,input) {
+      const {status,body}=await request(`/api/discussions/${validateUuid(id)}/lineup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(validateGenerate(input))});
+      if(![200,202].includes(status)||!isObject(body)||!keys(body,['discussionId','generationId','generationVersion','snapshot','replayed'])||
+        body.discussionId!==id||!validId(body.generationId)||!positive(body.generationVersion)||typeof body.replayed!=='boolean')throw protocolError();
+      const snapshot=decodeSnapshot(body.snapshot);
+      if(snapshot.discussionId!==id||snapshot.lineupGeneration?.generationId!==body.generationId||snapshot.lineupGeneration.generationVersion!==body.generationVersion||
+        !['generating_lineup','awaiting_confirmation','lineup_generation_failed'].includes(snapshot.status)||
+        (status===202)!==(snapshot.status==='generating_lineup')||status===200&&!body.replayed)throw protocolError();
+      return {discussionId:id,generationId:body.generationId,generationVersion:body.generationVersion,snapshot,replayed:body.replayed};
+    },
+    async confirm(id,input) {
+      const {status,body}=await request(`/api/discussions/${validateUuid(id)}/lineup/confirm`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(validateConfirm(input))});
+      if(status!==200||!isObject(body)||!keys(body,['discussionId','snapshot','replayed'])||body.discussionId!==id||typeof body.replayed!=='boolean')throw protocolError();
+      const snapshot=decodeSnapshot(body.snapshot);
+      if(snapshot.discussionId!==id||snapshot.status!=='lineup_confirmed'||snapshot.lineupGeneration?.generationId!==input.generationId||snapshot.lineupRevision!==input.lineupRevision)throw protocolError();
+      return {discussionId:id,snapshot,replayed:body.replayed};
+    },
     async create(input) {
       const { status, body } = await request('/api/discussions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
       if (![200,201].includes(status) || !isObject(body) || !keys(body,['discussionId','snapshot','replayed']) ||
@@ -112,8 +138,8 @@ export function createApi(transport: typeof fetch = fetch): Api {
       if (snapshot.discussionId !== body.discussionId || snapshot.topic !== input.topic || snapshot.expertCount !== input.expertCount) throw protocolError();
       return { discussionId: body.discussionId, snapshot, replayed: body.replayed };
     },
-    async get(id) {
-      const { status, body } = await request(`/api/discussions/${validateUuid(id)}`);
+    async get(id,signal) {
+      const { status, body } = await request(`/api/discussions/${validateUuid(id)}`,{signal:signal??null});
       const result = decodeSnapshot(body);
       if (status !== 200 || result.discussionId !== id) throw protocolError();
       return result;
