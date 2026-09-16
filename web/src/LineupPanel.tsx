@@ -17,7 +17,7 @@ export function LineupPanel({snapshot,busy,error,notice,checking,generate,confir
     {snapshot.status==='generating_lineup'&&<p className="lineup-progress" role="status">正在生成主持人与专家阵容……</p>}
     {snapshot.status==='lineup_generation_failed'&&<div className="lineup-empty"><h3>阵容生成失败</h3><p>{snapshot.lastNotice?.message}</p><button className="primary" disabled={busy||offline} onClick={generate}>{busy?'正在提交…':'重试生成'}</button></div>}
     {ready&&<><p className="lineup-caption">{blocked?'阵容状态尚未同步，请先重新检查。':'阵容尚未确认，请查看成员与立场。'}</p><div className="lineup-actions"><button className="primary" disabled={busy||offline||blocked} onClick={confirm}>确认阵容</button><button disabled={busy||offline||blocked} onClick={generate}>重新生成</button></div>{busy&&<p role="status">正在提交…</p>}</>}
-    {confirmed&&<p className="confirmed-notice" role="status">阵容已确认，讨论功能将在后续阶段启用。</p>}
+    {confirmed&&<p className="confirmed-notice" role="status">阵容已确认，可以开始讨论。</p>}
     {isRuntimeStatus(snapshot.status)&&<p role="status">{snapshot.summary?.status==='unavailable'?snapshot.lastNotice?.message??'讨论已结束，总结生成失败':statusLabels[snapshot.status]}。本页暂提供状态查询，可重新加载详情。</p>}
     {(ready||confirmed)&&<div className="member-grid">{snapshot.roles.map(member=><article className={`member-card ${member.role==='moderator'?'moderator':''}`} key={member.memberId} aria-label={`${member.role==='moderator'?'主持人':'专家'}：${member.name}`}>
       <div className="member-role"><span className="member-color" style={{backgroundColor:member.color}} aria-hidden="true"/>{member.role==='moderator'?'主持人':'专家'}</div>

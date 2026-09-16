@@ -2,6 +2,8 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createApi, statusLabels } from './api.js';
 import { Controller } from './controller.js';
 import { LineupPanel } from './LineupPanel.js';
+import {Studio} from './Studio.js';
+import {isRuntimeStatus} from '../../src/domain/snapshot.js';
 import './styles.css';
 
 const time = (value: string) => new Date(value).toLocaleString('zh-CN', { hour12: false });
@@ -9,6 +11,7 @@ export function App() {
   const [controller] = useState(() => new Controller(createApi()));
   const state = useSyncExternalStore(controller.subscribe, controller.getState);
   useEffect(() => {
+    controller.activate();
     void controller.loadList();
     const id=new URL(location.href).searchParams.get('discussion');
     if(id)void controller.select(id);
@@ -21,26 +24,28 @@ export function App() {
     if(state.selectedId){const url=new URL(location.href);url.searchParams.set('discussion',state.selectedId);history.replaceState(null,'',url);}
   },[state.selectedId]);
   useEffect(()=>{
-    const visible=()=>controller.visible(document.visibilityState==='visible'&&(window.innerWidth>=900||state.panel==='detail'));
+    const visible=()=>controller.visible(document.visibilityState==='visible'&&(state.detail&&isRuntimeStatus(state.detail.status)?state.panel==='detail':window.innerWidth>=900||state.panel==='detail'));
     visible();window.addEventListener('resize',visible);document.addEventListener('visibilitychange',visible);
     return ()=>{window.removeEventListener('resize',visible);document.removeEventListener('visibilitychange',visible);};
-  },[controller,state.panel]);
+  },[controller,state.panel,state.detail?.status]);
   const detail = state.detail;
+  const studio=detail&&isRuntimeStatus(detail.status)&&state.panel==='detail';
   const count = [...state.topic.trim()].length;
   return <div className="app-shell">
     <header className="masthead">
       <div className="brand-mark" aria-hidden="true">◎</div>
       <div><h1>圆桌工作台</h1><p>从一个值得讨论的话题开始</p></div>
-      <span className="header-label">讨论准备</span>
+      <span className="header-label">{studio?'讨论演播厅':'讨论准备'}</span>
     </header>
-    <div className="workspace-heading"><div><h2>准备下一场讨论</h2><p>保存话题，整理想法。你的草稿随时可以回来查看。</p></div>
-      <span className="stage-label">草稿工作区</span></div>
-    {state.saved && <div className="success" role="status">草稿已保存{state.listError ? '；列表更新失败，请到讨论列表重新加载。' : '，已选中新建草稿。'}</div>}
-    <nav className="mobile-nav" aria-label="区域选择">
+    {!studio&&<div className="workspace-heading"><div><h2>准备下一场讨论</h2><p>保存话题，整理想法。你的草稿随时可以回来查看。</p></div>
+      <span className="stage-label">草稿工作区</span></div>}
+    {state.saved && !studio&&<div className="success" role="status">草稿已保存{state.listError ? '；列表更新失败，请到讨论列表重新加载。' : '，已选中新建草稿。'}</div>}
+    <nav className="mobile-nav" aria-label="区域选择" style={studio?{display:'none'}:undefined}>
       {([['create','新建讨论'],['list','讨论列表'],['detail','草稿详情']] as const).map(([key,label]) =>
         <button key={key} aria-pressed={state.panel === key} onClick={() => controller.panel(key)}>{label}</button>)}
     </nav>
-    <main className="workspace" data-panel={state.panel}>
+    {studio&&<Studio key={detail.discussionId} snapshot={detail} connection={state.connection} busy={state.actionBusy} error={state.actionError} stop={()=>void controller.stop()} reconnect={()=>controller.reconnect()} back={()=>{controller.panel('list');void controller.loadList();}}/>}
+    <main className="workspace" data-panel={state.panel} style={studio?{display:'none'}:undefined}>
       <section className="pane create-pane" aria-labelledby="create-heading">
         <div className="pane-title"><h2 id="create-heading">新建讨论</h2><p>先确定话题与参与规模</p></div>
         <div className="pane-scroll">
@@ -80,17 +85,19 @@ export function App() {
       <section className="pane detail-pane" aria-labelledby="detail-heading">
         <div className="pane-title"><div className="title-row"><h2 id="detail-heading">草稿详情</h2>{state.selectedId && <button className="quiet" disabled={state.detailLoading} onClick={() => void controller.select(state.selectedId)}>重新加载详情</button>}</div><p>查看已保存的讨论准备</p></div>
         <div className="pane-scroll">
-          {state.detailLoading ? <p className="empty" role="status">正在读取草稿…</p> : state.detailError ? <p className="error" role="alert">详情加载失败：{state.detailError}</p> : detail ? <>
+          {state.detailLoading&&!detail ? <p className="empty" role="status">正在读取草稿…</p> : state.detailError&&!detail ? <p className="error" role="alert">详情加载失败：{state.detailError}</p> : detail ? <>
+            {state.detailError&&<p className="error" role="alert">详情加载失败：{state.detailError}</p>}
             <div className="detail-state"><span className="badge">{statusLabels[detail.status]}</span><span>{detail.startedAt?'已开始的讨论记录':detail.status==='created'?'已保存':'讨论尚未开始'}</span></div>
             <h3 className="topic-title">{detail.topic}</h3>
             <dl className="metadata"><div><dt>专家人数</dt><dd>{detail.expertCount} 位专家（不含主持人）</dd></div>
               <div><dt>创建时间</dt><dd>{time(detail.createdAt)}</dd></div><div><dt>更新时间</dt><dd>{time(detail.updatedAt)}</dd></div></dl>
             <LineupPanel snapshot={detail} busy={state.actionBusy} error={state.actionError} notice={state.syncNotice} checking={state.checking} blocked={state.needsRefresh}
               generate={()=>void controller.generate()} confirm={()=>void controller.confirm()} recheck={()=>void controller.recheck()}/>
+            {detail.status==='lineup_confirmed'&&<div className="start-discussion"><p className="help">Fake 演示环境：开始后将动态生成公开讨论内容。</p><button className="primary" disabled={state.actionBusy||state.needsRefresh||['recovering','manual'].includes(state.connection)} onClick={()=>void controller.start()}>{state.actionBusy?'正在开始…':'开始讨论'}</button>{['recovering','manual'].includes(state.connection)&&<button onClick={()=>controller.reconnect()}>重新连接</button>}</div>}
           </> : <div className="empty"><div className="empty-symbol" aria-hidden="true">▤</div><h3>选一条草稿，继续整理想法</h3><p>从列表中选择讨论，或先创建一个新话题。</p></div>}
         </div>
       </section>
     </main>
-    <footer>圆桌讨论 · 草稿准备</footer>
+    <footer>圆桌讨论 · {studio?'Fake 讨论演示':'草稿准备'}</footer>
   </div>;
 }

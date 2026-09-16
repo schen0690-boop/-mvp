@@ -9,7 +9,7 @@ function deferred<T>() {
   return { promise, resolve, reject };
 }
 const result = { discussionId: id, snapshot, replayed: false };
-function api(changes: Partial<Api> = {}): Api { return { generate: async () => { throw new Error('unused'); }, confirm: async () => result, create: async () => result, list: async () => [], get: async () => snapshot, ...changes }; }
+function api(changes: Partial<Api> = {}): Api { return {start:async()=>{throw Error('unused');},stop:async()=>{throw Error('unused');}, generate: async () => { throw new Error('unused'); }, confirm: async () => result, create: async () => result, list: async () => [], get: async () => snapshot, ...changes }; }
 it('防重复进入；成功选中快照、切all；明确再创建使用新标识', async () => {
   const wait = deferred<CreateResult>(); const requests: CreateInput[] = []; let n = 0;
   // Use valid stable UUIDs so the failing reason is lifecycle behavior, not input syntax.

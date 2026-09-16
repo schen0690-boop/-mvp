@@ -11,10 +11,14 @@ export interface CreateResult { discussionId: string; snapshot: DraftSnapshot; r
 export interface GenerateInput { requestId: string; expectedGenerationId: string | null }
 export interface ConfirmInput { generationId: string; lineupRevision: number }
 export interface GenerateResult extends CreateResult { generationId: string; generationVersion: number }
+export interface StartInput extends ConfirmInput {requestId:string}
+export interface StartResult extends CreateResult {runId:string}
 export class ApiError extends Error {
   constructor(message: string, readonly status: number) { super(message); }
 }
 export interface Api {
+  start(id:string,input:StartInput):Promise<StartResult>;
+  stop(id:string):Promise<DraftSnapshot>;
   create(input: CreateInput): Promise<CreateResult>;
   list(filter: 'active' | 'all'): Promise<DraftListItem[]>;
   get(id: string, signal?: AbortSignal): Promise<DraftSnapshot>;
@@ -116,6 +120,17 @@ export function createApi(transport: typeof fetch = fetch): Api {
     catch { throw protocolError(); }
   }
   return {
+    async start(id,input){
+      const valid={requestId:validateUuid(input.requestId),...validateConfirm({generationId:input.generationId,lineupRevision:input.lineupRevision})};
+      const {status,body}=await request(`/api/discussions/${validateUuid(id)}/start`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(valid)});
+      if(![200,202].includes(status)||!isObject(body)||!keys(body,['discussionId','runId','snapshot','replayed'])||body.discussionId!==id||!validId(body.runId)||body.replayed!==(status===200))throw protocolError();
+      const snapshot=decodeSnapshot(body.snapshot);if(snapshot.discussionId!==id||snapshot.runtime?.runId!==body.runId||snapshot.lineupGeneration?.generationId!==input.generationId||snapshot.confirmedLineupRevision!==input.lineupRevision||status===202&&snapshot.status!=='running')throw protocolError();
+      return {discussionId:id,runId:body.runId,snapshot,replayed:body.replayed};
+    },
+    async stop(id){
+      const {status,body}=await request(`/api/discussions/${validateUuid(id)}/stop`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+      const snapshot=decodeSnapshot(body);if(snapshot.discussionId!==id||!(status===202&&snapshot.status==='stopping'||status===200&&['completed','failed'].includes(snapshot.status)))throw protocolError();return snapshot;
+    },
     async generate(id,input) {
       const {status,body}=await request(`/api/discussions/${validateUuid(id)}/lineup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(validateGenerate(input))});
       if(![200,202].includes(status)||!isObject(body)||!keys(body,['discussionId','generationId','generationVersion','snapshot','replayed'])||

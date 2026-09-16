@@ -8,7 +8,7 @@ const id=ready.discussionId;
 const draft={...snapshot,discussionId:id};
 function result(s:DraftSnapshot):GenerateResult {return {discussionId:id,generationId:s.lineupGeneration!.generationId,generationVersion:1,snapshot:s,replayed:false};}
 function setup(initial:DraftSnapshot=draft,changes:Partial<Api>={}) {
-  const api:Api={create:vi.fn(),list:vi.fn(async()=>[]),get:vi.fn(async()=>initial),generate:vi.fn(async()=>result(generating)),confirm:vi.fn(async()=>({discussionId:id,snapshot:confirmed,replayed:false})),...changes};
+  const api:Api={start:vi.fn(),stop:vi.fn(),create:vi.fn(),list:vi.fn(async()=>[]),get:vi.fn(async()=>initial),generate:vi.fn(async()=>result(generating)),confirm:vi.fn(async()=>({discussionId:id,snapshot:confirmed,replayed:false})),...changes};
   const c=new Controller(api);controllers.push(c);return {api,c};
 }
 const controllers:Controller[]=[];
