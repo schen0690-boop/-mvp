@@ -5,7 +5,7 @@ import { readRosterConfig } from './config.js';
 import { RosterValidationError } from '../domain/lineup.js';
 import { isObject } from '../domain/input.js';
 import { rosterMessages } from './roster-prompt.js';
-export interface RequestMetric { elapsedMs:number; httpStatus?:number; finishReason?:string; requestId?:string; responseModel?:string; usage?:Record<string,number>; outcome:string }
+export interface RequestMetric { elapsedMs:number; attempt?:number; httpStatus?:number; finishReason?:string; requestId?:string; responseModel?:string; usage?:Record<string,number>; outcome:string }
 export class DeepSeekRosterProvider implements RosterGenerator {
   constructor(private readonly config:DeepSeekConfig,private readonly transport:typeof fetch,private readonly record:(metric:RequestMetric)=>void=()=>{}){}
   async generateRoster(input:RosterInput,context:RosterContext):Promise<string>{
@@ -18,6 +18,7 @@ export class DeepSeekRosterProvider implements RosterGenerator {
     const abort=()=>controller.abort();context.signal.addEventListener('abort',abort,{once:true});
     const timer=setTimeout(abort,remaining);
     const metric:RequestMetric={elapsedMs:0,outcome:'transport'};
+    if(context.acceptanceAttempt===1||context.acceptanceAttempt===2)metric.attempt=context.acceptanceAttempt;
     try {
       const response=await this.transport(`${this.config.baseUrl}/chat/completions`,{
         method:'POST',redirect:'error',headers:{Authorization:`Bearer ${this.config.apiKey}`,'Content-Type':'application/json'},signal:controller.signal,

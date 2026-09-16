@@ -20,7 +20,7 @@ try {
   try {
     const file=join(root,'discussions.sqlite');if(!existsSync(file))await initializeConfiguredDatabase(file);
     const db=openConfiguredDatabase(file);
-    const provider=new DeepSeekRosterProvider(config.deepseek,fetch,metric=>authorization.record(authorization.count,metric));
+    const provider=new DeepSeekRosterProvider(config.deepseek,fetch,metric=>authorization.record(metric.attempt??0,metric));
     const lineup=new LineupService(new SqliteLineupStore(db),new GuardedRosterProvider(provider,authorization),{capacity:1});
     try{lineup.recover();}catch{db.close();throw new Error();}
     const server=createApp(new DraftService(new SqliteDraftStore(db)),undefined,lineup).listen(41852,'127.0.0.1',()=>{

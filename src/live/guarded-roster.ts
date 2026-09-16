@@ -8,8 +8,9 @@ export class GuardedRosterProvider implements RosterGenerator {
   async generateRoster(input:RosterInput,context:RosterContext):Promise<string>{
     const attempt=this.authorization.reserve(input,context);
     try {
-      const raw=await this.provider.generateRoster(input,context);
-      if(context.signal.aborted||performance.now()>=context.deadline)throw new ProviderError('cancelled');
+      const raw=await this.provider.generateRoster(input,{...context,acceptanceAttempt:attempt});
+      if(context.signal.aborted)throw new ProviderError(context.signal.reason instanceof ProviderError&&context.signal.reason.kind==='timeout'?'timeout':'cancelled');
+      if(performance.now()>=context.deadline)throw new ProviderError('timeout');
       parseRoster(raw,input.expertCount);this.authorization.close('valid_result');return raw;
     }catch(error){
       if(error instanceof ProviderError&&!error.retryable)this.authorization.close('permanent_failure');
