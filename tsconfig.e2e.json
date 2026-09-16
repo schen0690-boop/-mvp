@@ -2,6 +2,8 @@
   "extends": "./tsconfig.json",
   "include": [
     "e2e/**/*.ts",
+    "e2e-local/**/*.ts",
+    "playwright.stage6a.config.ts",
     "playwright.config.ts",
     "playwright.stage5b.config.ts",
     "playwright.stage5c.config.ts"

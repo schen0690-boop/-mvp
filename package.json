@@ -17,6 +17,7 @@
     "build:web": "vite build --config web/vite.config.ts",
     "test:web": "vitest run --config web/vitest.config.ts",
     "test:e2e": "playwright test --config playwright.stage5c.config.ts",
+    "test:e2e:local-adapter": "playwright test --config playwright.stage6a.config.ts",
     "typecheck:e2e": "tsc -p tsconfig.e2e.json",
     "config:check": "node dist/check-backend-config.js",
     "live:stage4d": "node dist/live-server.js"

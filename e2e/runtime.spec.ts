@@ -1,9 +1,10 @@
+const evidenceRoot=process.env.E2E_EVIDENCE_ROOT??'evidence/stage-5c';
 import {test,expect,type Page} from '@playwright/test';
 import {randomUUID} from 'node:crypto';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
 declare global {interface Window {stage5cHalfCuts?:number}}
-const shots='evidence/stage-5c/screenshots';
+const shots=`${evidenceRoot}/screenshots`;
 test.afterEach(async({request})=>{
  const response=await request.get('/api/discussions?status=active');const {items}=await response.json();
  for(const item of items)if(item.status==='running'||item.status==='stopping'){
