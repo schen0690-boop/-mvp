@@ -4,6 +4,8 @@
 
 阶段2/3小节保留其历史背景；下方“阶段4B阵容HTTP增量”覆盖新状态、版本、错误和前端解析。确认与开始严格分离，本轮不新增运行接口。
 
+阶段5A新增的**待确认、尚未实现**运行/SSE精确规格见末节；它覆盖上文早期stop/SSE/发言类型草案中的冲突。4B/4C已实现阵容契约不被改写为已支持讨论。4D单样本阵容结果见stage-4d-validation，原真实调用授权已关闭。
+
 ## 标识、版本与公开类型
 
 | 字段/类型 | 定义 |
@@ -190,3 +192,80 @@ DeepSeekRosterProvider以注入fetch发送固定官方HTTPS Chat Completions；m
 内部RosterContext可携带generationId；服务重试前复核当前代次，ProviderError增加cancelled/filtered及retryable。400/401/402/422等配置错误和过滤/明确中止不自动重试；暂时传输、超时和无效结构仍共享至多2次。取消原因区分单次timeout与用户shutdown，30秒完整响应/60秒总期限不变。公开NoticeCode及错误结构没有扩展；过滤映射安全UNAVAILABLE、取消映射INTERRUPTED。
 
 真实验收在固定持久化授权目录绑定一组discussion/generation，仅指定话题4专家；出站前预约累计2次，成功或终结后关闭。不把验收计数变成公开字段或通用计费平台。原Fake入口及常规测试不加载私有配置。
+
+## 阶段5A运行与SSE契约草案（待确认）
+
+领域接受条件、预算和迁移以[discussion-runtime-design.md](discussion-runtime-design.md)为唯一设计依据。以下均未实现/未验证，不授权真实调用。旧阵容19/21字段保持，新增运行联合分支，禁止把未知字段校验改成无条件忽略。
+
+### HTTP命令与重复语义
+
+共同规则：同源loopback、application/json、正文≤16KiB、精确键白名单；格式/类型/UUID/整数先400，讨论不存在404，再检查命令幂等/状态/版本。所有错误沿用error五字段；400/404/409=false/none，429/503/500=true/try_again。运行中Provider失败通过已持久化snapshot/事件，不回写已结束的202。
+
+| 路径 | 精确输入 | 返回与规则 |
+|---|---|---|
+| POST /api/discussions/{id}/start | {requestId:UUID,generationId:UUID,lineupRevision:正安全整数} | 首次lineup_confirmed且当前确认三项一致时202：{discussionId,runId,snapshot,replayed:false}。服务端生成runId，不接收客户端runId或并发/预算设置 |
+| 同一/start重放 | 相同requestId且相同generationId/revision | 200同四字段、replayed:true，快照为当前持久化状态；即使已completed/failed也不重启。原绑定长期留在该讨论，不建通用幂等平台 |
+| 双Tab不同requestId | running/stopping且相同已绑定阵容 | 200现有runId/snapshot、replayed:true；不认定第二次启动，不创建新任务/事件；不替换原start_request_id |
+| POST /api/discussions/{id}/stop | 空对象{} | 首次running→stopping返回202完整snapshot；重复stopping返回202、completed/failed返回200当前snapshot；不重复总结。沿用旧stop响应形状，不另加requestId要求 |
+| GET /api/discussions/{id} | 无body | 200一致snapshot，全部公开对象和lastEventId来自同一读事务；无修复/启动副作用 |
+| GET /api/discussions?status=active或all | 沿用 | 原六字段列表和排序。active仍为generating_lineup/awaiting_confirmation/running/stopping；lineup_confirmed和终态只在all；前端不得只允许两个旧active状态 |
+
+start顺序：已有相同start_request_id但绑定不一致→409 IDEMPOTENCY_CONFLICT；同键同绑定→只读重放。其他requestId遇completed/failed→409 INVALID_STATE；未确认→409 LINEUP_NOT_READY；当前/确认阵容双版本不匹配→409 STALE_LINEUP；running/stopping同绑定→已有运行；lineup_confirmed且绑定正确才申请运行槽。满2场429 CAPACITY_REACHED，无状态变更。已识别存储故障503 STORAGE_UNAVAILABLE，未知错误500 INTERNAL_ERROR。
+
+stop在五种尚未运行状态全部409 INVALID_STATE（包括lineup_confirmed和lineup_generation_failed）。因为每场仅一次运行，空body不会误停“后来重新开播”的任务；若未来支持重开，必须另改此契约。HTTP断线不撤销已提交start/stop；客户端先GET核对，再明确重试原操作，不自动新建requestId。
+
+### 运行快照及对象
+
+running/stopping/completed/failed分支保留原21键（含lineupGeneration、confirmedAt）并新增**runtime、roleStates、synthesisState**，共24键。created仍19键，其他阵容状态仍21键。无运行时不额外插入三项null字段。既有创建幂等重放可返回这类当前运行快照，列表和GET也须同步支持。
+
+| 对象/字段 | 定义 |
+|---|---|
+| runtime | {runId,runDeadlineAt,stoppingAt,stopDeadlineAt}；后两项未收尾时null，开始时runDeadlineAt非null；无内部epoch/task/调用计数 |
+| startedAt/endedAt | 外层为运行开始/终结UTC毫秒，running/stopping的endedAt=null；lineupGeneration的时间仍是旧阵容生成时间 |
+| roles、lineupGeneration、confirmedAt/Revision | 保持已确认阵容身份与八字段成员不变；运行后confirmedAt≤updatedAt，不再相等 |
+| roleStates | 按成员displayOrder排序的N+1项，每项{roleId,status,publicFocus,focusSourceTranscriptVersion,updatedAt}；roleId就是roles.memberId；三态idle/preparing/speaking；无focus时两项null，focus版本≤transcriptVersion |
+| Utterance（utterances元素） | {id,discussionId,roleId,seq,sentences,replyToUtteranceIds,createdAt}；id为utteranceId概念的实际字段名；seq按本场从1连续，sentences1–2项，引用同场更小seq，角色必须属当前已确认组 |
+| Synthesis | null或{sourceTranscriptVersion,items,updatedAt}；items可空；每项{id,kind,text,evidenceUtteranceIds,positions}；positions为共识[]或分歧两项{text,evidenceUtteranceIds}，约束见核心规格第8节 |
+| synthesisState | idle/preparing/ready/failed；开始idle；任务开始preparing；成功（含空items）ready；有限失败failed，可保留旧synthesis；来源滞后由sourceTranscriptVersion比较显示 |
+| Summary | null或{status:ready或unavailable,text:string或null,sourceTranscriptVersion}；ready对应合法自然语言，unavailable必须text=null；已完成必须非null；Summary不进utterances |
+| stopReason | 既有user_requested/turn_limit/duration_limit/no_participation/synthesis_unavailable，新增call_budget_exhausted；未进入stopping时null；failed原因仍看notice，不虚构正常原因 |
+| version / lastEventId | 独立安全正整数。公开事务version+1，多事件共享该版本且lastEventId按事件数推进；不得要求两者相等 |
+
+运行notice沿用{code,message,retryable,action}，固定中文映射：RUN_START_FAILED/RUN_INTERRUPTED/HOST_UNAVAILABLE/DISCUSSION_PARTICIPATION_UNAVAILABLE/DISCUSSION_PROVIDER_CONFIGURATION/CONTEXT_LIMIT/RUNTIME_STORAGE_FAILED均false/new_discussion（配置、存储原因另需维护）；SYNTHESIS_UNAVAILABLE为false/none并注明保留旧观点；SUMMARY_UNAVAILABLE、SUMMARY_NO_CONTENT为false/none。不得给终态提供“重试本场模型”动作；前端不渲染原始诊断message。临时单专家失败只将其状态回idle，整场仍可继续。
+
+### 公开事件与事务批次
+
+现有表主键(discussion_id,event_id)，不是全局编号；创建event1，4B每次last_event_id+1，回滚不占号。003继续**讨论内连续**分配全部公开事件，不按类型过滤订阅；该条件成立时才将eventId跳号视为缺口，不以dataVersion+1或全局rowid检查。
+
+SSE持久化消息envelope为{discussionId,eventId,dataVersion,type,occurredAt,payload,transactionLastEventId}。最后一个字段由同discussion/dataVersion的最大event_id读出，不改旧payload、不重复存库；旧单事件事务就是自身eventId。SSE id=`discussionId:eventId`，event=type，data为该白名单JSON。客户端不得把JSON直接渲染。
+
+| type | 精确payload及应用语义 |
+|---|---|
+| discussion.status_changed | 历史创建六键及4B十一键按原形状识别；新运行载荷保留4B十一键并加runtime/roleStates/synthesisState。十一键为status/stopReason/startedAt/endedAt/confirmedLineupRevision/summary/lineupRevision/lineupGeneration/confirmedAt/roles/lastNotice。开始时初始化运行三字段；后续状态覆盖对应字段。发言/综合数组分别由自身事件更新，不重发整场transcript |
+| role.status_changed | {roleId,status,publicFocus,focusSourceTranscriptVersion}；updatedAt取occurredAt，仅更新对应roleStates。意愿/候选/竞争不在其中 |
+| utterance.created | {utterance}；追加唯一id/seq并令transcriptVersion=seq，不能重复显示 |
+| synthesis.status_changed | {state}；更新synthesisState，失败不清除旧synthesis，不把失败当新共识 |
+| synthesis.updated | {synthesis}；整组替换并设置synthesisState=ready；source版本不得倒退 |
+| summary.ready | {summary}且status=ready；与completed状态同一事务批次；unavailable不发这个事件 |
+| discussion.notice | {notice}；只更新受控lastNotice |
+
+不新增lineup.ready，不将内部请求、Abort、意愿或heartbeat存进这些类型。运行状态事件里summary不可用时也携带lastNotice；仅使用SSE的观察者也能得到完整终态，GET仍可独立取得同一终态。每个事件occurredAt=该事务updatedAt，接收时相应推进本地updatedAt。单事件序列化上限64KiB（C）；超限必须在数据库提交前拒绝，不能提交了才丢弃推送。
+
+客户端以eventId去重而不是dataVersion。将同dataVersion的事件应用到临时副本，到transactionLastEventId齐全才原子更新公开快照/version/lastEventId；断线丢弃未完成批次，重连从最后**已应用**游标补发。这样不会在“发言提交与角色状态/收尾同事务”中途画出互相矛盾的状态。
+
+### 初始快照、订阅、重连与终止
+
+1. GET一致快照，记k=lastEventId；首次连接GET `/api/discussions/{id}/events?after=k`。先注册按discussion的提交通知，再读高水位H，按eventId递增补发(k,H]，继续读通知后的新高水位。通知只设dirty标记，事件内容取数据库，补发中不持有长期事务；不得先补发完才注册监听。
+2. after为非负安全整数十进制（缺省0），拒绝重复/未知query。有效Last-Event-ID=`同discussionId:非负安全整数`优先于URL旧after；非法/跨场header直接400而非退回after。不存在讨论404，已识别存储不可用503；不返回诊断。
+3. 补发包含快照后订阅前的事件；前端只接受当前页面选择token/当前discussion，eventId≤已应用k直接忽略。更高ID但dataVersion倒退、未知类型/字段、批次不一致、序号缺口均不应用，关闭并重新GET。snapshot替换必须关闭旧EventSource和失效旧回调，避免旧连接污染新场。
+4. 请求游标超出末尾、历史缺失、游标落在事务批次中间时，返回200 SSE发送`stream.reset`控制消息（**无id、不写库**）：{reason:cursor_ahead/history_unavailable/partial_transaction,snapshotPath:固定本场GET路径}，然后关闭；前端关闭旧实例、GET再连接。不能将reset塞进Transcript或当业务failed。
+5. 原生EventSource的Last-Event-ID代表已接收，不保证应用已完成批次。5C前端在onerror主动close，丢弃未提交缓冲，用新实例after=最后已应用k重连；不依赖旧实例自动推进的header。服务端仍支持符合格式的Last-Event-ID客户端；partial_transaction触发快照恢复。建议重连等待1/2/4/8/10秒，连续5次仍失败显示手动重连，不修改业务状态、不自动POST。
+6. 通常SSE 200、Content-Type text/event-stream;charset=utf-8、Cache-Control:no-store；注释心跳约15秒、无id且不写业务表，不模拟专家状态。实际文本按完整短发言提交就推送，不收集整场后播放。供应商token流不是本阶段需求。
+7. 补发完completed/failed的最后完整事务后发送无id的`stream.end` {discussionId,lastEventId}并结束；客户端看到终态批次立即close。已在终态且请求游标等于末尾时204，不进入自动重连循环；落后则先补发终态，超前先reset。lineup_confirmed不是运行终态，可只读订阅等待另一Tab开始。
+8. 页面切换/卸载关闭连接、心跳与重连定时器，注销服务器监听和缓冲；不stop runner。多个观察者共享已存在runner，不复制上下文/任务。不同场的游标、连接、通知和取消域分别管理。
+
+### 慢客户端
+
+每连接最多64条待发事件且总字节≤256KiB（C，先达到者为限），数据库按最多32条分页读取，不拆分事务组（下一整组超出页上限则留到下一页；本版单事务事件数不得超过32）；无法放入下一批则暂停读库。response.write返回false后停止继续写，等drain，最长10秒；超限/超时断开该连接，不阻塞runner或其他观察者，不删除持久化事件。已背压时不保证能发送reset；前端从已应用游标重连/快照恢复。仅一个dirty标记合并通知，不创建无限事件副本。终态和断连都清理监听。
+
+编号、应用幂等和有限缓冲是应用契约，SSE不是“恰好一次”。重连/204/Last-Event-ID依据[WHATWG规范](https://html.spec.whatwg.org/multipage/server-sent-events.html)，write/drain依据[Node HTTP文档](https://nodejs.org/api/http.html#responsewritechunk-encoding-callback)；具体阈值与跨事件事务缓冲须5C验证。

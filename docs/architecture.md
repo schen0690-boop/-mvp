@@ -4,6 +4,8 @@
 
 阶段4A阵容设计已获P6确认，4B已实现Fake Provider后端与最小前端兼容，详见[lineup-design.md](lineup-design.md)及[验证记录](stage-4b-validation.md)。后续发言/调度/SSE原设计仅保留背景，不属本轮冻结范围。
 
+**阶段5A阅读入口：** 本文早期动态讨论段落仍是设计背景。新的待确认运行设计唯一正文为[discussion-runtime-design.md](discussion-runtime-design.md)，精确协议见contracts的5A节；冲突与建议在那里逐项登记，不表示现有代码已支持运行。4D已通过单样本真实阵容，但原授权关闭，5A/5B/5C不获任何真实模型额度。
+
 ## 模块与数据访问边界
 
 | 模块 | 职责 | 边界 |
@@ -212,3 +214,18 @@ web/src/api.ts负责阵容命令与严格DTO；controller.ts负责操作互斥�
 providers/config.ts固定模型/端点/输出限制；roster-prompt.ts保存应用阵容提示词；deepseek.ts负责单次原生fetch、完整体期限、外层校验与白名单指标。backend-config.ts仅显式后端配置入口加载根.env.backend.local，普通server仍明确Fake。live-server.ts使用正式服务/HTTP/迁移，在独立库和端口组合真实适配器。
 
 live/authorization.ts通过独占新建与fsync保存绑定/出站计数，不删除或覆盖；live/guarded-roster.ts复用已有parseRoster，仅用于首个有效结果立即关闭授权，业务层仍进行原有验证和原子写入。不是新业务表/迁移或供应商平台。临时测试不接官方网络。
+
+## 阶段5A扩展映射（仅待确认设计）
+
+| 层次 | 未来改动范围 | 必须保持 |
+|---|---|---|
+| domain | DiscussionService/单场runner；意愿、短发言、综合和总结四种校验；run身份与task失效 | RosterGenerator不扩成万能方法；确认不自动开始 |
+| db | 003从002全部列/成员/事件无损升级，新增发言/观点证据/公开角色状态，运行元数据放Discussion | 001/002不改校验和；备份/显式维护；数据及事件短事务；stage-4d-live库不作为迁移对象 |
+| providers/composition | FakeDiscussionProvider，阵容与讨论共用调用槽；独立运行总预算 | 常规入口不加载密钥；既有真实阵容保护不重置、不移植为讨论授权 |
+| HTTP | start绑定已确认双版本，stop唯一收尾，GET联合快照 | 原草稿/阵容命令及幂等、同源、错误白名单 |
+| SSE（5C） | public_events补发、事务末游标、有限背压、终态关闭 | GET/观察/重连不启动runner；完整短发言随提交推送，无token流要求 |
+| web（5C） | 运行分支解码、单一状态reducer、演播厅与断线恢复 | 原阵容轮询保留；旧19/21字段不强塞运行占位；独立滚动 |
+
+推荐保留发言→综合检查点→下一轮的串行内容决策；并行仅发生在受2/4槽控制的意愿调用。snapshot.version、小窗变化不使模型内容过期；transcriptVersion/runId/内部epoch和taskId分别承担内容/执行/取消判断。总结使用stop后新epoch与独立取消域。详细预算、公平性及失败策略不在此复制，以唯一规格第3–8节为准。
+
+当前SQLite事件是讨论内复合主键和手动加1，未来多事件事务将打破version==lastEventId；src/db读取和web/src/api.ts的硬限制必须同步扩展。5B仅后端Fake测试环境，不将产生运行态的服务接到尚未适配的4C界面并宣称兼容。5C才完成协议到页面的运行闭环。全部待执行测试见test-plan的S5矩阵。

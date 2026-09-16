@@ -240,3 +240,21 @@ P9来自本轮真实请求，完整可见正文单独归档sources/stage-4d-b-re
 本轮新运行：配置检查0、后端编译0、验收脚本语法0、单样本UI0、只读补图0、关停后只读SQLite业务层/完整性核验0。原254后端、69前端、26 Fake E2E及类型/前端构建没有重跑，沿用4D-A记录。四张截图、各步骤白名单快照、允许字段指标见evidence/stage-4d-b；不保存上游raw/reasoning/Authorization。
 
 收尾Ctrl+C停止两个自有终端（包装退出1，主动中断），实际端口无监听，server.lock已由关闭逻辑移除，预算closed/计数/绑定与验收库保留；两个独立浏览器上下文都已关闭。停服后只读重开原SQLite仍为同一已确认阵容。仅提交文档、脱敏证据和验证脚本。单样本真实联调通过；其他话题/人数、长期可靠性、完整系统E2E、调度/SSE/共识/演播厅仍未验证或未实现，停止等待下一阶段授权。
+
+## 阶段5A：讨论执行与实时事件设计（2026-09-16，待确认）
+
+本轮原始开发请求P10追加于sources/development-prompts.md，历史前缀不变。意图是把现有阵容准备延伸为可执行/可验收的讨论设计，严格区分5B Fake后端与5C SSE/演播厅；不把RosterGenerator当已支持讨论的接口。
+
+实际读取AGENTS、requirements/architecture/contracts/test-plan/ui-spec、lineup-design、stage-4d-validation，及schema-v1/v2、migration、snapshot/读库/事件写入、LineupService、Provider/启动组合、前端api/controller/App/LineupPanel。没有读取私有配置、预算目录或4D验收库。起始main为1c8acef、工作区干净，沿用schen/cs064210@163.com，不重新审计环境。
+
+发现实质冲突：002只支持阵容五态且事件类型仅status_changed；前端eventId==version和confirmedAt==updatedAt限制不适用于运行；原共识最少一证据无法区分单人观点；原总结失败completed可能被误读；运行所有权尚无普通入口锁。已在唯一核心规格逐条写明原约定与建议，没有修改现有源码掩盖差异。旧requirements/lineup-design等历史“真实阵容未执行”口径注明以4D-B报告为准，不把阵容单样本延伸为讨论能力验证。
+
+推荐保留串行发言/综合检查点，受限并行意愿；与异步综合备选比较后选择更易验证的一种。分别定义runId、内部epoch/task、transcriptVersion、公开version；stop作废旧任务，总结使用独立取消域。提出持续申请优先、第三次连续限制、两次主持介入及84/168/280整场尝试上限，均为C类建议，非原题数字/性能承诺/真实调用授权。
+
+实际使用brainstorming，文件C:\Users\Administrator\.codex\skills\superpowers\skills\brainstorming\SKILL.md已读取并用于范围、方案取舍、冲突与规格自查；版本沿用既有记录，不升级或审计。依用户指定只新增docs/discussion-runtime-design.md核心规格，不采用Skill默认另建spec路径，不进入writing-plans/实施/子代理/worktree。总结失败语义已通过文本问题请求用户确认，未收到确认的决定保持待确认，不因等待时间经过而视为批准。
+
+必要核对SSE协议使用WHATWG Server-sent events和Node HTTP response.write官方资料，只读网页，不执行远程代码或调用模型；来源链接在核心规格及contracts。自查聚焦HTTP状态/字段、24键运行DTO、事件批次、Provider四能力、结束取消、迁移保留、S5矩阵全部计划。收尾实际读取并使用C:\Users\Administrator\.codex\skills\superpowers\skills\verification-before-completion\SKILL.md，适用范围仅文档静态一致性、Git范围/历史前缀/敏感形态检查，不执行产品测试或Mermaid浏览器渲染。自查修订了最后一次普通预算调用的完成顺序、有限队列满时处理和SSE终态措辞；没有代码修复或产品测试经历。
+
+文档检查实际结果：内联Node只读检查退出码0，确认仅7份授权Markdown变更、原Prompt前缀保留、29条S5用例全部为计划、预算算式一致、相对文件链接有效、代码围栏成对、新增内容无TODO/TBD；变更Markdown中的密钥形态匹配为0。git diff --check退出码0；仅有仓库既有LF/CRLF转换提醒，未修改换行全局配置。以上不等于产品测试、Mermaid渲染或语义质量已通过。
+
+本轮全部实现、迁移、U/I/S/E/Q验证均未执行；4D真实授权维持关闭、未触碰。下一步仅等用户审阅三组决定；不得以本次文档提交作为5B启动或真实讨论授权。
