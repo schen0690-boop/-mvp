@@ -2,7 +2,7 @@
 
 ## 范围与阶段
 
-项目为 AI 圆桌讨论 Web App MVP，实际使用 Codex 辅助开发。需求来源只取题面前三部分及用户明确指令。当前处于阶段4A：阵容领域、非破坏迁移与Provider边界设计。只授权读取与Markdown设计/真实Prompt归档及当前身份下的设计提交；不改业务代码、不执行迁移、不调用模型，不进入讨论调度或SSE。设计须经用户确认后才能进入4B。
+项目为 AI 圆桌讨论 Web App MVP，实际使用 Codex 辅助开发。需求来源只取题面前三部分及用户明确指令。当前阶段4B：用户已确认4A设计并授权迁移框架、001/002、阵容领域/Fake Provider/生成确认/HTTP及最小前端兼容的逐任务真实TDD。禁止真实模型、调度、SSE、完整阵容UI；仅在独立临时数据库验证迁移，不自动迁移未知用户运行库。
 
 - 每轮只完成该轮明确授权的阶段，不自行安装、提交、联网调用模型或进入实现。
 - 阶段1B明确授权在 `tools/env-probe/` 局部安装精确依赖、编写探针与持久化环境测试、启动loopback服务及独立测试浏览器。探针不是产品功能/样例数据，不整体迁入正式应用；不把环境测试结果改写为产品TDD/E2E通过。
@@ -36,6 +36,6 @@ React + Vite + TypeScript 前端；Node.js + Express + TypeScript 后端；SQLit
 - SDD 仅沿用“数据建模与 API 契约”，DDD 仅沿用“前端组件与页面”；不补写英文全称。
 - 仅能取得真实原文的开发 Prompt 才原样归档；应用专家角色 Prompt 不计入核心开发 Prompt。
 - 用户暂定本仓库Git身份为schen <cs064210@163.com>，仅设置当前仓库；阶段3已授权先建立截至阶段2基线，再按实际小任务提交，不倒填时间、不重写历史、不创建远程仓库或推送。
-- 阶段4A只使用现有brainstorming；用户批准设计之前不调用TDD、frontend-design或writing-plans。阵容新提案见docs/lineup-design.md，状态为待确认；旧阶段报告保持历史语境。
+- 阶段4B使用writing-plans及当前会话逐任务执行，核心TDD、异常systematic-debugging、完成前verification-before-completion；4A设计已获P6确认，历史报告保留原语境。用户明确不启用额外代理/worktree，继续当前仓库并按真实小任务提交。
 - 本轮不启动 worktree、并行子代理、分支清理。使用现有 Superpowers，实际工具接口及用户边界优先于 Skill 默认流程。
 - 每轮结束报告文件变化、实际验证、已知问题、待确认项及下一阶段最小计划，并等待授权。

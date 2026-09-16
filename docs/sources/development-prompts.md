@@ -1861,3 +1861,426 @@ unit / DB integration / HTTP integration / E2E / real-model check。
 完成后停止。
 不要实现阶段 4B。
 ```
+
+
+## P6：阶段4B实施授权与真实TDD
+
+意图：实现已确认阵容后端、非破坏迁移、Fake Provider与最小消费者兼容；不接真实模型。原文来自当前会话，旧前缀原字节保留。
+
+```text
+我确认阶段 4A 的设计，进入：
+
+【阶段 4B：阵容生成核心后端、非破坏迁移与 Fake Provider TDD】
+
+项目根目录：
+D:\实测文件夹
+
+本轮依据：
+docs/lineup-design.md
+以及已同步的 architecture/contracts/test-plan。
+
+先使用 writing-plans 生成本子系统的实施计划，
+保存到 docs/superpowers/plans/ 下。
+计划必须仅覆盖本阶段，不扩张到真实模型、讨论调度、
+SSE、共识或完整演播厅。
+
+设计确认如下：
+
+1\. 沿用 lineup 命名。
+&#x20;  生命周期：
+&#x20;  created
+&#x20;  → generating\_lineup
+&#x20;  → awaiting\_confirmation
+&#x20;  → lineup\_confirmed
+
+&#x20;  失败：
+&#x20;  generating\_lineup
+&#x20;  → lineup\_generation\_failed
+
+2\. 允许：
+&#x20;  created → generate
+&#x20;  lineup\_generation\_failed → retry
+&#x20;  awaiting\_confirmation → regenerate
+
+&#x20;  禁止：
+&#x20;  lineup\_confirmed 及后续运行状态重新生成。
+
+3\. 生成中禁止强制替换。
+
+4\. 重新生成一旦受理，
+&#x20;  上一版 lineup 立即失去“当前可确认版本”资格。
+
+&#x20;  若新一代生成失败：
+&#x20;  \- 旧成员记录可以作为历史/审计数据保留；
+&#x20;  \- 旧 lineup 不能重新自动成为当前可确认版本；
+&#x20;  \- GET snapshot 不得把旧 lineup 表示成当前成功结果；
+&#x20;  \- 用户只能重试新生成，不得确认旧 generation。
+
+5\. 当前 generation/version 规则保持阶段 4A 设计：
+&#x20;  \- Discussion 记录当前 generation ID / generation number；
+&#x20;  \- 成功 lineup 有 lineupRevision；
+&#x20;  \- 迟到结果必须匹配当前讨论、当前代次和生成状态才能提交；
+&#x20;  \- A 迟到不得覆盖后来的 B；
+&#x20;  \- confirm 必须明确匹配当前 generation 和 lineup revision。
+
+6\. 数据库迁移：
+&#x20;  \- 001 只能严格识别并接管阶段 2 已实际存在的原始 schema；
+&#x20;  \- 001 不得顺便新增 lineup 功能或修改历史语义；
+&#x20;  \- 002 才负责新增生命周期字段、generation 字段和 lineup member 表；
+&#x20;  \- 不引入 ORM；
+&#x20;  \- 未知旧 schema 停止迁移；
+&#x20;  \- 迁移失败整体回滚；
+&#x20;  \- 已有草稿、public\_events 和原 API 数据必须保留。
+
+7\. 4B 只实现 FakeRosterProvider。
+&#x20;  不读取真实 API Key，
+&#x20;  不接真实模型，
+&#x20;  不调用任何付费模型。
+
+8\. 4B 允许做最小前端兼容，
+&#x20;  但不实现完整阵容卡片或确认页面。
+&#x20;  目标仅是：
+&#x20;  \- 前端能够安全接受新状态；
+&#x20;  \- 不因新 snapshot 字段直接崩溃或拒绝；
+&#x20;  \- 可以显示简洁状态文本；
+&#x20;  \- 现有草稿创建、列表、详情继续正常工作。
+
+━━━━━━━━━━━━━━━━━━
+一、先创建实施计划
+━━━━━━━━━━━━━━━━━━
+
+使用 writing-plans。
+
+计划必须：
+\- 映射真实文件路径；
+\- 每个任务有明确输入/输出接口；
+\- 每个核心业务任务遵循 RED → GREEN → REFACTOR；
+\- 每个任务结束都有独立验证；
+\- 不写 TBD/TODO；
+\- 不把整个 4B 做成一个大任务；
+\- 不调用真实模型。
+
+推荐拆为：
+A. migration 框架与 001 接管；
+B. 002 lineup schema；
+C. lineup domain 与运行时验证；
+D. FakeRosterProvider；
+E. generation service；
+F. confirm service；
+G. HTTP API；
+H. 最小前端消费者兼容；
+I. 回归与最终验证。
+
+计划完成后先进行自检，
+再按计划实施。
+如果 Superpowers 要求明确执行方式，
+优先使用当前会话内逐任务执行，
+不要启动未授权的并行子代理或 worktree。
+
+━━━━━━━━━━━━━━━━━━
+二、migration TDD
+━━━━━━━━━━━━━━━━━━
+
+首先实现正式 schema migration 机制。
+
+需要测试：
+
+1\. 空数据库可以按 001 → 002 正常建立；
+2\. 阶段 2 最终 schema 可以被 001 正确识别并登记；
+3\. 已有 discussion/public\_events 数据完整保留；
+4\. 未知 schema 拒绝接管；
+5\. migration 重复执行安全；
+6\. 002 失败时整体回滚；
+7\. 外键和唯一约束实际生效；
+8\. 升级后原阶段 2 查询仍然通过；
+9\. 数据库关闭重开后 migration 状态仍然正确。
+
+不得用删库重建代替升级测试。
+
+测试数据库必须从真实旧 schema fixture 创建，
+而不是直接从新 schema 开始。
+
+━━━━━━━━━━━━━━━━━━
+三、lineup schema
+━━━━━━━━━━━━━━━━━━
+
+按已确认设计实现必要字段。
+
+lineup 成员至少包含：
+
+\- memberId
+\- discussionId
+\- generationId 或等价代次关联
+\- lineupRevision
+\- role
+\- name
+\- profession
+\- title
+\- stance
+\- color
+\- displayOrder
+\- 必要创建时间
+
+约束：
+\- 一个有效 lineup 恰好 1 位 moderator；
+\- expert 数量由业务层确保等于 expertCount；
+\- displayOrder 在同一 lineup 内唯一；
+\- memberId 由系统生成；
+\- discussion 外键有效；
+\- 颜色由系统分配。
+
+是否保留历史 lineup 成员，
+按阶段 4A 设计执行。
+不得为了简单直接 DELETE 全部历史数据。
+
+━━━━━━━━━━━━━━━━━━
+四、Provider 与输出验证
+━━━━━━━━━━━━━━━━━━
+
+实现供应商无关的 RosterGenerator 接口，
+以及 FakeRosterProvider。
+
+Fake Provider 必须能够在测试中确定性地产生：
+
+\- 正常 1 主持人 + N 专家；
+\- 少专家；
+\- 多专家；
+\- 无主持人；
+\- 双主持人；
+\- 空字段；
+\- 非法 role；
+\- 重复成员；
+\- timeout；
+\- transport failure；
+\- invalid structured result；
+\- business-invalid result；
+\- 可控制延迟的迟到结果。
+
+业务层不得直接信任 provider 结果。
+
+统一管线：
+
+provider result
+→ structural validation
+→ business validation
+→ normalization
+→ system field enrichment
+→ transaction persistence
+
+系统生成：
+\- memberId；
+\- color；
+\- displayOrder；
+\- generation/version；
+\- timestamps。
+
+Provider 不得控制这些字段。
+
+━━━━━━━━━━━━━━━━━━
+五、生成 service TDD
+━━━━━━━━━━━━━━━━━━
+
+至少覆盖：
+
+1\. created 可以生成；
+2\. 非法状态拒绝；
+3\. 请求生成后进入 generating\_lineup；
+4\. 生成不改变 topic/expertCount；
+5\. 正常结果形成 awaiting\_confirmation；
+6\. 成员数量正确；
+7\. 系统颜色正确分配；
+8\. 无效输出不形成半套 lineup；
+9\. provider timeout 正确分类；
+10\. provider transport failure 正确分类；
+11\. structured invalid 与 business invalid 分开；
+12\. 每 generation 最多两次 provider 调用；
+13\. 网络重试与输出修复共享同一预算；
+14\. 失败后进入 lineup\_generation\_failed；
+15\. retry 产生新 generation；
+16\. awaiting\_confirmation 可以 regenerate；
+17\. regenerate 一旦受理，旧 lineup 不再可确认；
+18\. regenerate 失败后旧 lineup 仍仅作为历史存在；
+19\. A 晚于 B 返回时 A 被判 stale；
+20\. stale 结果不得修改当前 snapshot；
+21\. persistence failure 不得形成半完成状态。
+
+不要让模型/provider 调用持有 SQLite 写事务。
+
+━━━━━━━━━━━━━━━━━━
+六、confirm service TDD
+━━━━━━━━━━━━━━━━━━
+
+至少覆盖：
+
+1\. awaiting\_confirmation 可以确认；
+2\. confirm 必须提交当前 generationId；
+3\. confirm 必须提交当前 lineupRevision；
+4\. stale generation/revision 返回冲突；
+5\. lineup\_generation\_failed 不允许确认；
+6\. generating\_lineup 不允许确认；
+7\. 已重新生成后不能确认旧版；
+8\. 首次确认进入 lineup\_confirmed；
+9\. 完全相同版本的重复确认按契约幂等；
+10\. 不同旧版本重复确认返回冲突；
+11\. lineup\_confirmed 后禁止 regenerate；
+12\. confirm 不启动讨论；
+13\. confirm 不创建发言或共识。
+
+━━━━━━━━━━━━━━━━━━
+七、HTTP API
+━━━━━━━━━━━━━━━━━━
+
+实现 contracts.md 已确认的接口：
+
+POST /api/discussions/{id}/lineup
+POST /api/discussions/{id}/lineup/confirm
+
+以及必要的 GET snapshot 扩展。
+
+路径若真实 contracts.md 有不同定义，
+以已确认文档为准。
+
+验证：
+\- 202 受理；
+\- 400 输入错误；
+\- 404 discussion 不存在；
+\- 409 状态/版本冲突；
+\- 429 容量不足，如本阶段已有对应 service；
+\- 503 已识别存储不可用；
+\- 已受理后的 provider 失败通过安全 snapshot 状态表达。
+
+不得在 HTTP 响应中返回：
+\- provider raw output；
+\- hidden reasoning；
+\- SQL；
+\- stack trace；
+\- API 配置；
+\- 内部诊断对象。
+
+━━━━━━━━━━━━━━━━━━
+八、snapshot 与公开边界
+━━━━━━━━━━━━━━━━━━
+
+扩展原 19 字段 snapshot 时：
+\- 保持旧字段兼容；
+\- 新增 lineup/status 信息必须明确；
+\- created 草稿仍能被旧流程读取；
+\- 历史旧 lineup 不作为当前 lineup 暴露；
+\- 当前失败状态提供安全、中文可映射的公开错误码/状态；
+\- 不暴露内部 provider 错误正文。
+
+version/lastEventId 的更新规则必须与现有 public\_events 设计一致。
+
+若本轮状态变化需要写 public\_events，
+必须在必要事务内保持数据与公开事件一致性，
+但不要开始实现 SSE。
+
+━━━━━━━━━━━━━━━━━━
+九、最小前端兼容
+━━━━━━━━━━━━━━━━━━
+
+只做消费者兼容，不做完整阵容 UX。
+
+要求：
+\- 阶段 3 已有创建、列表、详情功能全部继续通过；
+\- 前端类型接受新状态；
+\- 新状态显示简洁中文标签；
+\- 新增 snapshot 字段不会导致严格解析整体失败；
+\- created 页面行为不变；
+\- generating\_lineup / awaiting\_confirmation /
+&#x20; lineup\_generation\_failed / lineup\_confirmed
+&#x20; 可以安全展示基本状态。
+
+本轮不要：
+\- 新增正式“生成阵容”按钮；
+\- 新增成员卡片；
+\- 新增确认阵容 UI；
+\- 新增重新生成 UI；
+\- 开始演播厅布局。
+
+这些留给下一前端阶段。
+
+━━━━━━━━━━━━━━━━━━
+十、测试与验证
+━━━━━━━━━━━━━━━━━━
+
+使用：
+\- test-driven-development；
+\- 出现异常时 systematic-debugging；
+\- 完成前 verification-before-completion。
+
+阶段 4A 规划的 32 条用例应映射到真实测试，
+但不要为了数量机械重复测试。
+
+需要实际运行：
+\- migration 测试；
+\- domain/service 单元测试；
+\- SQLite 集成测试；
+\- HTTP 集成测试；
+\- 阶段 2 全部后端回归；
+\- 阶段 3 前端单元测试；
+\- 阶段 3 E2E 回归；
+\- 类型检查；
+\- 后端和前端构建。
+
+本轮新增业务 RED 必须真正由于行为尚未实现而失败，
+不是语法、依赖或路径错误。
+
+记录代表性 RED→GREEN，
+不要为每个断言单独制作报告。
+
+━━━━━━━━━━━━━━━━━━
+十一、Git
+━━━━━━━━━━━━━━━━━━
+
+使用当前仓库已确认的项目级身份。
+
+保持已有提交历史，
+不得 rebase、squash 或倒填时间。
+
+建议真实提交粒度：
+
+1\. migration framework + 001；
+2\. 002 lineup schema；
+3\. lineup domain/provider；
+4\. generation service；
+5\. confirm + HTTP；
+6\. frontend compatibility；
+7\. docs/validation。
+
+以实际完成内容为准，
+不要为了匹配列表制造空提交。
+
+每次提交前检查：
+\- 测试；
+\- staged 文件范围；
+\- 密钥/数据库/临时输出；
+\- 原 Prompt 未被改写。
+
+━━━━━━━━━━━━━━━━━━
+十二、最终验收输出
+━━━━━━━━━━━━━━━━━━
+
+完成后回复：
+
+1\. 实际 migration 版本与升级结果；
+2\. lineup schema；
+3\. lifecycle 实际实现；
+4\. Provider 接口及 Fake Provider 覆盖；
+5\. generation/confirm API；
+6\. stale generation 防护验证；
+7\. regenerate 失败后的旧 lineup 行为；
+8\. 单元、集成、HTTP、前端回归和 E2E 结果；
+9\. RED→GREEN 代表证据；
+10\. Git 提交记录；
+11\. 尚未实现内容；
+12\. 阶段 4C 建议。
+
+明确写：
+本轮未接真实模型，
+Fake Provider 通过不等于真实模型已验证。
+
+完成后停止，
+不要自动进入真实模型接入或完整阵容 UI。
+
+```
