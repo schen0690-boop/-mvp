@@ -2,6 +2,8 @@ import type { DatabaseSync, SQLOutputValue } from 'node:sqlite';
 import type { DiscussionSnapshot } from '../domain/snapshot.js';
 import { noticeMessages, noticeOf } from '../domain/snapshot.js';
 import { parseRoster } from '../domain/lineup.js';
+import { isRuntimeStatus } from '../domain/snapshot.js';
+import { readRuntime } from './read-runtime.js';
 export function transaction<T>(db: DatabaseSync, fn: () => T, write = true): T {
   if (db.isTransaction) return fn();
   db.exec(write ? 'BEGIN IMMEDIATE' : 'BEGIN');
@@ -19,7 +21,7 @@ export function readSnapshot(db: DatabaseSync, id: string): DiscussionSnapshot |
   return transaction(db, () => {
     const r = db.prepare('SELECT * FROM discussions WHERE id=?').get(id); if (!r) return undefined;
     const status = r.status;
-    if (status !== 'created' && status !== 'generating_lineup' && status !== 'awaiting_confirmation' && status !== 'lineup_generation_failed' && status !== 'lineup_confirmed') throw new Error('INVALID_STORED_STATUS');
+    if (status !== 'created' && status !== 'generating_lineup' && status !== 'awaiting_confirmation' && status !== 'lineup_generation_failed' && status !== 'lineup_confirmed' && !isRuntimeStatus(status)) throw new Error('INVALID_STORED_STATUS');
     const snapshot: DiscussionSnapshot = {
       discussionId: text(r.id), topic: text(r.topic), expertCount: integer(r.expert_count), status,
       version: integer(r.version), lastEventId: integer(r.last_event_id), createdAt: text(r.created_at), updatedAt: text(r.updated_at),
@@ -37,7 +39,7 @@ export function readSnapshot(db: DatabaseSync, id: string): DiscussionSnapshot |
       if (!entry) throw new Error('INVALID_STORED_NOTICE');
       for (const key of Object.keys(noticeMessages) as (keyof typeof noticeMessages)[]) if (key === code) snapshot.lastNotice = noticeOf(key);
     }
-    if (status === 'awaiting_confirmation' || status === 'lineup_confirmed') {
+    if (status === 'awaiting_confirmation' || status === 'lineup_confirmed' || isRuntimeStatus(status)) {
       const rows = db.prepare('SELECT * FROM lineup_members WHERE discussion_id=? AND generation_id=? AND generation_version=? ORDER BY display_order').all(id, text(r.current_generation_id), integer(r.generation_version));
       const candidates = parseRoster(JSON.stringify({ roles: rows.map(m => ({ role: m.role, name: m.name, profession: m.profession, title: m.title, stance: m.stance })) }), snapshot.expertCount);
       snapshot.roles = rows.map((m, i) => {
@@ -45,6 +47,7 @@ export function readSnapshot(db: DatabaseSync, id: string): DiscussionSnapshot |
         return { ...candidate, memberId: text(m.member_id), color: text(m.color), displayOrder: integer(m.display_order) };
       });
     }
+    if(isRuntimeStatus(status))readRuntime(db,r,snapshot);
     return snapshot;
   }, false);
 }
