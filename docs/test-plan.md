@@ -1,6 +1,6 @@
 # 测试与验收计划
 
-**原T01–T20完整场景仍为“计划”；阶段2草稿子集已实际执行，独立列于下方S2矩阵，不将HTTP集成称作完整产品E2E。阶段1B没有执行产品测试。** 阶段1B已实际执行的独立环境探针见[环境验证报告](environment-validation.md)，不等同这里的T01–T20，也不是核心业务TDD。
+当前执行状态见各阶段实际映射与[阶段7总验证](delivery-validation.md)。T01–T20是场景定义，不将早期“计划”当作当前结论；Fake/HTTP替身、真实单样本和人工审阅分别计证。
 
 ## 分层与证据
 
@@ -47,7 +47,7 @@ T12故意构造错序是验证提交防护，不表示MVP默认无限并行生�
 4. 扩展到真实数据库、HTTP/SSE集成，再串起E2E；每次只记录实际执行的检查和结果。
 5. 测试替身验证系统控制流；真实模型能力和讨论质量用T17/T18单独补充。不能因替身成功就交付“真实AI已经验证”。
 
-## 当前未执行
+## 阶段2时点未执行（历史说明）
 
 原T01–T20整场讨论场景、SSE补发/观察、完整讨论Playwright系统E2E、真实模型和人工讨论质量仍未执行。阶段2已执行草稿单元/SQLite/HTTP集成，见下表；阶段1B环境结果仍独立。
 
@@ -299,3 +299,9 @@ S4-23/24的4C卡片/刷新/公开边界部分现已验证；S4-32真实模型仍
 ## 6B已执行补充
 
 短期限/绑定/第二专家收尾：tests/integration/short-discussion.test.ts；18+2/并行争额/重开/关闭/唯一总结task：tests/unit/discussion-authorization.test.ts；正式适配器HTTP传输计数/确定性失败/重试修复/取消/普通耗尽总结：tests/integration/guarded-discussion.test.ts；120秒严格快照与来源标签：web/tests/runtime-api.test.tsx、provider-label.test.ts；完整受保护本地短流程：scripts/stage6b-dry-run.mjs。实际数量、退出码、真实调用与本地测试区别见stage-6b-validation。本阶段不以本地边界测试证明供应商计费或长期语义质量。
+
+## 阶段7交付复验
+
+新增samples.test（五组完整/重复保留确认/写失败整批回滚）、app-providers.test（默认/双开关/独立模式）、HTTP /api/config、provider-label、server-shutdown测试；普通真实配置工厂通过本地HTTP+正式runner测试。具体命令数量/失败及最终重跑见delivery-validation。所有官方授权关闭，本轮0官方请求。
+
+已有非空覆盖足够支撑本地结构验收：unit/discussion验证两专家共识及分歧两立场引用；discussion-store验证真实SQLite证据与旧覆盖拒绝；e2e/runtime的8专家分歧和中途共识展示/引用点击、e2e-local的中途非空及末条总结。它们不证明真实语义支持，R1仅空提炼，未用新增人工夹具凑真实成绩。

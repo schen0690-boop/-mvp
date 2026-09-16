@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-09-16T15:27:26.311Z",
+  "historyTextBlobs": 828,
+  "credentialShapeHits": [],
+  "privateTracked": [],
+  "dangerousFrontendSinks": [],
+  "protectedFiles": 42,
+  "changedProtected": [],
+  "limitations": [
+    "Pattern scan is not a full security guarantee",
+    "No private config body was read",
+    "Synthetic fixture private markers are not proof of leaked reasoning"
+  ]
+}

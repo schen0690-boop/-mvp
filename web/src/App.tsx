@@ -1,4 +1,4 @@
-import {providerLabel} from './provider-label.js';
+import {useProviderLabel} from './use-provider-label.js';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createApi, statusLabels } from './api.js';
 import { Controller } from './controller.js';
@@ -9,6 +9,7 @@ import './styles.css';
 
 const time = (value: string) => new Date(value).toLocaleString('zh-CN', { hour12: false });
 export function App() {
+  const modeLabel=useProviderLabel();
   const [controller] = useState(() => new Controller(createApi()));
   const state = useSyncExternalStore(controller.subscribe, controller.getState);
   useEffect(() => {
@@ -94,11 +95,11 @@ export function App() {
               <div><dt>创建时间</dt><dd>{time(detail.createdAt)}</dd></div><div><dt>更新时间</dt><dd>{time(detail.updatedAt)}</dd></div></dl>
             <LineupPanel snapshot={detail} busy={state.actionBusy} error={state.actionError} notice={state.syncNotice} checking={state.checking} blocked={state.needsRefresh}
               generate={()=>void controller.generate()} confirm={()=>void controller.confirm()} recheck={()=>void controller.recheck()}/>
-            {detail.status==='lineup_confirmed'&&<div className="start-discussion"><p className="help">{providerLabel()}：开始后将动态生成公开讨论内容。</p><button className="primary" disabled={state.actionBusy||state.needsRefresh||['recovering','manual'].includes(state.connection)} onClick={()=>void controller.start()}>{state.actionBusy?'正在开始…':'开始讨论'}</button>{['recovering','manual'].includes(state.connection)&&<button onClick={()=>controller.reconnect()}>重新连接</button>}</div>}
+            {detail.status==='lineup_confirmed'&&<div className="start-discussion"><p className="help">{modeLabel}：开始后将动态生成公开讨论内容。</p><button className="primary" disabled={state.actionBusy||state.needsRefresh||['recovering','manual'].includes(state.connection)} onClick={()=>void controller.start()}>{state.actionBusy?'正在开始…':'开始讨论'}</button>{['recovering','manual'].includes(state.connection)&&<button onClick={()=>controller.reconnect()}>重新连接</button>}</div>}
           </> : <div className="empty"><div className="empty-symbol" aria-hidden="true">▤</div><h3>选一条草稿，继续整理想法</h3><p>从列表中选择讨论，或先创建一个新话题。</p></div>}
         </div>
       </section>
     </main>
-    <footer>圆桌讨论 · {studio?providerLabel():'草稿准备'}</footer>
+    <footer>圆桌讨论 · {modeLabel}</footer>
   </div>;
 }

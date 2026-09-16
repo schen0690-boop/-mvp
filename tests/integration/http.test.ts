@@ -109,3 +109,7 @@ it('真实存储异常返回脱敏500，诊断与公开响应分开，事务回�
   expect(diagnostics).toEqual([{ requestId: body.error.requestId, code: 'INTERNAL_ERROR' }]);
   expect(db.prepare('SELECT COUNT(*) AS count FROM discussions').get()?.count).toBe(0);
 });
+
+it('公开配置只报告当前两类Provider，不泄露配置正文',async()=>{const r=await fetch(base+'/api/config');expect(r.status).toBe(200);expect(await r.json()).toEqual({rosterProvider:'fake',discussionProvider:'fake'});});
+
+it('拒绝非本机Host，避免DNS重绑定读取本地公开记录',async()=>{const {request}=await import('node:http');const status=await new Promise<number|undefined>((resolve,reject)=>{const req=request(base+'/api/discussions',{headers:{Host:'untrusted.example'}},res=>{res.resume();res.on('end',()=>resolve(res.statusCode));});req.on('error',reject);req.end();});expect(status).toBe(400);});

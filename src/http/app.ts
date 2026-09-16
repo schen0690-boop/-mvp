@@ -1,3 +1,4 @@
+import type {PublicProviders} from '../app-providers.js';
 import express, { type Request, type Response, type NextFunction } from 'express';
 import type { DraftService } from '../domain/drafts.js';
 import { AppError, invalidInput } from '../domain/errors.js';
@@ -10,10 +11,12 @@ import {serveEvents} from './events.js';
 
 export interface Diagnostic { requestId: string; code: 'INTERNAL_ERROR' }
 
-export function createApp(service: DraftService, diagnose: (event: Diagnostic) => void = event => console.error(event), lineup?: LineupService, discussion?: DiscussionService, events?:SqliteEventSource) {
+export function createApp(service: DraftService, diagnose: (event: Diagnostic) => void = event => console.error(event), lineup?: LineupService, discussion?: DiscussionService, events?:SqliteEventSource, providers:PublicProviders={rosterProvider:'fake',discussionProvider:'fake'}) {
   const app = express();
   app.disable('x-powered-by');
   app.disable('etag');
+  // Loopback binding alone does not prevent a browser DNS-rebinding origin from reading local data.
+  app.use((req,_res,next)=>{if(!/^(127\.0\.0\.1|localhost|\[::1\])(?::\d{1,5})?$/i.test(req.get('host')??''))invalidInput('请求主机不受支持');next();});
   app.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   const jsonOnly = (req: Request, _res: Response, next: NextFunction) => {
     if (!req.is('application/json')) invalidInput('请求正文须使用application/json');
@@ -29,6 +32,7 @@ export function createApp(service: DraftService, diagnose: (event: Diagnostic) =
     }
     next();
   };
+  app.get('/api/config',(_req,res)=>res.json({rosterProvider:providers.rosterProvider,discussionProvider:providers.discussionProvider}));
   const parser=express.json({ limit: '16kb', inflate: false });
   if(events)app.get('/api/discussions/:discussionId/events',(req,res)=>{
     lineup?.assertAvailable(req.params.discussionId);discussion?.assertAvailable(req.params.discussionId);serveEvents(req,res,events);

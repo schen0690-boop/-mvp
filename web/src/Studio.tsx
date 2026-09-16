@@ -1,4 +1,4 @@
-import {providerLabel} from './provider-label.js';
+import {useProviderLabel} from './use-provider-label.js';
 import type {DraftSnapshot} from './api.js';
 import type {ConnectionState} from './discussion-stream.js';
 import {useLayoutEffect,useRef,useState} from 'react';
@@ -8,6 +8,7 @@ export interface StudioProps {snapshot:DraftSnapshot;connection:ConnectionState;
 export function followTranscript(distance:number){return distance<=48;}
 const labels:Record<ConnectionState,string>={connecting:'正在连接实时记录',live:'实时连接正常',recovering:'连接中断，正在恢复',manual:'自动恢复未成功，请手动重新连接',closed:'记录已同步，连接已关闭'};
 export function Studio({snapshot:s,connection,busy,error,stop,reconnect,back}:StudioProps){
+ const modeLabel=useProviderLabel();
  const [tab,setTab]=useState('transcript'),[unread,setUnread]=useState(false);const transcript=useRef<HTMLDivElement>(null),follow=useRef(true);
  useLayoutEffect(()=>{const box=transcript.current;if(!box)return;if(follow.current){box.scrollTop=box.scrollHeight;setUnread(false);}else setUnread(true);},[s.utterances.length,s.summary]);
  const bottom=()=>{const box=transcript.current;if(box)box.scrollTop=box.scrollHeight;follow.current=true;setUnread(false);};
@@ -15,7 +16,7 @@ export function Studio({snapshot:s,connection,busy,error,stop,reconnect,back}:St
  const source=(id:string)=>{const u=s.utterances.find(u=>u.id===id);return u?`第${u.seq}条 · ${s.roles.find(m=>m.memberId===u.roleId)?.name??'嘉宾'}`:'发言来源';};
  const links=(ids:string[])=><div className="evidence-links">发言依据：{ids.map(id=><button key={id} onClick={()=>jump(id)}>{source(id)}</button>)}</div>;
  return <main className="studio" aria-label="讨论演播厅" data-tab={tab}>
-  <header className="studio-heading"><div className="studio-topic"><span className="fake-label">{providerLabel()}</span><h2>{s.topic}</h2><div className="studio-status"><span className="badge" data-testid="discussion-status">{statusLabels[s.status]}</span><span role="status" data-testid="connection-status">{labels[connection]}</span></div></div><div className="studio-controls"><button onClick={back}>返回讨论列表</button>{s.status==='running'&&<button className="stop-button" disabled={busy} onClick={stop}>{busy?'正在请求结束…':'结束讨论'}</button>}{s.status==='stopping'&&<span role="status">正在收尾，请等待总结</span>}{['recovering','manual'].includes(connection)&&<button onClick={reconnect}>重新连接</button>}</div></header>
+  <header className="studio-heading"><div className="studio-topic"><span className="fake-label">{modeLabel}</span><h2>{s.topic}</h2><div className="studio-status"><span className="badge" data-testid="discussion-status">{statusLabels[s.status]}</span><span role="status" data-testid="connection-status">{labels[connection]}</span></div></div><div className="studio-controls"><button onClick={back}>返回讨论列表</button>{s.status==='running'&&<button className="stop-button" disabled={busy} onClick={stop}>{busy?'正在请求结束…':'结束讨论'}</button>}{s.status==='stopping'&&<span role="status">正在收尾，请等待总结</span>}{['recovering','manual'].includes(connection)&&<button onClick={reconnect}>重新连接</button>}</div></header>
   {error&&<p className="error" role="alert">{error}</p>}{s.status==='failed'&&<p className="error" role="alert">{s.lastNotice?.message??'讨论已中断，已提交记录仍然保留。'}</p>}
   <nav className="studio-tabs" aria-label="演播厅区域">{[['transcript','发言记录'],['roles','嘉宾状态'],['findings','共识与分歧']].map(([key,label])=><button key={key} aria-pressed={tab===key} onClick={()=>setTab(key!)}>{label}</button>)}</nav>
   <div className="studio-grid">

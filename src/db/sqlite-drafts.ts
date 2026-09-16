@@ -3,14 +3,13 @@ import type { CreateDraftInput } from '../domain/input.js';
 import type { DraftRecord, DraftStore } from '../domain/drafts.js';
 import { isObject } from '../domain/input.js';
 import { AppError } from '../domain/errors.js';
-import { readSnapshot } from './read-discussion.js';
+import { readSnapshot, transaction } from './read-discussion.js';
 import {isRuntimeStatus} from '../domain/snapshot.js';
 
 export class SqliteDraftStore implements DraftStore {
   constructor(private readonly db: DatabaseSync) {}
   create(input: CreateDraftInput, id: string, timestamp: string): { record: DraftRecord; replayed: boolean } {
-    this.db.exec('BEGIN IMMEDIATE');
-    try {
+    return transaction(this.db, () => {
       const previous = this.db.prepare('SELECT * FROM discussions WHERE create_request_id = ?').get(input.requestId);
       if (previous) {
         const record = readRecord(previous);
@@ -18,7 +17,6 @@ export class SqliteDraftStore implements DraftStore {
         if (record.topic !== input.topic || record.expertCount !== input.expertCount) {
           throw new AppError('IDEMPOTENCY_CONFLICT', '该请求标识已用于不同的创建内容', 409);
         }
-        this.db.exec('COMMIT');
         return { record, replayed: true };
       }
       this.db.prepare(`INSERT INTO discussions
@@ -32,12 +30,8 @@ export class SqliteDraftStore implements DraftStore {
         VALUES (?, 1, 1, 'discussion.status_changed', ?, ?)`)
         .run(id, timestamp, payload);
       const record = readRecord(this.db.prepare('SELECT * FROM discussions WHERE id = ?').get(id));
-      this.db.exec('COMMIT');
       return { record, replayed: false };
-    } catch (error) {
-      this.db.exec('ROLLBACK');
-      throw error;
-    }
+    });
   }
   get(id: string): DraftRecord | undefined {
     const row = this.db.prepare('SELECT * FROM discussions WHERE id = ?').get(id);

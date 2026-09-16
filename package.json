@@ -29,7 +29,8 @@
     "launch:stage6b": "node .cache/startup/scripts/startup/stage6b.js",
     "rehearse:stage6b": "npm run build:startup && npm run launch:stage6b -- --local",
     "prepare:stage6b:r1": "node dist/prepare-stage6b.js --r1",
-    "launch:stage6b:r1": "node .cache/startup/scripts/startup/stage6b.js --r1"
+    "launch:stage6b:r1": "node .cache/startup/scripts/startup/stage6b.js --r1",
+    "db:seed": "node dist/seed.js"
   },
   "dependencies": {
     "express": "5.2.1",

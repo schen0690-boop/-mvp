@@ -1,0 +1,49 @@
+{
+  "security": {
+    "repo": "openai/skills",
+    "commit": "49f948faa9258a0c61caceaf225e179651397431",
+    "license": "Apache-2.0"
+  },
+  "ui": {
+    "repo": "vercel-labs/agent-skills",
+    "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+    "license": "not found in inspected tree"
+  },
+  "interfaceRules": "e3d624baaf29dc1fc645aff3e38f03e564d2d6b1",
+  "installed": false,
+  "cache": ".cache/delivery-skills",
+  "files": [
+    {
+      "path": "interface-command.md",
+      "sha256": "5a775e6411f790f518dbc9c1fa7c50a89e6873502d9a3530a6eb223a590bcfe8"
+    },
+    {
+      "path": "interface-sha.txt",
+      "sha256": "ec73196fe325ba72bb68488e243cf35e184d02c497ae6a156e30f88316f8ee96"
+    },
+    {
+      "path": "openai-skills-skills_.curated_security-best-practices_references_javascript-typescript-react-web-frontend-security.md",
+      "sha256": "d3030c0f24bddb56b9bbb91bbec1ee49eb7778bce4d3e0297b2641b2fc6b0d9c"
+    },
+    {
+      "path": "openai-skills-skills_.curated_security-best-practices_SKILL.md",
+      "sha256": "7b3dae1ffc5434d890f3c65c8f552af52d0307fab3b35dec13013c9ca3844c4f"
+    },
+    {
+      "path": "skills_.curated_security-best-practices_LICENSE.txt",
+      "sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9"
+    },
+    {
+      "path": "skills_.curated_security-best-practices_references_javascript-express-web-server-security.md",
+      "sha256": "427835cbb5be7ba96172ea6ca9af80ddd4419c833e9ebf870996740c80d8406c"
+    },
+    {
+      "path": "skills_.curated_security-best-practices_references_javascript-general-web-frontend-security.md",
+      "sha256": "3a7bc7b3f6e7ff043db9dbaa8933894d7a19d987d0607e4ddae5d70184a63d63"
+    },
+    {
+      "path": "vercel-labs-agent-skills-skills_web-design-guidelines_SKILL.md",
+      "sha256": "f4647ca866a3accf763777f83e7682954f0187cd6bea7eea0399796652414e8f"
+    }
+  ]
+}

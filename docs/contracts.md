@@ -1,8 +1,8 @@
-# HTTP与SSE公开契约（当前阶段5C）
+# HTTP与SSE公开契约（阶段7当前实现）
 
 当前：草稿、阵容、5B运行/停止及5C SSE均已实现。各阶段小节保留历史背景；当前运行字段及SSE以本文末节为准，阵容沿用[lineup-design.md](lineup-design.md)。所有正文UTF-8，JSON是API传输格式，不直接作为页面文本。
 
-阶段2/3小节保留其历史背景；下方“阶段4B阵容HTTP增量”覆盖新状态、版本、错误和前端解析。确认与开始严格分离，本轮不新增运行接口。
+阶段2/3小节保留其历史背景；下方“阶段4B阵容HTTP增量”覆盖新状态、版本、错误和前端解析。确认与开始严格分离，运行接口见下方5B/5C节。
 
 阶段5A设计经P11确认并在5B/5C实施；末节覆盖上文早期stop/SSE/发言类型草案中的冲突，早期未实现措辞仅反映当时状态。4D单样本阵容结果见stage-4d-validation，原真实调用授权已关闭。
 
@@ -11,16 +11,16 @@
 | 字段/类型 | 定义 |
 |---|---|
 | discussionId、roleId、utteranceId、findingId | 服务端生成的不透明 UUID；查询及引用必须验证归属，UUID 本身不提供授权 |
-| status | created / generating_lineup / awaiting_confirmation / lineup_generation_failed / lineup_confirmed；running / stopping / completed / failed属于未来运行阶段 |
+| status | created / generating_lineup / awaiting_confirmation / lineup_generation_failed / lineup_confirmed；running / stopping / completed / failed均已实现 |
 | version / dataVersion | 同一场公开数据版本：快照字段为 version，事件字段为 dataVersion；每次原子变更加1，不保证与事件数相同 |
-| eventId / lastEventId | 同一场持久化公开事件正整数序号；初始快照无事件时 lastEventId=0；不同场编号可重复 |
+| eventId / lastEventId | 同一场持久化公开事件正整数序号；草稿创建同时写event1，lastEventId从1开始；不同场编号可重复 |
 | transcriptVersion / seq | 公开普通发言的版本/序号；初始0，每条发言加1，Summary 不计入 |
 | lineupRevision | 最后成功阵容的generationVersion；初始0，可跳号；可整套重新生成，不支持编辑/换人 |
 | confirmedLineupRevision | 尚未确认时为 null，成功/lineup/confirm后固定为当前版本，不自动start |
 | sourceTranscriptVersion | 综合/总结依据的 transcript 版本，由后端请求上下文设置 |
 | LineupMember（roles元素） | memberId、role(moderator/expert)、name、profession、title、stance、color、displayOrder；不含未来运行字段 |
 | Utterance | id、discussionId、roleId、seq、sentences(1–2项)、replyToUtteranceIds、createdAt |
-| Finding | id、kind(consensus/disagreement)、text、evidenceUtteranceIds(至少1项) |
+| Finding | id、kind(consensus/disagreement)、text、evidenceUtteranceIds、positions（共识至少两专家，分歧两立场；详见运行节） |
 | Synthesis | sourceTranscriptVersion、items(Finding数组)、updatedAt；初始null |
 | Summary | status(ready/unavailable)、text(string或null)、sourceTranscriptVersion；初始null |
 | PublicNotice | code、message(安全中文)、retryable、action(try_again/new_discussion/none) |
@@ -42,22 +42,22 @@ PublicSnapshot 是明确字段白名单，不能直接展开数据库行。内�
 | POST /api/discussions/{discussionId}/stop | 提前结束运行；空JSON对象 | running首次202快照；stopping为202；completed/failed为200 | 每个讨论最多安排一次终结总结；重复请求不增加runEpoch、不重复总结。created/generating_lineup/awaiting_confirmation返回409 INVALID_STATE，不将离开确认页等同停止 |
 | GET /api/discussions/{discussionId}/events | 订阅本场公开事件；query after=非负整数；自动重连可带Last-Event-ID | 200 text/event-stream；具体见下 | 404不存在；400无效游标/UUID/跨讨论游标。断线与重新订阅都不启动/停止讨论 |
 
-阶段4A新增生成/确认的契约见末节；confirm与start分离，只确认不启动。未来开始接口需在后续运行设计明确，不把旧/start合并行为继续当作有效阵容契约。旧stop/events尚未实现，本轮没有设计增量。
+阶段4A新增生成/确认的契约见末节；confirm与start分离，只确认不启动。开始/停止/SSE已实现，按下方5B/5C节执行；不把历史确认合并开始方案当作当前契约。
 
 202只代表受理，HTTP断开不撤销已提交生成；GET查询不触发任务。阵容命令幂等不同于创建幂等，详见末节。
 
 ## 运行时校验
 
-共享 TypeScript 类型仅用于编译期；服务端在 JSON 解析后必须运行真实 schema 校验，并执行数据库关联验证。阶段2使用小型手写运行时校验与字段白名单，不新增schema框架；未来模型输出仍必须真实校验，不能用 `as Type` 代替。
+共享 TypeScript 类型仅用于编译期；服务端在 JSON 解析后必须运行真实 schema 校验，并执行数据库关联验证。阶段2使用小型手写运行时校验与字段白名单，不新增schema框架；模型输出同样执行真实校验，不能用 `as Type` 代替。
 
 | 边界 | 校验规则（长度均为Unicode码点，数字为C建议） |
 |---|---|
 | HTTP | 限JSON正文16KiB；拒绝null/数组充当对象；UUID格式、整数范围、枚举、未知字段、空白topic；expertCount不可是字符串/小数/NaN；持久化规范化topic |
 | 阵容输出 | 对象只含roles，每项role/name/profession/title/stance；1 moderator+N expert；名称1–64、profession/title各1–80、stance1–200码点；trim后非空、规范化姓名判重；memberId/颜色/displayOrder/版本/时间由系统生成。详细管线与分类见lineup-design第5节 |
 | 意愿输出 | wantsToSpeak布尔；intent仅answer/supplement/rebuttal/question；replyToUtteranceIds为本场已存在ID数组；publicFocus为null或1–80字符的独立公开关注点；不接受reasoning/score/debug等额外字段 |
-| 普通发言输出 | sentences恰好1–2个非空纯文本字符串，每项建议至多160字符；replyToUtteranceIds只引用本场请求快照中已有发言；后端设置roleId/seq/版本。拒绝明显序列化对象/数组或HTML作为“公开句子”，不执行HTML；句界除数组约束外做中文终止标点检查，缩写/引文边界列入人工质量检查 |
-| 共识/分歧输出 | items建议至多12；kind合法、text 1–300字符、evidenceUtteranceIds非空且全部属于本场请求快照；服务端生成findingId和sourceTranscriptVersion。分歧验证不同角色证据，空items合法且不虚构共识 |
-| 总结输出 | 只含text，1–2句、建议至多320字符的自然语言，使用与普通发言一致的句界校验原则；拒绝JSON对象/数组原文、隐藏推理字段或诊断文本；总结单独展示，不写入Utterance |
+| 普通发言输出 | sentences恰好1–2个非空纯文本字符串，每项至多160字符；replyToUtteranceIds只引用本场请求快照中已有发言；后端设置roleId/seq/版本。拒绝明显序列化对象/数组或HTML作为“公开句子”，不执行HTML；句界除数组约束外做中文终止标点检查，缩写/引文边界列入人工质量检查 |
+| 共识/分歧输出 | items至多12；kind合法、text 1–300字符、evidenceUtteranceIds非空且全部属于本场请求快照；服务端生成findingId和sourceTranscriptVersion。分歧验证不同角色证据，空items合法且不虚构共识 |
+| 总结输出 | 只含text，1–2句、至多320字符的自然语言，使用与普通发言一致的句界校验原则；拒绝JSON对象/数组原文、隐藏推理字段或诊断文本；总结单独展示，不写入Utterance |
 | 提交结果 | 当前discussionId、status、runEpoch、源transcriptVersion必须满足该任务的提交条件；不匹配即丢弃，不能让重试结果越过stop或新版本 |
 
 模型供应商可能用JSON文本封装对象，适配器可以解析一次指定内容字段再校验；解析失败走有限重试，不能靠“找第一个大括号”猜取或把原文转成发言。供应商 envelope 的推理/诊断字段在适配器边界丢弃；模型正文里出现未知字段则校验失败。输入topic及transcript按不可信数据区块传入，不覆盖系统职责。
@@ -66,38 +66,7 @@ PublicSnapshot 是明确字段白名单，不能直接展开数据库行。内�
 
 ## SSE 公开事件
 
-以下是早期未来SSE设计，尚未实现；阶段4A不新增SSE，阵容状态变更仅按lineup-design第7节复用已存储的discussion.status_changed。表中的lineup.ready不在4B产生，未来实现SSE时再统一消费者契约，不能把此表当作4B需要新增推送的授权。
-
-持久化事件统一载荷：discussionId、eventId、dataVersion、type、occurredAt、payload。SSE 的 `event` 行使用下表 type；`id` 行为 `discussionId:eventId`，`data` 行是上述公开对象。每个事件最多只归属一场讨论。
-
-| type | payload必要字段 | 含义 |
-|---|---|---|
-| discussion.status_changed | status、stopReason、startedAt、endedAt、confirmedLineupRevision、summary | 已持久化的生命周期变化；未有总结时summary=null，结束失败总结为unavailable，保证纯SSE观察者也能得到终态 |
-| lineup.ready | lineupRevision、roles | 有效阵容可供确认 |
-| role.status_changed | roleId、status、publicFocus | 真实任务阶段的投影，不包含意愿、打分或隐藏思考 |
-| utterance.created | utterance | 一条已校验、已持久化的普通公开发言 |
-| synthesis.updated | synthesis | 原子替换当前综合；sourceTranscriptVersion决定适用内容 |
-| summary.ready | summary | status=ready的自然语言总结 |
-| discussion.notice | notice | 安全中文提示；失败总结通过notice及终态快照表达 |
-
-一条原子事务可包含 role.status_changed 和 utterance.created 等多条事件；同dataVersion不能视为重复，必须按eventId区分。每次公开变更更新Discussion.updatedAt，事件occurredAt使用该事务的updatedAt，客户端据此更新快照时间。utterance.created将transcriptVersion推进至utterance.seq；lineup.ready更新阵容和lineupRevision；discussion.notice更新lastNotice；状态事件包含确认版本和总结，保证持续观察者不必靠猜测补字段。summary.ready之后的completed事件与快照反映最终状态；unavailable总结不伪造summary.ready。事件载荷只含相关公开对象，客户端不可将整个data对象直接打印到界面。
-
-### 快照与后续事件衔接
-
-1. 客户端先GET快照，以其中lastEventId=k初始化游标，并替换该场本地状态。
-2. 再连接 `/events?after=k`。服务端从数据库补发eventId>k的事件；快照取得后、连接建立前的事件也在库中，因此不丢失。
-3. 服务端先登记该观察连接的实时通知，再读取事件高水位并按序补发；随后对缓冲通知再按游标从数据库读取。通知仅唤醒读库，数据库是事实来源，去重后交付严格递增事件。不得采用“先读完，再监听”的丢事件窗口。
-4. 快照包含的数据和lastEventId来自同一读事务。客户端仅在应用完整事件后推进游标；同场eventId≤已应用游标忽略，跨场一律拒收。
-5. SSE心跳使用注释行，无eventId、无业务状态含义。允许断开后自动重连，但不能用心跳假扮专家活动。
-
-### 重连、旧事件与缺口
-
-- 首次使用after；原生EventSource重连的有效 `Last-Event-ID` 优先于URL旧after，二者不同是正常情况。header中的discussionId必须等于路径，eventId必须为非负安全整数。
-- 断线不清空已有内容；显示“连接中断，正在重连”，禁用依赖最新状态的开始按钮。恢复后按游标补发，重复事件忽略。
-- eventId连续但dataVersion相同的事件逐条应用；dataVersion小于当前已应用版本的旧载荷不覆盖新状态，但游标仍推进。综合还必须检查sourceTranscriptVersion不得小于已应用综合版本；不以时间戳决定新旧。
-- 收到eventId>本地游标+1的缺口、游标超出服务端末尾、历史补发不可用时，服务端发送一次连接控制事件 `stream.reset`（无id，仅reason与固定快照路径），然后关闭。客户端关闭旧EventSource、重新GET快照、用新after建立新连接，避免旧Last-Event-ID循环。
-- stream.reset是连接控制信息，不进入PublicEvent表、不呈现在Transcript。当前C建议保留全部事件、不自动清理；该降级仍覆盖数据恢复/版本变更造成的补发不可用，不构建通用事件保留平台。
-- 初始快照替换时必须关闭旧连接并使旧回调失效；迟到的旧连接消息不能写入新讨论或新快照。
+当前协议统一见下方“公开事件与事务批次”“初始快照、订阅、重连与终止”，取代早期未实现草案。
 
 ## 用户错误与内部诊断
 
@@ -292,3 +261,7 @@ SSE持久化消息envelope为{discussionId,eventId,dataVersion,type,occurredAt,p
 仅后端受控SqliteDiscussionStore acceptance绑定唯一discussion/run，可设2次专家成功提交/普通120000ms；客户端start字段不变，不能指定参数。runDeadlineAt从running提交时间计算，排队/重试计入；总结仍60000ms且独立取消。第二次专家提交原子进入stopping，不再提炼；首次专家后仍由原runner提炼一次。正常12/600000及003的B(N)不改。前端快照运行期限严格接受600000或此次120000，其他不接受。
 
 独立固定授权目录不可变slot限制20=普通18+唯一总结2，在唯一传输之前持久化。普通预算不足抛CallBudgetError由runner转已有预算收尾，不额外重试；已预约未知结果不退还。公开快照中的callLimit为程序技术上限，不代表真实授权金额/次数；实际请求授权查看6B验证记录。无新增HTTP业务字段、schema或SSE事件。授权记录含代码版本/绑定/固定参数，重启只中断恢复而不续跑，终态后关闭。
+
+## 阶段7运行模式查询
+
+GET /api/config返回200：`{rosterProvider:"fake"|"deepseek",discussionProvider:"fake"|"deepseek"}`，仅这两个字段，无密钥/地址/额度；no-store。由后端实际组合设置，GET不调用模型、不创建授权。普通启动默认Fake；显式deepseek还须后端CLI --allow-real-models。模式读取失败前端显示未知，不回退伪称Fake。历史测试专用来源标签不作为配置权限。
