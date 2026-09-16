@@ -4483,3 +4483,9 @@ docs/stage-5c-validation.md。
 
 完成后停止，不自动进入真实讨论接入。
 ```
+
+# P13 — 阶段6A真实讨论适配器与本地契约测试（2026-09-16）
+
+当前会话用户原文独立归档于 [stage-6a-request.md](stage-6a-request.md)，从“请基于已完成的阶段 5C”至“完成后停止，不自动执行 6B”；保留用户转义标记，不复制含密钥的历史消息。该文件是开发Prompt，应用运行时提示词位于src/providers/discussion-prompt.ts，二者不混淆。
+
+意图：在0官方请求边界内实现四能力适配器，验证正式runner与页面的本地协议接入。真实修正：共享传输异常类型收窄导致类型检查失败；并发指标测试误设返回顺序。前者明确Error收窄，后者按taskId集合验证，不改变调度。TDD和最后全量验证证据见stage-6a-validation。历史Prompt不修改。

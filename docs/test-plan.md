@@ -281,3 +281,17 @@ S4-23/24的4C卡片/刷新/公开边界部分现已验证；S4-32真实模型仍
 | S5-29 | 真实讨论相关性、证据语义、总结质量 | 仍未执行，需独立授权 |
 
 正常E2E只在Provider边界Fake；响应丢失、半批断线、offline属于明确传输故障注入。当前没有系统通用故障接口。截图与动态状态等待互补，截图不是行为证明。
+## 阶段6A实际测试映射
+
+本轮标记为“真实适配器经本地 HTTP 替身验证”，不与真实供应商质量检查混淆；实际数量、时间和退出码见[stage-6a-validation](stage-6a-validation.md)，旧阶段报告保留历史语境。
+
+|范围|持久化用例|前置、操作、验收|
+|---|---|---|
+|四能力/配置|unit/deepseek-discussion、discussion-config、test-network-boundary|有效同场输入；依次调用四方法/切换明确配置；输出按既有规则、默认Fake、缺配置失败、非本地发送前拒绝|
+|本地真实HTTP|integration/discussion-adapter-http|虚拟凭据loopback stub；检查POST、任务messages、上限及变化；无意愿/空综合合法，字段/句数/角色/引用/finish非法拒绝，诊断无敏感正文|
+|期限取消|同上及discussion-adapter-runner|先发头/空白后挂起正文或在普通发言时停止；读取超时/取消、独立总结完成、迟到结果不改终态|
+|正式runner与SQLite|integration/discussion-adapter-runner|Fake确认阵容+真实适配器stub；运行到12专家，检查中途11次提炼/末条总结、旧覆盖、事件和预算；混合503/非法输出总共两次、401一次、总结失败降级|
+|隔离/总预算|同上及原discussion-controls/store/runner|并行两场，核对同场引用/指标归属/共享限流；测试库中耗尽普通额度，保证保留总结额度；沿用30秒/10分钟/60秒Fake时钟回归|
+|页面/SSE/刷新|e2e-local/discussion-adapter.spec.ts|真实前端+后端+SQLite+SSE+HTTP stub；开场/专家/中途观点后释放观察门闩，看到结束总结，刷新同一快照；另验证总结unavailable|
+|既有流程|全部后端、前端及原37 E2E|默认Fake；阵容共享传输26单元/5HTTP/13pipeline等继续运行；截图写本阶段目录，保留旧证据|
+|未来真实质量|未执行|6B独立授权后，人工审查真实语义相关性、角色差异、证据支持、争议保留；不将stub输出计为通过|

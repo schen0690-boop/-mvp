@@ -1,0 +1,19 @@
+{
+  "label": "真实适配器经本地 HTTP 替身验证",
+  "officialRequests": 0,
+  "discussionId": "ded2f26c-568e-4250-ae97-8c443ece5ac6",
+  "runId": "6674fcdf-c065-4b5a-980c-35b243aa3e4f",
+  "streamed": true,
+  "middleTranscriptVersion": 3,
+  "finalTranscriptVersion": 13,
+  "summary": {
+    "status": "unavailable",
+    "text": null,
+    "sourceTranscriptVersion": 13
+  },
+  "counters": {
+    "calls_used": 50,
+    "summary_calls_used": 2
+  },
+  "refreshMatches": true
+}

@@ -277,3 +277,12 @@ SSE持久化消息envelope为{discussionId,eventId,dataVersion,type,occurredAt,p
 - 流额外设置X-Accel-Buffering:no，flushHeaders及时送出；Vite代理实时性已有真实浏览器链路验证。出流后异常仅安全reset/关闭，不能再写普通JSON错误。
 - 同场手动GET加载保留已有内容，旧GET不能覆盖新版本；跨场切换使旧响应/回调失效。StrictMode清理后可重建，任何时刻只保留一个有效页面订阅。前端批次最多32事件/256KiB，超限执行有限快照恢复。
 - 每次读库最多32条且不拆分事务；当前实现不叠加多个待读批次，write=false即停止读取。批次超过64条/256KiB连接限额即关闭；10秒未drain关闭；取消订阅不取消runner、不释放运行槽。15秒心跳仅注释且不写库。
+## 阶段6A实现补充：供应商讨论边界
+
+公开HTTP、snapshot和SSE契约不变。四能力输入/输出继续采用`DiscussionProvider`和`domain/discussion.ts`，DeepSeek只返回经过结构/业务校验的公开候选，由原runner核对run/epoch/transcriptVersion并事务提交。适配器不能选择发言者、写系统字段、改变终态或自行重试。
+
+任务输出max_tokens分别为意愿512、发言768、提炼4096、总结1024；实际内容仍受既有1–2句/每句160码点/总结320码点/证据规则约束。每个消息的公开数据96KiB、user JSON128KiB、输出content16KiB、外层响应128KiB限额；长度超限明确失败，不截断最新发言或补造证据。这些字节/字符界限不是token计数或费用估计。
+
+固定官方地址、deepseek-flash、thinking.disabled、stream=false、json_object、无tools，禁止重定向；完整响应及正文读取受原30秒/任务期限和取消信号约束。HTTP400/401/403等永久错误为configuration；408/429及可恢复5xx为transport；其他分类沿用timeout/cancelled/filtered和invalid_structure/invalid_content。恢复/修复仍共享runner两次尝试，无第三层调用。缺失usage为“未取得”，诊断只白名单operation/taskId/attempt/status/耗时/finish_reason/usage/outcome。
+
+正常入口显式Fake；独立DISCUSSION_PROVIDER配置仅经明确组合入口注入，不从私有文件自动启用。deepseek缺配置/缺显式transport即失败，无Fake回退。本轮官方请求0，stub不放宽生产Base URL限制。见[验证与6B待授权方案](stage-6a-validation.md)。

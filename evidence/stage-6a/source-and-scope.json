@@ -1,0 +1,356 @@
+{
+  "checkedAt": "2026-09-16T13:29:38.848Z",
+  "base": "0f767fecd5571d175ac1592a3bf65d916718c01e",
+  "identity": {
+    "name": "schen",
+    "email": "cs064210@163.com"
+  },
+  "historicalPromptPrefixPreserved": true,
+  "protectedCodeAndLockUnchanged": true,
+  "historicalEvidenceChanges": [],
+  "potentialSecretMatches": 0,
+  "sourceFiles": [
+    {
+      "path": "e2e/drafts.spec.ts",
+      "sha256": "59da549b981866bf8fe0d090fc5fa5c332ebe6f5f96891af683fafa91d7bcf9e",
+      "modifiedAt": "2026-09-16T13:19:51.472Z"
+    },
+    {
+      "path": "e2e/interaction.spec.ts",
+      "sha256": "044238cbe1b10059b2c69940d755ad91273b2d25c47e157ac91aed864b458181",
+      "modifiedAt": "2026-09-16T13:19:51.473Z"
+    },
+    {
+      "path": "e2e/layout.spec.ts",
+      "sha256": "8951c7403bd6fdf9d0e8f422a6785632b53b1741e714ae3142479537626b1248",
+      "modifiedAt": "2026-09-16T13:19:51.472Z"
+    },
+    {
+      "path": "e2e/lineup.spec.ts",
+      "sha256": "1dd51b05453ae0709bb11afd4a1092ff1afaeb276a46c450ebc51833d289cb37",
+      "modifiedAt": "2026-09-16T13:19:51.473Z"
+    },
+    {
+      "path": "e2e/runtime.spec.ts",
+      "sha256": "d33a1aa3d1926cc10a88063c6e6bccedb241bec6ef3ac1ee4e017426a3289fb3",
+      "modifiedAt": "2026-09-16T13:19:51.473Z"
+    },
+    {
+      "path": "package.json",
+      "sha256": "8f17e64c0afb39fb8628b19fc84add08689d8c71e964a65f7df5e30528d83de7",
+      "modifiedAt": "2026-09-16T13:19:51.554Z"
+    },
+    {
+      "path": "playwright.stage5c.config.ts",
+      "sha256": "9561ad45e3ebb69ff8b0169fb7b10e0907b76890aae34f14c5011d52b031a39d",
+      "modifiedAt": "2026-09-16T13:19:51.554Z"
+    },
+    {
+      "path": "src/providers/deepseek.ts",
+      "sha256": "a1c357f28ddc4d507d60171a7981839a31926cbbebfebac0d416cad3e3c63e5c",
+      "modifiedAt": "2026-09-16T13:08:58.333Z"
+    },
+    {
+      "path": "tsconfig.e2e.json",
+      "sha256": "8cce391135847cab96e41032b532f54016e810b8f8c3c1f10ed7877f311a3640",
+      "modifiedAt": "2026-09-16T13:18:17.404Z"
+    },
+    {
+      "path": "vitest.config.ts",
+      "sha256": "9397e628a92f9ee8947fa6df485d6ea7de596387ebefbdd9be97eb626ae37866",
+      "modifiedAt": "2026-09-16T13:19:17.505Z"
+    },
+    {
+      "path": "web/src/App.tsx",
+      "sha256": "f50235c08e51ee36dcca8ca3d5804c5e44c7591129cc5fbc39cc34f0d2347c66",
+      "modifiedAt": "2026-09-16T13:16:56.846Z"
+    },
+    {
+      "path": "web/src/Studio.tsx",
+      "sha256": "001f74cb49c2ca9c5dbca687a897b58c1b6203972b0a95bd17b64e9ac0487d7c",
+      "modifiedAt": "2026-09-16T13:16:56.844Z"
+    },
+    {
+      "path": "e2e-local/discussion-adapter.spec.ts",
+      "sha256": "48558b51c6482ac06f8faec0293afb067b472cfd68540524a470bc93ff6be952",
+      "modifiedAt": "2026-09-16T13:18:17.402Z"
+    },
+    {
+      "path": "playwright.stage6a.config.ts",
+      "sha256": "9f50df10e5e08286fd0d45bc6090ba09c99e0d486d4a54fbcec62c6c8c298d5d",
+      "modifiedAt": "2026-09-16T13:18:17.402Z"
+    },
+    {
+      "path": "scripts/lib/discussion-stub.d.mts",
+      "sha256": "59946aaf6147d0705845dfed0c6a0243ce56e6502dc86bbc48d36b7d682776eb",
+      "modifiedAt": "2026-09-16T13:14:46.772Z"
+    },
+    {
+      "path": "scripts/lib/discussion-stub.mjs",
+      "sha256": "b93858197d565fa6cf000bfac287f735c20c8862b674e8f130c0dbdf6af6aeb0",
+      "modifiedAt": "2026-09-16T13:20:56.473Z"
+    },
+    {
+      "path": "scripts/stage6a-backend.mjs",
+      "sha256": "468e42df380a6295933cc191017bf9ee9c9c3025a90369794fafcebb2bcd55ab",
+      "modifiedAt": "2026-09-16T13:18:17.401Z"
+    },
+    {
+      "path": "scripts/stage6a-verify.mjs",
+      "sha256": "1a65d1229347fbae26032ac0d2882b1e09323c704e27be882493131e67d54b74",
+      "modifiedAt": "2026-09-16T13:20:58.285Z"
+    },
+    {
+      "path": "src/providers/deepseek-discussion.ts",
+      "sha256": "18a9024be05d8b82b1425ac13f9fdcaef49a380ca9d4d7df4671dd770654a27b",
+      "modifiedAt": "2026-09-16T13:08:58.414Z"
+    },
+    {
+      "path": "src/providers/deepseek-transport.ts",
+      "sha256": "1059d817abd5c2a9b74669dc2b66f0eafcaa9a4a07687f4744336270b907d8c4",
+      "modifiedAt": "2026-09-16T13:11:59.475Z"
+    },
+    {
+      "path": "src/providers/discussion-config.ts",
+      "sha256": "a839e3113195495476765b26ac5cdb032014f3885a6a875b5817ed835b5650bc",
+      "modifiedAt": "2026-09-16T13:12:47.330Z"
+    },
+    {
+      "path": "src/providers/discussion-prompt.ts",
+      "sha256": "96bbe6e84aefdc268ec0a2e01e5d97eb3040dd9b0db8707cdb27f868fbb487bd",
+      "modifiedAt": "2026-09-16T13:08:58.412Z"
+    },
+    {
+      "path": "tests/helpers/discussion-adapter.ts",
+      "sha256": "a70981d8711531e031f008d40c8a94df74056644efa8f174404aaebee593c3f2",
+      "modifiedAt": "2026-09-16T13:14:46.783Z"
+    },
+    {
+      "path": "tests/helpers/local-fetch.ts",
+      "sha256": "91dd97ccaf5da520faca34053705298d9f54c843cc6931044646d1ecfc227ba2",
+      "modifiedAt": "2026-09-16T13:19:17.504Z"
+    },
+    {
+      "path": "tests/integration/discussion-adapter-http.test.ts",
+      "sha256": "98c46f11fb859f40eac6a06c13cfc04b1ab63fd4ffa297ee18459ca3a4fb0c31",
+      "modifiedAt": "2026-09-16T13:20:56.473Z"
+    },
+    {
+      "path": "tests/integration/discussion-adapter-runner.test.ts",
+      "sha256": "f2e142749b0e7bc473ef12e4e0076519aabc0b103538dc1ec384fc333fb0d206",
+      "modifiedAt": "2026-09-16T13:16:55.107Z"
+    },
+    {
+      "path": "tests/setup.ts",
+      "sha256": "9c98cc2bb48d499edbe534bc82b2ffb8c995a463e8b5b5adba87b30f51bf4344",
+      "modifiedAt": "2026-09-16T13:19:17.505Z"
+    },
+    {
+      "path": "tests/unit/deepseek-discussion.test.ts",
+      "sha256": "a96503d186af058e30d74aa9f509963101c6096be15584876ec90abee051bc6f",
+      "modifiedAt": "2026-09-16T13:06:46.679Z"
+    },
+    {
+      "path": "tests/unit/discussion-config.test.ts",
+      "sha256": "1440637a73bcb065fc6ef8f6222e0fb5ea96c04af702b8acff38c1d9052825e1",
+      "modifiedAt": "2026-09-16T13:12:32.654Z"
+    },
+    {
+      "path": "tests/unit/test-network-boundary.test.ts",
+      "sha256": "682fc0c99b3ae4078a0e1851640b539c5801b829077bf84d4b5d4f5a418bedad",
+      "modifiedAt": "2026-09-16T13:19:15.056Z"
+    },
+    {
+      "path": "web/src/provider-label.ts",
+      "sha256": "8bb35e1975d7a59c428febb1e585218521d80102db37179ae5990baf3be58c94",
+      "modifiedAt": "2026-09-16T13:16:55.107Z"
+    },
+    {
+      "path": "web/tests/provider-label.test.ts",
+      "sha256": "8a806b009a461f9fb16bb77ec6da3ebb1a8fd3ca7abab328e4ecf12bb981f379",
+      "modifiedAt": "2026-09-16T13:16:16.859Z"
+    }
+  ],
+  "changedFiles": [
+    ".env.backend.example",
+    ".gitignore",
+    "AGENTS.md",
+    "README.md",
+    "docs/contracts.md",
+    "docs/discussion-runtime-design.md",
+    "docs/sources/development-prompts.md",
+    "docs/test-plan.md",
+    "e2e/drafts.spec.ts",
+    "e2e/interaction.spec.ts",
+    "e2e/layout.spec.ts",
+    "e2e/lineup.spec.ts",
+    "e2e/runtime.spec.ts",
+    "package.json",
+    "playwright.stage5c.config.ts",
+    "src/providers/deepseek.ts",
+    "tsconfig.e2e.json",
+    "vitest.config.ts",
+    "web/src/App.tsx",
+    "web/src/Studio.tsx",
+    "docs/sources/stage-6a-request.md",
+    "docs/stage-6a-validation.md",
+    "docs/superpowers/plans/2026-09-16-stage6a.md",
+    "e2e-local/discussion-adapter.spec.ts",
+    "evidence/stage-6a/adapter-green.json",
+    "evidence/stage-6a/adapter-red.json",
+    "evidence/stage-6a/cleanup.json",
+    "evidence/stage-6a/config-red.json",
+    "evidence/stage-6a/label-green.json",
+    "evidence/stage-6a/label-red.json",
+    "evidence/stage-6a/local-failure.json",
+    "evidence/stage-6a/local-success.json",
+    "evidence/stage-6a/network-green.json",
+    "evidence/stage-6a/network-red.json",
+    "evidence/stage-6a/preflight-failure.json",
+    "evidence/stage-6a/screenshots/1366x768-detail.png",
+    "evidence/stage-6a/screenshots/1366x768-list-error.png",
+    "evidence/stage-6a/screenshots/1366x768-normal.png",
+    "evidence/stage-6a/screenshots/2560x1080-detail.png",
+    "evidence/stage-6a/screenshots/390x844-create.png",
+    "evidence/stage-6a/screenshots/390x844-detail.png",
+    "evidence/stage-6a/screenshots/confirmed.png",
+    "evidence/stage-6a/screenshots/desktop-4-members.png",
+    "evidence/stage-6a/screenshots/desktop-4.png",
+    "evidence/stage-6a/screenshots/desktop-running.png",
+    "evidence/stage-6a/screenshots/disconnected.png",
+    "evidence/stage-6a/screenshots/failed.png",
+    "evidence/stage-6a/screenshots/lineup-1366-8-bottom.png",
+    "evidence/stage-6a/screenshots/lineup-1366-8.png",
+    "evidence/stage-6a/screenshots/lineup-2560-8-bottom.png",
+    "evidence/stage-6a/screenshots/lineup-2560-8.png",
+    "evidence/stage-6a/screenshots/lineup-390-1-bottom.png",
+    "evidence/stage-6a/screenshots/lineup-390-1.png",
+    "evidence/stage-6a/screenshots/local-completed.png",
+    "evidence/stage-6a/screenshots/local-refreshed.png",
+    "evidence/stage-6a/screenshots/local-running.png",
+    "evidence/stage-6a/screenshots/local-summary-unavailable.png",
+    "evidence/stage-6a/screenshots/narrow-studio.png",
+    "evidence/stage-6a/screenshots/offline.png",
+    "evidence/stage-6a/screenshots/stopping.png",
+    "evidence/stage-6a/screenshots/studio-4-experts.png",
+    "evidence/stage-6a/screenshots/studio-8-experts.png",
+    "evidence/stage-6a/screenshots/summary-unavailable.png",
+    "evidence/stage-6a/screenshots/summary.png",
+    "evidence/stage-6a/transport-green.json",
+    "evidence/stage-6a/verification-2026-09-16T13-20-58.335Z.json",
+    "playwright.stage6a.config.ts",
+    "scripts/lib/discussion-stub.d.mts",
+    "scripts/lib/discussion-stub.mjs",
+    "scripts/stage6a-backend.mjs",
+    "scripts/stage6a-verify.mjs",
+    "src/providers/deepseek-discussion.ts",
+    "src/providers/deepseek-transport.ts",
+    "src/providers/discussion-config.ts",
+    "src/providers/discussion-prompt.ts",
+    "tests/helpers/discussion-adapter.ts",
+    "tests/helpers/local-fetch.ts",
+    "tests/integration/discussion-adapter-http.test.ts",
+    "tests/integration/discussion-adapter-runner.test.ts",
+    "tests/setup.ts",
+    "tests/unit/deepseek-discussion.test.ts",
+    "tests/unit/discussion-config.test.ts",
+    "tests/unit/test-network-boundary.test.ts",
+    "web/src/provider-label.ts",
+    "web/tests/provider-label.test.ts"
+  ],
+  "finalAudit": {
+    "checkedAt": "2026-09-16T13:32:22.239Z",
+    "codeRevision": "ead5502d5be62640eacbdd056c1c1e7211124cc2",
+    "changedFiles": [
+      ".env.backend.example",
+      ".gitignore",
+      "AGENTS.md",
+      "README.md",
+      "docs/contracts.md",
+      "docs/development-log.md",
+      "docs/discussion-runtime-design.md",
+      "docs/sources/development-prompts.md",
+      "docs/superpowers/plans/2026-09-16-stage6a.md",
+      "docs/test-plan.md",
+      "e2e-local/discussion-adapter.spec.ts",
+      "e2e/drafts.spec.ts",
+      "e2e/interaction.spec.ts",
+      "e2e/layout.spec.ts",
+      "e2e/lineup.spec.ts",
+      "e2e/runtime.spec.ts",
+      "package.json",
+      "playwright.stage5c.config.ts",
+      "playwright.stage6a.config.ts",
+      "scripts/lib/discussion-stub.d.mts",
+      "scripts/lib/discussion-stub.mjs",
+      "scripts/stage6a-backend.mjs",
+      "scripts/stage6a-verify.mjs",
+      "src/providers/deepseek-discussion.ts",
+      "src/providers/deepseek-transport.ts",
+      "src/providers/deepseek.ts",
+      "src/providers/discussion-config.ts",
+      "src/providers/discussion-prompt.ts",
+      "tests/helpers/discussion-adapter.ts",
+      "tests/helpers/local-fetch.ts",
+      "tests/integration/discussion-adapter-http.test.ts",
+      "tests/integration/discussion-adapter-runner.test.ts",
+      "tests/setup.ts",
+      "tests/unit/deepseek-discussion.test.ts",
+      "tests/unit/discussion-config.test.ts",
+      "tests/unit/test-network-boundary.test.ts",
+      "tsconfig.e2e.json",
+      "vitest.config.ts",
+      "web/src/App.tsx",
+      "web/src/Studio.tsx",
+      "web/src/provider-label.ts",
+      "web/tests/provider-label.test.ts",
+      "docs/sources/stage-6a-request.md",
+      "docs/stage-6a-validation.md",
+      "evidence/stage-6a/adapter-green.json",
+      "evidence/stage-6a/adapter-red.json",
+      "evidence/stage-6a/cleanup.json",
+      "evidence/stage-6a/config-red.json",
+      "evidence/stage-6a/label-green.json",
+      "evidence/stage-6a/label-red.json",
+      "evidence/stage-6a/local-failure.json",
+      "evidence/stage-6a/local-success.json",
+      "evidence/stage-6a/network-green.json",
+      "evidence/stage-6a/network-red.json",
+      "evidence/stage-6a/preflight-failure.json",
+      "evidence/stage-6a/screenshots/1366x768-detail.png",
+      "evidence/stage-6a/screenshots/1366x768-list-error.png",
+      "evidence/stage-6a/screenshots/1366x768-normal.png",
+      "evidence/stage-6a/screenshots/2560x1080-detail.png",
+      "evidence/stage-6a/screenshots/390x844-create.png",
+      "evidence/stage-6a/screenshots/390x844-detail.png",
+      "evidence/stage-6a/screenshots/confirmed.png",
+      "evidence/stage-6a/screenshots/desktop-4-members.png",
+      "evidence/stage-6a/screenshots/desktop-4.png",
+      "evidence/stage-6a/screenshots/desktop-running.png",
+      "evidence/stage-6a/screenshots/disconnected.png",
+      "evidence/stage-6a/screenshots/failed.png",
+      "evidence/stage-6a/screenshots/lineup-1366-8-bottom.png",
+      "evidence/stage-6a/screenshots/lineup-1366-8.png",
+      "evidence/stage-6a/screenshots/lineup-2560-8-bottom.png",
+      "evidence/stage-6a/screenshots/lineup-2560-8.png",
+      "evidence/stage-6a/screenshots/lineup-390-1-bottom.png",
+      "evidence/stage-6a/screenshots/lineup-390-1.png",
+      "evidence/stage-6a/screenshots/local-completed.png",
+      "evidence/stage-6a/screenshots/local-refreshed.png",
+      "evidence/stage-6a/screenshots/local-running.png",
+      "evidence/stage-6a/screenshots/local-summary-unavailable.png",
+      "evidence/stage-6a/screenshots/narrow-studio.png",
+      "evidence/stage-6a/screenshots/offline.png",
+      "evidence/stage-6a/screenshots/stopping.png",
+      "evidence/stage-6a/screenshots/studio-4-experts.png",
+      "evidence/stage-6a/screenshots/studio-8-experts.png",
+      "evidence/stage-6a/screenshots/summary-unavailable.png",
+      "evidence/stage-6a/screenshots/summary.png",
+      "evidence/stage-6a/source-and-scope.json",
+      "evidence/stage-6a/transport-green.json",
+      "evidence/stage-6a/verification-2026-09-16T13-20-58.335Z.json"
+    ],
+    "secretPatternMatches": 0,
+    "historicalPromptAndLogPreserved": true
+  }
+}

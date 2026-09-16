@@ -1,0 +1,15 @@
+{
+  "startTime": 1789564793671,
+  "passed": 358,
+  "failed": 1,
+  "failures": [
+    {
+      "file": "D:/实测文件夹/tests/integration/discussion-adapter-http.test.ts",
+      "title": "同场最新内容和两场并发分别构造消息，话题注入仍只在user数据中",
+      "messages": [
+        "AssertionError: expected [ …(3) ] to deeply equal [ …(3) ]\n    at D:/实测文件夹/tests/integration/discussion-adapter-http.test.ts:22:35\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///D:/%E5%AE%9E%E6%B5%8B%E6%96%87%E4%BB%B6%E5%A4%B9/node_modules/vitest/dist/chunks/run.C5UmxDPh.js:2783:20"
+      ]
+    }
+  ],
+  "resolution": "Removed invalid response completion ordering assumption; assert task identity set instead."
+}

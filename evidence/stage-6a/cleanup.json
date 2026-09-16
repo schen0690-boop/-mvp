@@ -1,0 +1,25 @@
+{
+  "databasesRetained": true,
+  "listeners": [],
+  "removedOwners": [
+    {
+      "removed": true,
+      "pid": 2692,
+      "alive": false,
+      "path": "D:\\实测文件夹\\.tmp\\stage-6a\\browser-3WDGmk\\test.sqlite.owner"
+    },
+    {
+      "removed": true,
+      "pid": 21508,
+      "alive": false,
+      "path": "D:\\实测文件夹\\.tmp\\stage-6a\\browser-ZNgPHo\\test.sqlite.owner"
+    },
+    {
+      "removed": true,
+      "pid": 3636,
+      "alive": false,
+      "path": "D:\\实测文件夹\\.tmp\\stage-5c\\browser-n3zJiV\\test.sqlite.owner"
+    }
+  ],
+  "checkedAt": "2026-09-16T21:28:46.0287493+08:00"
+}

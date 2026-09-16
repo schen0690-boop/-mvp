@@ -255,3 +255,10 @@ GET快照是读事务内全部公开对象+lastEventId。SSE按同讨论完整�
 已做文档交叉核对：运行与阵容身份分离、三种版本分离、公开/内部字段分开；start幂等及stop唯一总结覆盖；003明确保留002所有列和旧payload；不把未实现的事件/Provider当现有能力；所有S5用例为计划。本轮没有产品测试、迁移、配置检查、服务启动或模型请求；没有读取私有配置或stage-4d-live数据库。
 
 SSE的Last-Event-ID、UTF-8和终止重连语义参考[WHATWG Server-sent events](https://html.spec.whatwg.org/multipage/server-sent-events.html)；有限背压依据[Node HTTP response.write](https://nodejs.org/api/http.html#responsewritechunk-encoding-callback)。本文的游标检查、批次原子应用、缓冲阈值是本项目设计选择，非协议天然保证；尚未在5C执行验证。
+## 阶段6A落地注记（2026-09-16）
+
+在四能力边界新增`DeepSeekDiscussionProvider`，`deepseek-transport.ts`从阵容适配器局部抽取一次安全传输，两个适配器分别使用自己的提示词/校验器。runner、预算、期限、取消域、003和SSE均未重写。正常入口显式Fake；配置选择不能赋予真实调用权限。
+
+`discussionMessages`逐项复制同场角色、已提交发言、既有观点及覆盖版本，system仅含固定规则，user为安全序列化的数据。没有全局可变上下文、工具、外部记忆或额外摘要调用。输入上限/每任务token限额和解析错误见contracts阶段6A补充；总结读取最终transcript而非仅旧提炼结果。结构校验能约束角色ID、字段、句数和引用存在性，不能证明语义相关性、证据支持度或完全抵御提示注入。
+
+本地验证组合为正式runner→四能力适配器→受限HTTP stub→正式SQLite/事件/SSE→现有演播厅。stub按实际任务及当前公开内容构造响应，保留协调器选人、检查点和事务行为。响应是确定性的测试数据，不用于真实讨论质量宣称。[6A记录](stage-6a-validation.md)包括6B短样本建议；当前12专家发言/10分钟等并无专用短验收配置，6B需另行批准最小参数化及独立一次性授权保护。本轮未实施或启用。

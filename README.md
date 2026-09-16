@@ -1,4 +1,4 @@
-# AI 圆桌讨论 MVP：阶段5C SSE与Fake演播厅
+# AI 圆桌讨论 MVP：阶段6A讨论适配器与本地验证
 
 已完成草稿创建/查询、阵容生成与确认、Fake讨论执行、内容驱动调度、增量提炼和有限总结。中文页面可明确开始讨论、实时观察、结束并刷新恢复记录；创建不自动生成阵容，确认不自动开始。演播厅显示真实已提交的发言、角色公开状态、观点证据及总结。
 
@@ -173,3 +173,20 @@ npm run dev:web -- --port 41851
 后端最多运行10分钟，Ctrl+C可提前停止并关闭授权。GET/确认/刷新不调用模型。取消会中断本地HTTP连接，但不能保证远端停止或不计费。请求上限是整个本轮累计2次；4096只是本轮输出限制。
 
 实际实现、RED→GREEN、本地回归及待执行真实记录见[阶段4D验证](docs/stage-4d-validation.md)。
+# 阶段6A补充：真实讨论适配器的本地验证
+
+四种讨论能力已提供DeepSeek协议适配器；本阶段只能连接测试注入的本地HTTP替身，不代表真实讨论质量。正常 `npm start` 仍显式使用Fake阵容和Fake讨论，不读取私有配置。`DISCUSSION_PROVIDER` 与 `ROSTER_PROVIDER` 独立：`readDiscussionConfig` 默认fake，deepseek缺配置抛configuration；工厂在deepseek模式必须显式注入transport，没有静默回退或默认官方发送入口。配置值不是请求授权。不要使用 `live:stage4d` 验证讨论。
+
+项目根目录执行（现有依赖，无需安装）：
+
+```powershell
+npm run build
+npm test
+npm run test:web
+npm run test:e2e:local-adapter
+node scripts/stage6a-verify.mjs
+```
+
+最后一条顺序执行全部测试、类型/构建、旧37项Fake E2E及2项本地HTTP适配器E2E；回归截图重定向到 `evidence/stage-6a`，不覆盖历史实证。本地接入使用 `.tmp/stage-6a/browser-*` 独立SQLite，前端41871/后端41872、HTTP stub随机loopback端口、虚拟凭据；Playwright采用已安装Edge，retries=0，不下载浏览器。端口占用即失败，不复用未知服务。测试入口无公开故障控制接口；文件门闩仅用于观察已发生的中途状态，不预生成整场脚本。后端Vitest默认禁止非loopback fetch；本地入口将唯一注入transport映射到stub，其余fetch禁止。
+
+`VITE_DISCUSSION_DEMO=local-http` 只在该测试前端显示“真实适配器经本地 HTTP 替身验证”，不是Provider选择或调用授权。应用提示词见 `src/providers/discussion-prompt.ts`；规则及限制、真实开发Prompt、证据和待授权6B建议见 [6A验证记录](docs/stage-6a-validation.md)。私有配置、数据库、原始测试输出均不提交。
