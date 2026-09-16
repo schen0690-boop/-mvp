@@ -206,3 +206,9 @@ erDiagram
 web/src/api.ts负责阵容命令与严格DTO；controller.ts负责操作互斥、双版本确认、请求身份、有限串行轮询、取消及选择隔离；LineupPanel.tsx仅呈现五态和公开成员，App.tsx接入URL定位、在线/可见性事件。CSS仅扩展详情区卡片，不增加演播厅。
 
 没有后台任务平台或客户端阵容存储；浏览器状态由GET/命令快照恢复。生产src/、迁移001/002及Provider均未变。scripts/e2e-backend.mjs仅为测试组合入口，使用正式Express/服务/SQLite迁移与FakeProvider；测试门闩只在.tmp/stage-4c/gates按随机UUID释放，不开放故障HTTP端点。真实模型接入阶段固定为4D。
+
+## 阶段4D实际增量（A本地完成，B等待配置）
+
+providers/config.ts固定模型/端点/输出限制；roster-prompt.ts保存应用阵容提示词；deepseek.ts负责单次原生fetch、完整体期限、外层校验与白名单指标。backend-config.ts仅显式后端配置入口加载根.env.backend.local，普通server仍明确Fake。live-server.ts使用正式服务/HTTP/迁移，在独立库和端口组合真实适配器。
+
+live/authorization.ts通过独占新建与fsync保存绑定/出站计数，不删除或覆盖；live/guarded-roster.ts复用已有parseRoster，仅用于首个有效结果立即关闭授权，业务层仍进行原有验证和原子写入。不是新业务表/迁移或供应商平台。临时测试不接官方网络。

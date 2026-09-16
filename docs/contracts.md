@@ -182,3 +182,11 @@ Provider超时、传输/结构/业务错误发生在202之后：不补写HTTP错
 - confirm冻结当前双版本；409另GET（错误正文无snapshot），明确提示变化，不自动重提。GET失败保留文本但锁住已知过时的操作，手动检查成功后恢复；非409确认失败保留卡片和固定中文错误，可重试。
 - 2秒串行GET，页面监测窗口最多60次自动查询；离线不计时补发，联网恢复计入剩余预算。终态/切换/卸载停止，隐藏详情暂停。上限只停止自动查询，不改业务status，允许显式手动GET；刷新/重新选择开启新页面窗口。
 - URL仅含discussion定位ID，GET恢复所有状态；无localStorage阵容缓存。每个详情选择代次与查询代次隔离迟到结果；同讨论拒绝较低snapshot.version回退。多Tab各自读取，通过409/下一次GET接受当前状态，无额外同步协议。
+
+## 阶段4D内部Provider边界（公开API不变）
+
+DeepSeekRosterProvider以注入fetch发送固定官方HTTPS Chat Completions；model=deepseek-flash、thinking.disabled、stream=false、json_object、max_tokens4096，不传tools/extra_body/reasoning_effort。外层只提取有效stop的assistant.content；已有parseRoster/业务校验、系统赋值与事务保存不变。reasoning_content不读作正文、不存日志/事件。
+
+内部RosterContext可携带generationId；服务重试前复核当前代次，ProviderError增加cancelled/filtered及retryable。400/401/402/422等配置错误和过滤/明确中止不自动重试；暂时传输、超时和无效结构仍共享至多2次。取消原因区分单次timeout与用户shutdown，30秒完整响应/60秒总期限不变。公开NoticeCode及错误结构没有扩展；过滤映射安全UNAVAILABLE、取消映射INTERRUPTED。
+
+真实验收在固定持久化授权目录绑定一组discussion/generation，仅指定话题4专家；出站前预约累计2次，成功或终结后关闭。不把验收计数变成公开字段或通用计费平台。原Fake入口及常规测试不加载私有配置。

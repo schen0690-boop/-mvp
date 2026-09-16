@@ -201,3 +201,9 @@ lineup_members（STRICT）：member_id TEXT主键非空；discussion_id TEXT非�
 ## 阶段4C落地补充
 
 P7授权详情区阵容操作、有限GET轮询与Fake局部E2E；4B数据模型/迁移/服务保持不变。UI使用当前generationId+lineupRevision确认，409重取且不自动确认新版；失败重试不复活历史成员。实现/真实证据见stage-4c-validation。4D专指后续真实模型适配与接入检查，尚未执行。
+
+## 阶段4D实现补充
+
+P8固定官方DeepSeek/deepseek-flash与关闭思考、非流式JSON、4096上限；公开成员/生命周期/SQLite迁移不变。新增原生fetch实现和后端私有配置、安全指标。已用本地测试证实永久失败不得重试、过时代次不得再发请求、超时与主动取消需区别；据此局部扩展Provider内部错误和context。应用提示词与P8开发Prompt分开存储。
+
+适配器没有内部重试、重定向或SDK；正文读取和保活空行受AbortSignal与剩余期限约束。真实联调保护在.local固定目录持久化，重启不清零。A本地测试通过不能替代B真实验证；当前等待用户回复已配置，真实请求0。

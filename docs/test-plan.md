@@ -163,3 +163,24 @@ S4-23/24的HTTP/DB边界已测试，4C完整卡片/按钮与冲突恢复交互�
 本轮前端68项＝原25＋新增43（API7、Controller28、Panel8）；本轮E2E26＝原10＋新增16。4B兼容用例保留真实API状态回归，旧“没有按钮/卡片”断言按P7改为新界面断言，不将旧阶段限制延续到本轮。后端190项全部回归，未修改后端测试或业务。
 
 S4-23/24的4C卡片/刷新/公开边界部分现已验证；S4-32真实模型仍未执行。T01–T20整场讨论、SSE、发言和共识等仍只保留既有计划。完整结果、退出码和RED→GREEN见stage-4c-validation。自动等待依据业务状态，生产轮询有2秒间隔；假时钟模拟60次上限，不让E2E固定休眠两分钟。
+
+## 阶段4D本地测试对应（真实联调仍未执行）
+
+| P8要求 | 实际覆盖 |
+|---|---|
+| 1 URL/参数/dummy鉴权 | unit/deepseek.test + integration/deepseek-http.test（native fetch loopback） |
+| 2 缺配置零请求 | unit/deepseek-config/deepseek/backend-config |
+| 3 有效正文进入现有管线 | integration/deepseek-pipeline（SQLite保存、确认、事件） |
+| 4 空/结构/人数/字段错误 | unit/deepseek；integration/deepseek-pipeline |
+| 5 finish截断/过滤/异常 | unit/deepseek；integration/deepseek-pipeline |
+| 6 reasoning/秘密/原始错误不公开 | unit/deepseek指标白名单；integration/deepseek-pipeline公开事件检查 |
+| 7 账号/参数问题不重复 | unit/deepseek；integration/deepseek-pipeline 400/401/402/422 |
+| 8 两次共享预算 | integration/deepseek-pipeline transport→invalid、invalid→repair；guarded-roster |
+| 9 首次成功一次 | integration/deepseek-pipeline/guarded-roster |
+| 10 正文延迟/空行受期限 | integration/deepseek-http（实际socket关闭） |
+| 11 取消/迟到/过期代次 | integration/deepseek-http；deepseek-pipeline stale failure；原generation-resilience回归 |
+| 12 不fallback | config/deepseek-pipeline/guarded-roster永久错误 |
+| 13 常规测试不加载真实配置 | 所有新传输显式注入；普通server/E2E继续显式Fake，backend-config只由显式检查/live入口导入 |
+| 14 拒第三次/第二场 | unit/live-authorization（含重建对象模拟重启）；integration/guarded-roster |
+
+本地新增64项全部通过；前置均为dummy配置、临时文件/SQLite或loopback stub，不读取真实密钥。RED证据与最终254后端/69前端/26Fake E2E见stage-4d-validation。S4-32实际模型检查保持未执行，等待配置交接，不能据本地通过改成真实联调成功。

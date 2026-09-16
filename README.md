@@ -1,8 +1,8 @@
-# AI 圆桌讨论 MVP：阶段4C阵容前端闭环
+# AI 圆桌讨论 MVP：阶段4D适配器与受限联调准备
 
 已完成草稿创建/查询、SQLite持久化及幂等；新增Fake阵容生成、失败重试、整套重新生成和当前版本确认。创建仍不自动生成阵容，确认不启动讨论。详情区支持生成、失败重试、重新生成、主持人/专家卡片和当前版本确认。仅使用Fake Provider，确认后显示只读阵容。
 
-**本轮未接真实模型，Fake Provider通过不等于真实模型已验证。** 讨论调度、SSE、共识和完整演播厅尚未实现。
+**DeepSeek适配器已完成本地测试；真实联调尚未执行，等待用户配置密钥并回复“已配置”。** 讨论调度、SSE、共识和完整演播厅尚未实现。
 
 ## 运行
 
@@ -77,7 +77,7 @@ node scripts/http-smoke.mjs --lineup
 - `src/http/app.ts`：只创建Express应用；`src/server.ts`才监听端口。
 - 当前支持草稿及四种阵容状态；002不允许未来running等状态。存储边界与Provider解耦，无ORM；`src/providers/`只有Fake。
 - web/src为React组件、API运行时校验及请求状态控制；只共享浏览器安全的输入校验和类型，不打包数据库或服务端配置。
-- 后续4D为真实模型适配与接入检查，须另行授权；讨论调度及完整系统仍未实现。
+- 4D本地适配已完成，真实调用须等待密钥配置交接；讨论调度及完整系统仍未实现。
 - 实际开发工具Codex；题面工具口径待出题方确认。Git使用用户暂定署名schen与邮箱cs064210@163.com，仅配置当前仓库，实际当前时间建立基线与后续提交；无远程，历史不倒填。
 
 ## 中文前端与局部浏览器测试
@@ -102,9 +102,9 @@ npm run build
 npm run test:e2e
 ```
 
-test:e2e自动运行独立回环41841/41842，显式初始化新.tmp/stage-4c/browser-*测试SQLite，不复用已有服务器，结束时关闭自有进程。使用本机Edge独立非持久化上下文，无需下载；不可用时报告失败。报告/trace在被忽略的evidence/stage-4c/raw，精选截图与命令记录纳入Git。4C无依赖安装/升级。测试入口仅在Provider边界注入可控结果，测试标记不影响生产server；网络故障用例单独标记。
+test:e2e自动运行独立回环41841/41842，显式初始化新.tmp/stage-4d/browser-*测试SQLite，不复用已有服务器，结束时关闭自有进程。使用本机Edge独立非持久化上下文，无需下载；不可用时报告失败。报告/trace在被忽略的evidence/stage-4d/raw，精选截图与命令记录纳入Git。4D无依赖安装/升级。测试入口仅在Provider边界注入可控结果，测试标记不影响生产server；网络故障用例单独标记。
 
-最新验证见[阶段4C记录](docs/stage-4c-validation.md)。完整讨论系统、真实模型质量与移动真机仍未验证；Windows10本机Edge成功不等于官方支持认证。
+最新验证见[阶段4D记录](docs/stage-4d-validation.md)，原阵容UI交付见[阶段4C记录](docs/stage-4c-validation.md)。完整讨论系统、真实模型质量与移动真机仍未验证；Windows10本机Edge成功不等于官方支持认证。
 
 ## 阵容操作
 
@@ -114,3 +114,52 @@ test:e2e自动运行独立回环41841/41842，显式初始化新.tmp/stage-4c/br
 4. 待确认时查看主持人、专家的姓名/职业/头衔/立场及颜色。“重新生成”一经受理隐藏旧卡片，失败只提供新代重试。
 5. 确认提交当前generationId和lineupRevision。409重新GET并提示，不自动重提；GET也失败时先手动检查再允许确认。500/503/断网保留卡片，可以明确重试。
 6. 确认后只读，没有开始讨论、修改或撤销按钮。当前Fake成员是演示数据，不代表真实人物。
+
+## 阶段4D：密钥配置交接（当前在此停止）
+
+正常 `npm start` 保持明确Fake模式，不加载私有配置；普通Vitest/Playwright也只使用Fake或显式HTTP stub。本轮没有改变任何依赖版本或SQLite迁移。
+
+配置示例在根目录 `.env.backend.example`，真实文件仅为 `D:\实测文件夹\.env.backend.local`。由用户本人操作，已有文件不覆盖：
+
+```powershell
+Set-Location -LiteralPath 'D:\实测文件夹'
+if (!(Test-Path -LiteralPath '.env.backend.local')) {
+  Copy-Item -LiteralPath '.env.backend.example' -Destination '.env.backend.local'
+}
+notepad .env.backend.local
+# 填写后保存；不要将密钥发到聊天，也不要使用Get-Content/type展示文件
+npm run config:check
+git check-ignore .env.backend.local
+```
+
+`config:check`只输出“密钥已配置 / 未配置”，不联网。已配置仅表示本地必要设置有效，不能证明鉴权/余额/模型调用成功。Git忽略匹配应输出该路径；私有文件不在web/public，不使用VITE_*变量。填写完成后回复“已配置”，当前不要主动点击真实生成。
+
+示例内容（DEEPSEEK_API_KEY由用户在本地填写）：
+
+```dotenv
+ROSTER_PROVIDER=deepseek
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-flash
+DEEPSEEK_API_KEY=
+DEEPSEEK_MAX_TOKENS=4096
+```
+
+只有显式 `npm run live:stage4d` 导入后端配置加载器，以Node内置parseEnv读取该文件，不回退到全局/其他工具凭据。真实模式配置错误直接停止，不转Fake。若需要继续Fake演示，使用普通npm start即可；不通过浏览器切换供应商。
+
+### 用户确认配置后才执行的真实验收入口
+
+```powershell
+# 后端，须先npm run build；本轮当前不执行
+npm run live:stage4d
+# 独立前端终端，连接验收后端，不改变原开发服务
+$env:WEB_API_TARGET = 'http://127.0.0.1:41852'
+npm run dev:web -- --port 41851
+```
+
+独立端口41851/41852、验收库`.local/stage-4d-live/discussions.sqlite`；只初始化新库，已有库仅检查schema，未知库停止。网页创建唯一“AI 如何改善教育？”、4专家另加主持人；只点一次生成，然后查看/确认/刷新。失败后停止，不点重试/重新生成，不做curl/Hello/模型列表探测，不使用会自动重跑的真实E2E。
+
+固定目录`.local/stage-4d-live/authorization`保存不含秘密的discussion/generation绑定、发送前request-1/2预约、白名单结果指标与关闭状态；独占创建+fsync，重跑不清零。有效正文复用已有parseRoster检查后立即关闭后续出站权限，随后仍走服务层校验/系统赋值/事务保存。确定性错误、第二次失败和停止都关闭余量。不删除或更改该目录、server.lock或验收库以获得新授权。崩溃残留锁会拒绝自动重启，需要核对记录，不能自动清锁。
+
+后端最多运行10分钟，Ctrl+C可提前停止并关闭授权。GET/确认/刷新不调用模型。取消会中断本地HTTP连接，但不能保证远端停止或不计费。请求上限是整个本轮累计2次；4096只是本轮输出限制。
+
+实际实现、RED→GREEN、本地回归及待执行真实记录见[阶段4D验证](docs/stage-4d-validation.md)。
