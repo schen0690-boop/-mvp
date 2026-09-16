@@ -49,3 +49,12 @@ it('主持串联发言两次失败属于致命主持失败，不当成综合失�
   return {items:ids.length<2?[]:[{kind:'disagreement',text:'两种取舍',evidenceUtteranceIds:ids,positions:[{text:'先试点',evidenceUtteranceIds:[ids[0]]},{text:'先评估',evidenceUtteranceIds:[ids[1]]}]}]};
  }});f.service.start(f.id,f.input);await f.service.idle();expect(f.drafts.get(f.id)).toMatchObject({status:'failed',lastNotice:{code:'HOST_UNAVAILABLE'}});
 });
+it('当前公开内容实际改变申请者与下一发言者，而非固定角色顺序',async()=>{
+ const observations:{version:number;requestedOrder:number;text:string}[]=[];const normal=new FakeDiscussionProvider();
+ const f=await fixture(2,{
+  assessIntent:async i=>{const last=i.utterances.at(-1)!;const text=last.sentences.join('');const requestedOrder=text.includes('需要补充成本证据')?2:1;observations.push({version:i.sourceTranscriptVersion,requestedOrder,text});return {wantsToSpeak:i.member.displayOrder===requestedOrder,intent:'answer',replyToUtteranceIds:[last.id],publicFocus:'回应当前证据缺口'};},
+  generateUtterance:async(i,c)=>i.purpose!=='expert'?normal.generateUtterance(i,c):{sentences:[i.member.displayOrder===1?'需要补充成本证据。':'请进一步评估教学效果。'],replyToUtteranceIds:[i.utterances.at(-1)!.id]}
+ });f.service.start(f.id,f.input);await f.service.idle();const s=f.drafts.get(f.id);
+ expect(s.status).toBe('completed');expect(observations.some(o=>o.requestedOrder===2&&o.text==='需要补充成本证据。')).toBe(true);
+ for(const u of s.utterances.slice(1)){const previous=s.utterances[u.seq-2]!;const chosen=s.roles.find(m=>m.memberId===u.roleId)!;expect(chosen.displayOrder).toBe(previous.sentences.join('').includes('需要补充成本证据')?2:1);expect(u.replyToUtteranceIds).toEqual([previous.id]);}
+});

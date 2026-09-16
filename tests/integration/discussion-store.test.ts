@@ -1,9 +1,9 @@
-import {afterEach,expect,it} from 'vitest';
+import {afterEach,expect,it,vi} from 'vitest';
 import {DatabaseSync} from 'node:sqlite';
 import {randomUUID} from 'node:crypto';
 import {discussionFixture} from '../helpers/discussion.js';
 import {SqliteDiscussionStore} from '../../src/db/sqlite-discussion.js';
-const connections:DatabaseSync[]=[];afterEach(()=>connections.splice(0).forEach(db=>db.close()));
+const connections:DatabaseSync[]=[];afterEach(()=>{connections.splice(0).forEach(db=>db.close());vi.useRealTimers();});
 async function fixture(n=4){const f=await discussionFixture(n);connections.push(f.db);return f;}
 it('开始绑定确认版本，重复开始同一个运行；不改确认时间',async()=>{
  const f=await fixture();const result=f.store.begin(f.id,f.input);expect(result.snapshot.status).toBe('running');expect(result.snapshot.confirmedAt).toBe(f.confirmed.confirmedAt);
@@ -48,4 +48,26 @@ it('增量观点证据落库，失败保留旧来源，旧版本不能覆盖',as
  f.store.append(state.key,state.snapshot.roles[1]!.memberId,{sentences:['再讨论成本。'],replyToUtteranceIds:[ids[1]!]});
  expect(f.store.synthesize(state.key,items)).toBe(false);f.store.synthesisStatus(f.store.state(f.id)!.key,'failed');expect(f.store.state(f.id)!.snapshot.synthesis).toEqual(saved);
  expect(f.db.prepare('SELECT COUNT(*) AS n FROM finding_evidence').get()?.n).toBe(2);
+});
+it('真实外键、唯一序号、事件连续与事务批次实际约束',async()=>{
+ const f=await fixture(1);f.store.begin(f.id,f.input);const st=f.store.state(f.id)!;f.store.append(st.key,st.snapshot.roles[0]!.memberId,{sentences:['开场。'],replyToUtteranceIds:[]});
+ const u=f.db.prepare('SELECT * FROM utterances').get()!;
+ const insert=f.db.prepare('INSERT INTO utterances VALUES (?,?,?,?,?,?,?,?)');
+ expect(()=>insert.run(randomUUID(),f.id,st.key.runId,st.snapshot.roles[0]!.memberId,1,'["重复。"]','[]',u.created_at!)).toThrow(/UNIQUE/);
+ expect(()=>insert.run(randomUUID(),f.id,randomUUID(),st.snapshot.roles[0]!.memberId,2,'["错误运行。"]','[]',u.created_at!)).toThrow(/FOREIGN KEY/);
+ expect(()=>insert.run(randomUUID(),f.id,st.key.runId,randomUUID(),2,'["错误成员。"]','[]',u.created_at!)).toThrow(/FOREIGN KEY/);
+ const events=f.db.prepare('SELECT event_id,data_version,occurred_at FROM public_events WHERE discussion_id=? ORDER BY event_id').all(f.id);
+ expect(events.map(e=>e.event_id)).toEqual(events.map((_,i)=>i+1));expect(events.at(-1)!.data_version).toBe(events.at(-2)!.data_version);expect(events.at(-1)!.occurred_at).toBe(events.at(-2)!.occurred_at);
+ expect(()=>f.db.prepare('UPDATE discussions SET last_event_id=version-1 WHERE id=?').run(f.id)).toThrow(/CHECK/);
+});
+it.each(['utterance','synthesis','summary'] as const)('写事务内到期也不能提交%s结果',async kind=>{
+ const f=await fixture(1);f.store.begin(f.id,f.input);let st=f.store.state(f.id)!;
+ if(kind!=='utterance'){f.store.append(st.key,st.snapshot.roles[0]!.memberId,{sentences:['开场。'],replyToUtteranceIds:[]});st=f.store.state(f.id)!;}
+ if(kind==='summary'){f.store.stop(f.id,'user_requested');st=f.store.state(f.id)!;}
+ const before=st.snapshot;const deadline=kind==='summary'?before.runtime!.stopDeadlineAt!:before.runtime!.runDeadlineAt;
+ vi.useFakeTimers({toFake:['Date']});f.db.function('expire_clock',()=>{vi.setSystemTime(new Date(deadline));return 0;});
+ const event=kind==='utterance'?'utterance.created':kind==='synthesis'?'synthesis.updated':'summary.ready';
+ f.db.exec(`CREATE TRIGGER expire_result AFTER INSERT ON public_events WHEN NEW.type='${event}' BEGIN SELECT expire_clock(); END`);
+ const result=kind==='utterance'?f.store.append(st.key,st.snapshot.roles[0]!.memberId,{sentences:['即将到期。'],replyToUtteranceIds:[]}):kind==='synthesis'?f.store.synthesize(st.key,[]):f.store.finish(st.key,'讨论已经结束。');
+ expect(result).toBe(false);expect(f.store.state(f.id)!.snapshot).toEqual(before);
 });

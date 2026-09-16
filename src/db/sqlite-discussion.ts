@@ -51,7 +51,18 @@ export class SqliteDiscussionStore implements DiscussionStore {
   this.events(key.discussionId,[{type:'role.status_changed',payload:{roleId,status,publicFocus,focusSourceTranscriptVersion:source}}],time);return true;
  });
  private input(s:RunState):DiscussionInput{return {...s.snapshot,sourceTranscriptVersion:s.key.sourceTranscriptVersion};}
- append:DiscussionStore['append']=(key,roleId,speech)=>transaction(this.db,()=>{
+ private resultTransaction(key:RunKey,summary:boolean,work:()=>boolean,allowExpired=false):boolean{
+  const expired=Symbol('expired-result');
+  try{return transaction(this.db,()=>{
+   const initial=this.current(key,summary,allowExpired);if(!initial)return false;
+   const deadline=summary?initial.snapshot.runtime!.stopDeadlineAt!:initial.snapshot.runtime!.runDeadlineAt;
+   const result=work();
+   // A result can change status/epoch itself; recheck its original deadline before COMMIT.
+   if(!allowExpired&&Date.now()>=Date.parse(deadline))throw expired;
+   return result;
+  });}catch(error){if(error===expired)return false;throw error;}
+ }
+ append:DiscussionStore['append']=(key,roleId,speech)=>this.resultTransaction(key,false,()=>{
   const s=this.current(key);if(!s)return false;
   const member=s.snapshot.roles.find(m=>m.memberId===roleId);if(!member)throw new Error('INVALID_ROLE');
   if(!s.snapshot.utterances.length&&member.role!=='moderator')throw new Error('OPENING_REQUIRES_MODERATOR');
@@ -70,7 +81,7 @@ export class SqliteDiscussionStore implements DiscussionStore {
   this.db.prepare('UPDATE discussions SET synthesis_state=?,runtime_notice_code=? WHERE id=?').run(status,status==='failed'?'SYNTHESIS_UNAVAILABLE':null,key.discussionId);
   this.events(key.discussionId,[{type:'synthesis.status_changed',payload:{state:status}},{type:'discussion.notice',payload:{notice:status==='failed'?runtimeNotice('SYNTHESIS_UNAVAILABLE'):null}}],now());return true;
  });
- synthesize:DiscussionStore['synthesize']=(key,items)=>transaction(this.db,()=>{
+ synthesize:DiscussionStore['synthesize']=(key,items)=>this.resultTransaction(key,false,()=>{
   const s=this.current(key);if(!s||s.snapshot.synthesis&&s.snapshot.synthesis.sourceTranscriptVersion>=key.sourceTranscriptVersion)return false;
   const valid=parseSynthesis({items},this.input(s)),id=key.discussionId,time=now();
   this.db.prepare('DELETE FROM finding_evidence WHERE discussion_id=?').run(id);this.db.prepare('DELETE FROM findings WHERE discussion_id=?').run(id);
@@ -91,13 +102,13 @@ export class SqliteDiscussionStore implements DiscussionStore {
   if(s.snapshot.status!=='running')throw new AppError('INVALID_STATE','当前讨论尚未运行',409);
   const time=now();this.stopMutation(id,reason,time);this.events(id,[{type:'discussion.status_changed',payload:null}],time);return this.state(id)!.snapshot;
  });
- finish:DiscussionStore['finish']=(key,summaryText)=>transaction(this.db,()=>{
+ finish:DiscussionStore['finish']=(key,summaryText)=>this.resultTransaction(key,true,()=>{
   const s=this.current(key,true,summaryText===null);if(!s)return false;
   const summary={status:summaryText===null?'unavailable':'ready',text:summaryText===null?null:parseSummary({text:summaryText}),sourceTranscriptVersion:key.sourceTranscriptVersion};
   const time=now(),code=summaryText===null?(s.snapshot.utterances.length?'SUMMARY_UNAVAILABLE':'SUMMARY_NO_CONTENT'):null;
   this.db.prepare("UPDATE discussions SET status='completed',summary_json=?,runtime_notice_code=?,ended_at=? WHERE id=?").run(JSON.stringify(summary),code,time,key.discussionId);
   const events:Event[]=summaryText===null?[]:[{type:'summary.ready',payload:{summary}}];events.push({type:'discussion.status_changed',payload:null});this.events(key.discussionId,events,time);return true;
- });
+ },summaryText===null);
  fail:DiscussionStore['fail']=(id,code)=>transaction(this.db,()=>{
   runtimeNotice(code);const s=this.state(id);if(!s||!['running','stopping'].includes(s.snapshot.status))return;
   const time=now(),summary=s.snapshot.status==='stopping'?JSON.stringify({status:'unavailable',text:null,sourceTranscriptVersion:s.key.sourceTranscriptVersion}):null;
