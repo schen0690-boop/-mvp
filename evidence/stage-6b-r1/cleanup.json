@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-09-16T15:11:53.199Z",
+  "codeRevision": "0e7227b5a26cf7072c1db413d84e95f4540528cf",
+  "portsChecked": [
+    41881,
+    41882
+  ],
+  "remainingListeners": [],
+  "remainingOwnedLocks": [],
+  "browserClosed": true,
+  "authorization": {
+    "closed": true,
+    "reason": "terminal",
+    "closedAt": "2026-09-16T15:04:51.932Z",
+    "ordinary": 8,
+    "summary": 1,
+    "total": 9
+  },
+  "protectedOldFileCount": 10,
+  "changedOld": [],
+  "sourceFileCount": 10,
+  "changedSource": [],
+  "historyPrefixesPreserved": [
+    "AGENTS.md",
+    "README.md",
+    "docs/development-log.md",
+    "docs/stage-6b-validation.md"
+  ],
+  "trackedPrivateFiles": [],
+  "sensitiveTextMatches": [],
+  "checkedTextFileCount": 17,
+  "notes": [
+    "No model request or service restart during this audit",
+    "No unknown process or file removed",
+    "No conclusion about future supplier billing"
+  ]
+}

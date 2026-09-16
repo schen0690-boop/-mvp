@@ -1,0 +1,27 @@
+{
+  "mode": "r1",
+  "startedAt": "2026-09-16T15:04:41.516Z",
+  "steps": [
+    "backend snapshot validated",
+    "frontend proxy same snapshot validated",
+    "same run read-only settlement: completed",
+    "browser short discussion + terminal refresh passed"
+  ],
+  "processes": [
+    {
+      "code": 0,
+      "signal": null
+    },
+    {
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "root": "D:\\实测文件夹\\.local\\stage-6b-r1",
+  "uiEvidence": "evidence/stage-6b-r1/live",
+  "finishedAt": "2026-09-16T15:04:52.979Z"
+}

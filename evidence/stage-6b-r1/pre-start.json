@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-09-16T15:04:41.025Z",
+  "codeRevision": "0e7227b5a26cf7072c1db413d84e95f4540528cf",
+  "discussionId": "f56bd564-77c7-4087-b36b-169c43abd162",
+  "runId": "cc3a2879-e612-45b0-a51f-17e56e405bf5",
+  "generationId": "8162dfb4-664b-43f3-9a7f-50ca294e51bd",
+  "lineupRevision": 1,
+  "settings": {
+    "topic": "AI 如何改善教育？",
+    "expertCount": 2,
+    "expertTurns": 2,
+    "runDurationMs": 120000,
+    "stopDurationMs": 60000,
+    "callDurationMs": 30000,
+    "totalRequests": 20,
+    "ordinaryRequests": 18,
+    "summaryRequests": 2,
+    "model": "deepseek-flash",
+    "thinking": "disabled",
+    "stream": false,
+    "responseFormat": "json_object",
+    "tokenLimits": {
+      "assessIntent": 512,
+      "generateUtterance": 768,
+      "extractSynthesis": 4096,
+      "summarize": 1024
+    }
+  },
+  "rosterSource": "本地预置，未在本次通过真实模型生成",
+  "countsBeforeStart": 0,
+  "sourceHashesMatch": true,
+  "backend": "127.0.0.1:41882",
+  "frontend": "127.0.0.1:41881",
+  "database": ".local/stage-6b-r1/discussions.sqlite"
+}

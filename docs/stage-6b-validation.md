@@ -139,3 +139,70 @@ P16另行批准一场指定短讨论，不是恢复旧6B。固定`.local/stage-6
 本轮修改后实际定向检查33测试通过（含新路径2条和只读收尾3条）、后端/启动类型检查、后端编译、浏览器脚本语法、共享入口本地短彩排全部退出0，完整命令见evidence/stage-6b-r1/preflight.json。新路径2 RED→GREEN、收尾3 RED→GREEN保留。彩排仍为本机stub，不能当作R1真实结果；此前371/90/37/2为历史成绩，没有机械重跑。
 
 真实执行版本、ID、请求和结果将在本节下追加；准备提交之后至真实终止期间冻结源码/提示词/参数。
+
+### R1实际执行结果：正常路径通过（2026-09-16）
+
+执行源码为`0e7227b5a26cf7072c1db413d84e95f4540528cf`。`npm run prepare:stage6b:r1`、`npm run launch:stage6b:r1`实际退出0；共享launch启动于23:04:41.516、清理结束23:04:52.979（UTC+8）。讨论15:04:44.126Z开始、15:04:51.840Z结束，运行墙钟7.714秒（普通6.870秒、收尾0.844秒）。运行期间及终态后未改源码、提示词、模型或参数。
+
+- 后端`http://127.0.0.1:41882`、前端`http://127.0.0.1:41881`，独立Edge；前端代理完整快照与后端匹配后才点击开始。
+- 数据库`D:\实测文件夹\.local\stage-6b-r1\discussions.sqlite`；授权`D:\实测文件夹\.local\stage-6b-r1\authorization`；一次性锚点`.local/stage-6b-r1-once.json`。均不提交Git，不复用旧库。
+- discussion=`f56bd564-77c7-4087-b36b-169c43abd162`；run=`cc3a2879-e612-45b0-a51f-17e56e405bf5`。
+- generation=`8162dfb4-664b-43f3-9a7f-50ca294e51bd`，lineupRevision/confirmedLineupRevision均1。
+- 阵容来源：**本地预置，未在本次通过真实模型生成**。林知远（虚构）主持；陈思敏（虚构）关注课堂实践/教师负担；周衡（虚构）关注公平/隐私。经原校验、保存与确认；真实阵容请求0。
+- 官方DeepSeek直连，请求与响应模型均`deepseek-flash`；thinking disabled、stream false、json_object、无tools。四任务token上限512/768/4096/1024；120/60/30秒不变。
+
+### 请求与额度：本轮真实数据
+
+9次发送前持久化计数=普通8+总结1；有fetch调用证据9、HTTP200响应9、业务校验有效9。全部attempt=1、finish_reason=stop，无网络重试或修复调用，无响应未知、无usage缺失。每次请求的内部task标识/时间/请求及响应模型/usage见`evidence/stage-6b-r1/requests-and-result.json`，只归档允许字段。
+
+| 次序 | operation/用途 | attempt | HTTP | 耗时ms | prompt/completion/total tokens |
+|---|---|---:|---:|---:|---|
+| 1 | generateUtterance 开场 | 1 | 200 | 1385 | 698/49/747 |
+| 2 | assessIntent | 1 | 200 | 937 | 805/76/881 |
+| 3 | assessIntent | 1 | 200 | 1074 | 805/72/877 |
+| 4 | generateUtterance 专家 | 1 | 200 | 1408 | 921/95/1016 |
+| 5 | extractSynthesis | 1 | 200 | 560 | 935/5/940 |
+| 6 | assessIntent | 1 | 200 | 1105 | 1029/73/1102 |
+| 7 | assessIntent | 1 | 200 | 648 | 1029/28/1057 |
+| 8 | generateUtterance 专家 | 1 | 200 | 1148 | 1146/101/1247 |
+| 9 | summarize | 1 | 200 | 828 | 1215/52/1267 |
+
+已知usage合计prompt=8583、completion=551、total=9134，cache_hit=1920、cache_miss=6663。它是本次响应返回用量，不是完整账单，不估算费用。请求耗时相加9093ms；两组意愿请求并行，因此该总和不是讨论墙钟时间。
+
+授权上限20，普通限18实际8；总结保留最多2次、唯一逻辑总结实际1次。20次并非预先发送20次，剩余11次全部关闭不能再用。SQLite默认技术call_limit仍112，独立授权20更严格；calls_used=9、summary_calls_used=1。没有用真实第21次请求验证拒绝，额度极限及并发保护依赖本轮已通过的定向本地测试与现有保护。
+
+### 工程链路验收
+
+| 项目 | 实际结果 |
+|---|---|
+| 开始 | 页面一次点击，浏览器仅1个POST /start，绑定唯一run |
+| 公开发言 | 1主持开场+2专家，全部经校验正式保存；专家顺序周衡→陈思敏，不要求固定轮流 |
+| 中途提炼 | 第一条专家发言后执行并提交1次，sourceTranscriptVersion=2，ready且items为空；没有虚构共识/分歧 |
+| SSE | 浏览器实际收到utterance事件8/19/34、synthesis.updated事件23、summary.ready事件37、completed事件38；中途提炼早于第二条专家发言 |
+| 收尾 | 两次专家发言后turn_limit，唯一总结任务1次成功；无额外普通发言/第二次提炼 |
+| 终态 | completed、summary.ready；snapshot version31、lastEventId38、transcriptVersion3 |
+| 展示与刷新 | 运行/中途/终态/刷新4张截图实际查看，页面与公开记录一致；无原始JSON、隐藏推理或诊断对象 |
+| 停服后读取 | DatabaseSync readOnly重开同一R1库，通过业务查询层读取；integrity_check=ok，与终态及刷新快照一致 |
+
+完整短内容随着实际过程提交并推送，不是等整场结束播放。GET/SSE/刷新未产生额外模型请求。总结依据transcriptVersion3，包含最后专家发言，不受上次提炼只覆盖版本2的限制。
+
+### 本次公开内容审阅与限制
+
+主持人要求区分改善定义、证据与假设。周衡回应公平和弱势学生参与条件；陈思敏明确补充课堂反馈/教师负担的可评估指标，并回应上一条关于参与条件的讨论。两条reply引用均存在且与内容相符；没有明显互不相关独白或整段机械重复。
+
+中途只有一位专家发言，返回空共识/分歧是允许结果，没有把单人观点包装成全场共识；但**本样本不覆盖非空提炼条目的证据支持质量**。总结保留试点局限和仍待验证的结论，覆盖末条发言；“均指出公平与可评估效果”压缩了两位专家各自重点，不能据此称每人逐项明确赞同。
+
+语义局限：公开发言中“已公开的经验”“只在小范围试点中”等经验概括没有给出具体研究或来源；本轮不能确认这些外部事实。没有明显对立意见或充分争论，不能据此验收深度辩论、争议解决或长期内容质量。没有删改公开结果，也没有追加请求追求更好措辞。
+
+公开原文、运行与中途快照均在`evidence/stage-6b-r1/live/`。此结论仅为**一个指定短讨论样本的正常工程路径通过**；全部话题、专家人数、长期可靠性、生产负载、非空共识质量及提示注入稳健性未验证。
+
+### 证据、验证范围与关闭
+
+- 启动过程：`evidence/stage-6b-r1/launch/r1-2026-09-16T15-04-41.514Z/result.json`。
+- 请求与只读验证：`requests-and-result.json`、`public-event-index.json`、`read-only-reopened.json`（均在R1证据目录）。
+- 截图：`live/running.png`、`live/middle.png`、`live/terminal.png`、`live/refreshed.png`；本轮没有错过中途截图，没有补跑。
+- 实际前置命令与退出码：`preflight.json`；33定向测试、启动严格TS/checkJs、后端类型/编译、浏览器语法、本地共享入口彩排均0。新路径2 RED→GREEN、只读等待终态3 RED→GREEN。旧全量产品成绩未在本轮重跑，不作为本轮新通过。
+- R1授权于15:04:51.932Z自动closed，reason=terminal，计数保留9。后端和UI进程退出0，自有前端SIGTERM、独立浏览器closed。端口及锁最终检查见`cleanup.json`。
+- 旧6B/4D十个保护文件前后SHA256一致；原6B受阻/0次/closed与4D记录不改，未访问其业务数据执行新任务。真实配置不改、不打印、不提交。
+
+本轮只提交薄入口、定向验证、文档及筛选公开证据；真实结束后仅补文档/证据，无业务代码修改。不推送、不改写历史、不自动执行第二场。本地退出不能证明供应商不存在任何后续计费，账单仍以供应商为准。

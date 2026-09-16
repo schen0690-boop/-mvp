@@ -1,0 +1,138 @@
+{
+  "discussionId": "f56bd564-77c7-4087-b36b-169c43abd162",
+  "topic": "AI 如何改善教育？",
+  "expertCount": 2,
+  "status": "completed",
+  "version": 31,
+  "lastEventId": 38,
+  "createdAt": "2026-09-16T15:04:13.788Z",
+  "updatedAt": "2026-09-16T15:04:51.840Z",
+  "lineupRevision": 1,
+  "confirmedLineupRevision": 1,
+  "transcriptVersion": 3,
+  "roles": [
+    {
+      "role": "moderator",
+      "name": "林知远（虚构）",
+      "profession": "教育议题主持",
+      "title": "圆桌主持人",
+      "stance": "澄清概念，要求意见回应已有发言，并区分实证与假设。",
+      "memberId": "8b979bb8-9ec7-4417-9b8f-bc17878de011",
+      "color": "#193455",
+      "displayOrder": 0
+    },
+    {
+      "role": "expert",
+      "name": "陈思敏（虚构）",
+      "profession": "基础教育教学研究",
+      "title": "课堂实践研究员",
+      "stance": "关注教师工作负担、学习反馈和可评估的课堂效果，主张小范围试点。",
+      "memberId": "c66db611-7fc4-4caa-b1dc-4003602fea00",
+      "color": "#2157a5",
+      "displayOrder": 1
+    },
+    {
+      "role": "expert",
+      "name": "周衡（虚构）",
+      "profession": "教育公平与数据治理",
+      "title": "教育政策研究员",
+      "stance": "关注资源差异、学生隐私与偏差风险，要求说明弱势学生的参与条件。",
+      "memberId": "ba3b75a8-725d-4527-8d51-ad6e169b4a3d",
+      "color": "#137568",
+      "displayOrder": 2
+    }
+  ],
+  "utterances": [
+    {
+      "id": "1c54fd1c-e99d-429c-8af8-9cd6cb88ec66",
+      "discussionId": "f56bd564-77c7-4087-b36b-169c43abd162",
+      "roleId": "8b979bb8-9ec7-4417-9b8f-bc17878de011",
+      "seq": 1,
+      "sentences": [
+        "欢迎来到本次圆桌，今天讨论AI如何改善教育。",
+        "请两位专家先界定所说的改善指什么，并区分已有证据与尚属假设的主张。"
+      ],
+      "replyToUtteranceIds": [],
+      "createdAt": "2026-09-16T15:04:45.542Z"
+    },
+    {
+      "id": "82048b51-4d23-4e9a-8514-10945cc6a117",
+      "discussionId": "f56bd564-77c7-4087-b36b-169c43abd162",
+      "roleId": "ba3b75a8-725d-4527-8d51-ad6e169b4a3d",
+      "seq": 2,
+      "sentences": [
+        "我先回应主持人的界定：改善必须包含公平维度，否则平均分提升也可能掩盖弱势学生的掉队。",
+        "就已公开的经验看，AI教学只在小范围试点中见到反馈效率提升，弱势学生的设备、网络与家长支持仍是参与前提。"
+      ],
+      "replyToUtteranceIds": [
+        "1c54fd1c-e99d-429c-8af8-9cd6cb88ec66"
+      ],
+      "createdAt": "2026-09-16T15:04:48.100Z"
+    },
+    {
+      "id": "cfcf53eb-2c88-4d40-b096-1ac6471ab78b",
+      "discussionId": "f56bd564-77c7-4087-b36b-169c43abd162",
+      "roleId": "c66db611-7fc4-4caa-b1dc-4003602fea00",
+      "seq": 3,
+      "sentences": [
+        "我补充课堂层面的可评估效果：AI可减轻教师批改与分层反馈负担，但现有证据多来自小范围试点，不宜外推为普遍改善。",
+        "试点应先设定教师负担与学习反馈的对照指标，并记录弱势学生参与条件，否则无法判断改善是否成立。"
+      ],
+      "replyToUtteranceIds": [
+        "82048b51-4d23-4e9a-8514-10945cc6a117"
+      ],
+      "createdAt": "2026-09-16T15:04:50.996Z"
+    }
+  ],
+  "synthesis": {
+    "sourceTranscriptVersion": 2,
+    "updatedAt": "2026-09-16T15:04:48.686Z",
+    "items": []
+  },
+  "summary": {
+    "status": "ready",
+    "text": "本场陈思敏与周衡均指出AI改善教育需以公平与可评估效果为前提，当前证据多来自小范围试点，不宜外推。双方未就普遍改善达成结论，仍待更大范围验证。",
+    "sourceTranscriptVersion": 3
+  },
+  "lastNotice": null,
+  "stopReason": "turn_limit",
+  "startedAt": "2026-09-16T15:04:44.126Z",
+  "endedAt": "2026-09-16T15:04:51.840Z",
+  "lineupGeneration": {
+    "generationId": "8162dfb4-664b-43f3-9a7f-50ca294e51bd",
+    "generationVersion": 1,
+    "startedAt": "2026-09-16T15:04:13.795Z",
+    "finishedAt": "2026-09-16T15:04:13.802Z"
+  },
+  "confirmedAt": "2026-09-16T15:04:13.809Z",
+  "runtime": {
+    "runId": "cc3a2879-e612-45b0-a51f-17e56e405bf5",
+    "runDeadlineAt": "2026-09-16T15:06:44.126Z",
+    "stoppingAt": "2026-09-16T15:04:50.996Z",
+    "stopDeadlineAt": "2026-09-16T15:05:50.996Z"
+  },
+  "synthesisState": "ready",
+  "roleStates": [
+    {
+      "roleId": "8b979bb8-9ec7-4417-9b8f-bc17878de011",
+      "status": "idle",
+      "publicFocus": null,
+      "focusSourceTranscriptVersion": null,
+      "updatedAt": "2026-09-16T15:04:50.996Z"
+    },
+    {
+      "roleId": "c66db611-7fc4-4caa-b1dc-4003602fea00",
+      "status": "idle",
+      "publicFocus": "补充课堂层面的可评估效果：教师负担与学习反馈，并说明小范围试点如何设计。",
+      "focusSourceTranscriptVersion": 2,
+      "updatedAt": "2026-09-16T15:04:50.996Z"
+    },
+    {
+      "roleId": "ba3b75a8-725d-4527-8d51-ad6e169b4a3d",
+      "status": "idle",
+      "publicFocus": null,
+      "focusSourceTranscriptVersion": null,
+      "updatedAt": "2026-09-16T15:04:50.996Z"
+    }
+  ]
+}
