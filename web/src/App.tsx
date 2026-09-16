@@ -1,5 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
-import { createApi } from './api.js';
+import { createApi, statusLabels } from './api.js';
 import { Controller } from './controller.js';
 import './styles.css';
 
@@ -56,7 +56,7 @@ export function App() {
             <div className="empty"><div className="empty-symbol" aria-hidden="true">◎</div><h3>{state.filter === 'active' ? '还没有进行中的讨论' : '还没有保存的讨论'}</h3><p>{state.filter === 'active' ? '草稿会保留在“全部讨论”中。' : '在新建讨论中保存你的第一个话题。'}</p></div> :
             <ul className="discussion-list">{state.items.map(item => <li key={item.discussionId} className={state.selectedId === item.discussionId ? 'selected' : ''}>
               <button className="item-title" aria-label={item.topic} aria-pressed={state.selectedId === item.discussionId} onClick={() => void controller.select(item.discussionId)}>{item.topic}</button>
-              <div className="item-meta"><span className="badge">草稿</span><span>{item.expertCount} 位专家</span></div><time dateTime={item.updatedAt}>更新于 {time(item.updatedAt)}</time>
+              <div className="item-meta"><span className="badge">{statusLabels[item.status]}</span><span>{item.expertCount} 位专家</span></div><time dateTime={item.updatedAt}>更新于 {time(item.updatedAt)}</time>
             </li>)}</ul>}
         </div>
       </section>
@@ -64,11 +64,12 @@ export function App() {
         <div className="pane-title"><div className="title-row"><h2 id="detail-heading">草稿详情</h2>{state.selectedId && <button className="quiet" disabled={state.detailLoading} onClick={() => void controller.select(state.selectedId)}>重新加载详情</button>}</div><p>查看已保存的讨论准备</p></div>
         <div className="pane-scroll">
           {state.detailLoading ? <p className="empty" role="status">正在读取草稿…</p> : state.detailError ? <p className="error" role="alert">详情加载失败：{state.detailError}</p> : detail ? <>
-            <div className="detail-state"><span className="badge">草稿</span><span>已保存</span></div>
+            <div className="detail-state"><span className="badge">{statusLabels[detail.status]}</span><span>{detail.status==='created'?'已保存':'讨论尚未开始'}</span></div>
             <h3 className="topic-title">{detail.topic}</h3>
             <dl className="metadata"><div><dt>专家人数</dt><dd>{detail.expertCount} 位专家（不含主持人）</dd></div>
               <div><dt>创建时间</dt><dd>{time(detail.createdAt)}</dd></div><div><dt>更新时间</dt><dd>{time(detail.updatedAt)}</dd></div></dl>
-            <div className="lineup-empty"><h3>阵容尚未生成</h3><p>当前保存的是讨论草稿。主持人和专家名单还未生成，讨论尚未开始。</p></div>
+            {detail.status==='created' ? <div className="lineup-empty"><h3>阵容尚未生成</h3><p>当前保存的是讨论草稿。主持人和专家名单还未生成，讨论尚未开始。</p></div> :
+              <div className="lineup-empty"><h3>{statusLabels[detail.status]}</h3><p>{detail.lastNotice?.message ?? (detail.status==='generating_lineup'?'正在生成阵容。可重新加载详情查看状态。':'当前阵容状态已保存，讨论尚未开始。')}</p></div>}
           </> : <div className="empty"><div className="empty-symbol" aria-hidden="true">▤</div><h3>选一条草稿，继续整理想法</h3><p>从列表中选择讨论，或先创建一个新话题。</p></div>}
         </div>
       </section>

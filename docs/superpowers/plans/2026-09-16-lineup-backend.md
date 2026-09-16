@@ -94,9 +94,9 @@
 
 接口：decodeSnapshot接受精确联合DTO，create/list/get仍原路径；新中文状态标签，created不变，不增加生成/确认按钮、卡片或轮询。
 
-- [ ] 先RED：五态snapshot、未知字段/旧成员泄漏/坏确认版本拒绝；创建幂等重放可接受已生成快照；active合法列表不再错误拒绝。
-- [ ] `npm run test:web`确认新行为失败；补齐严格校验和通用状态文本，GREEN。
-- [ ] `npm run typecheck:web`、`npm run build:web`及阶段3原9项E2E回归通过后提交兼容。
+- [x] 先RED：五态snapshot、未知字段/旧成员泄漏/坏确认版本拒绝；创建幂等重放可接受已生成快照；active合法列表不再错误拒绝。
+- [x] `npm run test:web`确认新行为失败；补齐严格校验和通用状态文本，GREEN。
+- [x] `npm run typecheck:web`、`npm run build:web`及阶段3原9项E2E回归通过后提交兼容。
 
 ## I. 回归、证据、文档与停止
 

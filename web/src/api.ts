@@ -1,4 +1,6 @@
 import type { DraftListItem, DraftSnapshot } from '../../src/domain/drafts.js';
+import { colors, parseRoster } from '../../src/domain/lineup.js';
+import { noticeMessages, noticeOf, type DiscussionStatus } from '../../src/domain/snapshot.js';
 import { isObject, validateCreateDraft, validateUuid } from '../../src/domain/input.js';
 export type { DraftListItem, DraftSnapshot };
 export interface CreateInput { topic: string; expertCount: number; requestId: string }
@@ -22,22 +24,66 @@ function timestamp(value: unknown): value is string {
 function validId(value: unknown): value is string {
   try { return validateUuid(value) === value; } catch { return false; }
 }
+export const statusLabels: Record<DiscussionStatus,string> = {
+  created:'草稿', generating_lineup:'阵容生成中', awaiting_confirmation:'阵容待确认',
+  lineup_generation_failed:'阵容生成失败', lineup_confirmed:'阵容已确认'
+};
+function status(value: unknown): value is DiscussionStatus {
+  return value === 'created' || value === 'generating_lineup' || value === 'awaiting_confirmation' || value === 'lineup_generation_failed' || value === 'lineup_confirmed';
+}
+function positive(value: unknown): value is number { return typeof value==='number' && Number.isSafeInteger(value) && value>0; }
 function isItem(value: unknown): value is DraftListItem {
   return isObject(value) && validId(value.discussionId) && typeof value.topic === 'string' &&
     value.topic === value.topic.trim() && [...value.topic].length > 0 && [...value.topic].length <= 500 &&
     typeof value.expertCount === 'number' && Number.isInteger(value.expertCount) && value.expertCount >= 1 && value.expertCount <= 8 &&
-    value.status === 'created' && value.version === 1 && timestamp(value.updatedAt);
+    status(value.status) && positive(value.version) && (value.status==='created' ? value.version===1 : value.version>=2) && timestamp(value.updatedAt);
 }
 function isSnapshot(value: unknown): value is DraftSnapshot {
   if (!isObject(value) || !isItem(value)) return false;
   const data: Record<string, unknown> = value;
-  const nullFields = ['confirmedLineupRevision','synthesis','summary','lastNotice','stopReason','startedAt','endedAt'];
-  return keys(data, ['discussionId','topic','expertCount','status','version','updatedAt','createdAt','lastEventId',
-    'lineupRevision','transcriptVersion','roles','utterances',...nullFields]) &&
-    timestamp(data.createdAt) && data.createdAt === data.updatedAt && data.lastEventId === 1 &&
-    data.lineupRevision === 0 && data.transcriptVersion === 0 &&
-    Array.isArray(data.roles) && data.roles.length === 0 && Array.isArray(data.utterances) && data.utterances.length === 0 &&
-    nullFields.every(key => data[key] === null);
+  const nullFields = ['synthesis','summary','stopReason','startedAt','endedAt'];
+  const baseKeys = ['discussionId','topic','expertCount','status','version','updatedAt','createdAt','lastEventId',
+    'lineupRevision','confirmedLineupRevision','transcriptVersion','roles','utterances','lastNotice',...nullFields];
+  if (!timestamp(data.createdAt) || data.createdAt>value.updatedAt || data.lastEventId!==value.version || data.transcriptVersion!==0 ||
+      !Array.isArray(data.roles) || !Array.isArray(data.utterances) || data.utterances.length!==0 || !nullFields.every(key=>data[key]===null)) return false;
+  if(value.status==='created') return keys(data,baseKeys) && data.createdAt===data.updatedAt && data.lineupRevision===0 &&
+    data.confirmedLineupRevision===null && data.lastNotice===null && data.roles.length===0;
+  if(!keys(data,[...baseKeys,'lineupGeneration','confirmedAt'])) return false;
+  const generation=data.lineupGeneration;
+  if(!isObject(generation) || !keys(generation,['generationId','generationVersion','startedAt','finishedAt']) ||
+      !validId(generation.generationId) || !positive(generation.generationVersion) || !timestamp(generation.startedAt) ||
+      generation.startedAt<data.createdAt || generation.startedAt>value.updatedAt ||
+      typeof data.lineupRevision!=='number' || !Number.isSafeInteger(data.lineupRevision) || data.lineupRevision<0 || data.lineupRevision>generation.generationVersion) return false;
+  if(value.status==='generating_lineup') {
+    if(generation.finishedAt!==null) return false;
+  } else if(!timestamp(generation.finishedAt) || generation.finishedAt<generation.startedAt || generation.finishedAt>value.updatedAt || value.version<3) return false;
+  if(value.status==='lineup_confirmed') {
+    if(data.confirmedLineupRevision!==data.lineupRevision || !timestamp(data.confirmedAt) || data.confirmedAt!==value.updatedAt || value.version<4) return false;
+  } else if(data.confirmedAt!==null || data.confirmedLineupRevision!==null) return false;
+  if(value.status==='lineup_generation_failed') {
+    const notice=data.lastNotice;
+    if(!isObject(notice) || !keys(notice,['code','message','retryable','action'])) return false;
+    let valid=false;
+    for(const key of Object.keys(noticeMessages) as (keyof typeof noticeMessages)[]) {
+      if(notice.code===key) { const expected=noticeOf(key);valid=notice.message===expected.message && notice.retryable===expected.retryable && notice.action===expected.action; }
+    }
+    if(!valid) return false;
+  } else if(data.lastNotice!==null) return false;
+  if(value.status==='generating_lineup' || value.status==='lineup_generation_failed') return data.roles.length===0 && data.lineupRevision<generation.generationVersion;
+  if(data.lineupRevision!==generation.generationVersion || data.roles.length!==value.expertCount+1) return false;
+  const ids=new Set<string>();
+  const candidates: unknown[]=[];
+  for(const [index,member] of data.roles.entries()) {
+    if(!isObject(member) || !keys(member,['memberId','role','name','profession','title','stance','color','displayOrder']) ||
+        !validId(member.memberId) || ids.has(member.memberId) || member.displayOrder!==index || member.color!==colors[index] ||
+        member.role!==(index===0?'moderator':'expert')) return false;
+    ids.add(member.memberId);
+    const candidate={role:member.role,name:member.name,profession:member.profession,title:member.title,stance:member.stance};
+    if([member.name,member.profession,member.title,member.stance].some(v=>typeof v!=='string'||v!==v.trim()))return false;
+    candidates.push(candidate);
+  }
+  try { parseRoster(JSON.stringify({roles:candidates}),value.expertCount); } catch { return false; }
+  return true;
 }
 export function decodeSnapshot(value: unknown): DraftSnapshot {
   if (!isSnapshot(value)) throw protocolError();
@@ -77,7 +123,7 @@ export function createApi(transport: typeof fetch = fetch): Api {
       if (status !== 200 || !isObject(body) || !keys(body,['items']) || !Array.isArray(body.items) ||
           !body.items.every((item: unknown) => isObject(item) && isItem(item) && keys(item,['discussionId','topic','expertCount','status','version','updatedAt']))) throw protocolError();
       const items = body.items.filter(isItem);
-      if (new Set(items.map(item => item.discussionId)).size !== items.length || (filter === 'active' && items.length > 0)) throw protocolError();
+      if (new Set(items.map(item => item.discussionId)).size !== items.length || (filter === 'active' && items.some(item=>item.status!=='generating_lineup' && item.status!=='awaiting_confirmation'))) throw protocolError();
       return items;
     }
   };
