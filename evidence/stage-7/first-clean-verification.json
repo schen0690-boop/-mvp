@@ -1,0 +1,49 @@
+{
+  "stage": 7,
+  "codeRevision": "463101b43bc2116bbdf75ea8ef558fbf9535c7d3",
+  "directory": "D:\\Codex-delivery-check\\stage7-d950261835\\project",
+  "node": "v24.16.0",
+  "startedAt": "2026-09-16T15:44:47.670Z",
+  "officialRequests": 0,
+  "networkBoundary": "child fetch loopback only; Fake and injected local stub; no env file loading",
+  "commands": [
+    {
+      "name": "initial backend build",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.build.json"
+      ],
+      "startedAt": "2026-09-16T15:44:47.673Z",
+      "endedAt": "2026-09-16T15:44:48.502Z",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "dependencies",
+      "args": [
+        "scripts/check-dependencies.mjs"
+      ],
+      "startedAt": "2026-09-16T15:44:48.502Z",
+      "endedAt": "2026-09-16T15:44:48.638Z",
+      "exitCode": 0,
+      "output": "{\n  \"node\": \"v24.16.0\",\n  \"sqliteVersion\": \"3.53.0\",\n  \"packages\": {\n    \"express\": {\n      \"version\": \"5.2.1\",\n      \"path\": \"node_modules/express\"\n    },\n    \"react\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/react\"\n    },\n    \"react-dom\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/react-dom\"\n    },\n    \"@types/express\": {\n      \"version\": \"5.0.6\",\n      \"path\": \"node_modules/@types/express\"\n    },\n    \"@types/node\": {\n      \"version\": \"24.13.4\",\n      \"path\": \"node_modules/@types/node\"\n    },\n    \"typescript\": {\n      \"version\": \"7.0.2\",\n      \"path\": \"node_modules/typescript\"\n    },\n    \"vite\": {\n      \"version\": \"8.3.0\",\n      \"path\": \"node_modules/vite\"\n    },\n    \"vitest\": {\n      \"version\": \"5.0.1\",\n      \"path\": \"node_modules/vitest\"\n    },\n    \"@types/react\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/@types/react\"\n    },\n    \"@types/react-dom\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/@types/react-dom\"\n    },\n    \"@playwright/test\": {\n      \"version\": \"1.63.0\",\n      \"path\": \"node_modules/@playwright/test\"\n    }\n  },\n  \"resolution\": {\n    \"express\": \"node_modules\\\\express\\\\index.js\",\n    \"vitest\": \"node_modules\\\\vitest\\\\dist\\\\index.js\",\n    \"vite\": \"node_modules\\\\vite\\\\dist\\\\node\\\\index.js\",\n    \"typescript\": \"node_modules\\\\typescript\\\\lib\\\\version.cjs\"\n  },\n  \"lifecycleScripts\": [\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"lightningcss\",\n      \"version\": \"1.33.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"patch-package\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"path-to-regexp\",\n      \"version\": \"8.4.2\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"tinyexec\",\n      \"version\": \"1.3.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    }\n  ],\n  \"installationPolicy\": \"--ignore-scripts --no-audit --no-fund\",\n  \"lockVerified\": true,\n  \"formalDependenciesIndependent\": true\n}\n"
+    },
+    {
+      "name": "backend",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "--reporter=json",
+        "--outputFile=evidence/stage-7/raw/backend.json"
+      ],
+      "startedAt": "2026-09-16T15:44:48.639Z",
+      "endedAt": "2026-09-16T15:45:08.995Z",
+      "exitCode": 1,
+      "output": "JSON report written to D:/Codex-delivery-check/stage7-d950261835/project/evidence/stage-7/raw/backend.json\n"
+    }
+  ],
+  "finishedAt": "2026-09-16T15:45:08.996Z"
+}

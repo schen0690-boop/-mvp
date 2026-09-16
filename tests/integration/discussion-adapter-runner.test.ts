@@ -53,6 +53,6 @@ it('两场并发使用共享限流且响应/指标按task归属隔离',async()=>
 });
 
 it('普通配置工厂真实模式经本地HTTP接入正式runner，不依赖历史授权或验收ID',async()=>{
- const {selectProviders}=await import('../../src/app-providers.js');const stub=await startDiscussionStub();cleanup.push(stub.close);const providers=selectProviders({ROSTER_PROVIDER:'fake',DISCUSSION_PROVIDER:'deepseek',DEEPSEEK_API_KEY:'local-test-credential'},true,stub.transport);
+ const {selectProviders}=await import('../../src/app-providers.js');const stub=await startDiscussionStub();cleanup.push(stub.close);const providers=selectProviders({ROSTER_PROVIDER:'fake',DISCUSSION_PROVIDER:'deepseek',DEEPSEEK_API_KEY:adapterConfig.apiKey},true,stub.transport);
  const f=await discussionFixture(2),service=new DiscussionService(f.store,providers.discussion,new CallLimiter());cleanup.push(async()=>{await service.close();f.db.close();});service.start(f.id,f.input);await service.idle();expect(f.drafts.get(f.id)).toMatchObject({status:'completed',summary:{status:'ready'}});expect(stub.requests).toHaveLength(49);expect(providers.publicConfig).toEqual({rosterProvider:'fake',discussionProvider:'deepseek'});
 });

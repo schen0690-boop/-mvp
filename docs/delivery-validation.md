@@ -65,3 +65,7 @@
 当前architecture三图、discussion-runtime-design及lineup-design现行图按代码人工核对；本机未找到项目mermaid/mmdc，未安装渲染器，**Mermaid渲染未验证**。历史设计图不作为执行证据。
 
 第三部分远程GitHub/Gitee链接尚缺（git remote为空）；本轮不创建或推送。Codex与题面工具口径仍待出题方确认，不能签署或虚构许可。实际开发模型未核实；应用运行模型明确deepseek-flash。跨平台、移动真机、长期/多题质量与生产负载均未验证。
+
+## 首次干净复现发现与修正
+
+候选463101b在D:/Codex-delivery-check/stage7-d950261835/project从git archive导出；锁安装127包成功，README类型/构建/初始化/两次样例导入与正式Fake浏览器冒烟均退出0。完整后端回归402通过/1失败：新增普通配置工厂测试用local-test-credential，而已有HTTP stub严格要求local-stub-credential，返回LOCAL_STUB_FAILURE。定位为测试夹具输入不一致，不是供应商或产品故障；改为引用已有adapterConfig.apiKey，单文件回归通过。保留first-clean-verification.json；不把该夹具错误计作业务RED，不修改生产鉴权或放宽parser。修正测试后另提交候选、重新导出新目录并完整复验，不只在临时目录修补。
