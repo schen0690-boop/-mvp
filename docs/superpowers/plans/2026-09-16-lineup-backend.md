@@ -29,10 +29,10 @@
 
 接口：initializeDatabase(db)迁移到最新；openConfiguredDatabase(path, initialize=false)启动只检查，初始化显式迁移。schema-v2导出固定SQL，migrations控制事务。新增字段与lineup_members严格遵循lineup-design，成员表仅保留最后成功整组，历史成功在公开事件留存。
 
-- [ ] 从001 fixture迁移写RED：`expect(tableNames).toContain('lineup_members')`；注入002记录写失败要求整事务回滚；约束实插、旧字段字节/事件、重开、重复迁移都验证。
-- [ ] `npm test -- tests/integration/migrations.test.ts tests/integration/runtime.test.ts`；只行为未实现失败计RED。
-- [ ] 新表复制/原子替换Discussion，检查FK/integrity；启动不隐式迁移；维护入口对已有文件新建一致备份且不覆盖。
-- [ ] 同组GREEN，原79后端回归（表数量断言按新增schema明确更新），类型检查后提交002。
+- [x] 从001 fixture迁移写RED：`expect(tableNames).toContain('lineup_members')`；注入002记录写失败要求整事务回滚；约束实插、旧字段字节/事件、重开、重复迁移都验证。
+- [x] `npm test -- tests/integration/migrations.test.ts tests/integration/runtime.test.ts`；只行为未实现失败计RED。
+- [x] 新表复制/原子替换Discussion，检查FK/integrity；启动不隐式迁移；维护入口对已有文件新建一致备份且不覆盖。
+- [x] 同组GREEN，原79后端回归（表数量断言按新增schema明确更新），类型检查后提交002。
 
 ## C. lineup领域和运行时验证
 

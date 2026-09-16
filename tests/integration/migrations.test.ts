@@ -63,3 +63,50 @@ it('001记录checksum被改变时拒绝继续', () => {
   expect(() => migrateDatabase(db, 1)).toThrow('MIGRATION_HISTORY_MISMATCH');
   expect(() => assertCurrentSchema(db)).toThrow('MIGRATION_HISTORY_MISMATCH');
 });
+
+it('002从空库依次建立两版本，仅必要表', () => {
+  migrateDatabase(db, 2);
+  expect(tables()).toEqual(['discussions', 'lineup_members', 'public_events', 'schema_migrations']);
+  expect(db.prepare('SELECT id FROM schema_migrations ORDER BY id').all()).toEqual([{ id: 1 }, { id: 2 }]);
+  assertCurrentSchema(db);
+});
+it('002升级真实旧草稿并保留旧19字段与原始事件，重开重复安全', () => {
+  const { created, input } = seed();
+  const events = db.prepare('SELECT * FROM public_events').all();
+  migrateDatabase(db, 2);
+  const rows = db.prepare('SELECT * FROM schema_migrations').all();
+  expect(new DraftService(new SqliteDraftStore(db)).get(created.discussionId)).toEqual(created.snapshot);
+  expect(db.prepare('SELECT * FROM public_events').all()).toEqual(events);
+  expect(db.prepare('SELECT generation_version,lineup_revision,current_generation_id FROM discussions').get())
+    .toEqual({ generation_version: 0, lineup_revision: 0, current_generation_id: null });
+  db.close(); db = new DatabaseSync(path); migrateDatabase(db, 2); assertCurrentSchema(db);
+  expect(db.prepare('SELECT * FROM schema_migrations').all()).toEqual(rows);
+  expect(new DraftService(new SqliteDraftStore(db)).create(input).replayed).toBe(true);
+});
+it('002末尾完整性检查失败时，复制和版本登记整体回滚', () => {
+  seed();
+  db.exec('PRAGMA foreign_keys=OFF');
+  db.prepare("INSERT INTO public_events VALUES ('missing',1,1,'discussion.status_changed','2026-09-16T00:00:00.000Z','{}')").run();
+  const schema = db.prepare('SELECT * FROM sqlite_schema ORDER BY name').all();
+  const data = db.prepare('SELECT * FROM discussions').all();
+  expect(() => migrateDatabase(db, 2)).toThrow('MIGRATION_INTEGRITY_FAILED');
+  expect(db.prepare('SELECT * FROM sqlite_schema ORDER BY name').all()).toEqual(schema);
+  expect(db.prepare('SELECT * FROM discussions').all()).toEqual(data);
+  expect(db.prepare('SELECT COUNT(*) AS n FROM public_events').get()?.n).toBe(2);
+  expect(db.prepare('PRAGMA foreign_keys').get()?.foreign_keys).toBe(1);
+});
+it('002成员复合外键、顺序和主持唯一、状态组合约束实际生效', () => {
+  const { created } = seed(); migrateDatabase(db, 2);
+  const id = created.discussionId, generation = randomUUID(), now = new Date().toISOString();
+  db.prepare(`UPDATE discussions SET status='awaiting_confirmation',version=3,last_event_id=3,
+    current_generation_id=?,generation_request_id=?,generation_version=1,generation_started_at=?,generation_finished_at=?,
+    lineup_generation_id=?,lineup_revision=1 WHERE id=?`).run(generation, randomUUID(), now, now, generation, id);
+  const insert = db.prepare('INSERT INTO lineup_members VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
+  const member = [randomUUID(),id,generation,1,'moderator','主持','教育','主持人','中立','#193455',0,'主持',now];
+  insert.run(...member);
+  expect(() => insert.run(...[randomUUID(),...member.slice(1)])).toThrow();
+  expect(() => insert.run(randomUUID(),id,randomUUID(),1,'expert','专家','教育','研究员','观察','#2157a5',1,'专家',now)).toThrow(/FOREIGN KEY/);
+  expect(() => db.prepare("UPDATE discussions SET status='lineup_confirmed' WHERE id=?").run(id)).toThrow(/CHECK/);
+  expect(() => db.prepare("UPDATE discussions SET status='running' WHERE id=?").run(id)).toThrow(/CHECK/);
+  expect(db.prepare('PRAGMA foreign_key_check').all()).toEqual([]);
+});
