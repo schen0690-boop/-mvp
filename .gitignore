@@ -32,3 +32,5 @@ playwright-report/
 !.env.backend.example
 /.local/
 /evidence/stage-4d/raw/
+*.sqlite.owner
+/evidence/stage-5b/raw/

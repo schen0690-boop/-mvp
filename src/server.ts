@@ -5,32 +5,41 @@ import { createApp } from './http/app.js';
 import { LineupService } from './domain/lineup-service.js';
 import { SqliteLineupStore } from './db/sqlite-lineup.js';
 import { FakeRosterProvider } from './providers/fake-roster.js';
+import {DiscussionService} from './domain/discussion-service.js';
+import {SqliteDiscussionStore} from './db/sqlite-discussion.js';
+import {FakeDiscussionProvider} from './providers/fake-discussion.js';
+import {CallLimiter} from './providers/call-limiter.js';
+import {LimitedRosterProvider} from './providers/limited-roster.js';
+import {acquireDatabaseOwnership} from './db/ownership.js';
 
+let release:()=>void=()=>{};
 try {
   const rawPort = process.env.PORT ?? '3000';
   const port = Number(rawPort);
   if (!/^\d+$/.test(rawPort) || !Number.isInteger(port) || port < 1 || port > 65535) throw new Error('INVALID_PORT');
-  const db = openConfiguredDatabase();
-  const lineup=new LineupService(new SqliteLineupStore(db),new FakeRosterProvider(),{diagnose:event=>console.error(event)});
-  try { lineup.recover(); } catch(error) { db.close();throw error; }
-  const server = createApp(new DraftService(new SqliteDraftStore(db)),undefined,lineup).listen(port, '127.0.0.1', () => {
-    console.log(`本地服务已启动：http://127.0.0.1:${port}（阵容使用Fake Provider，非真实AI）`);
+  release=acquireDatabaseOwnership(process.env.DATABASE_PATH??'data/discussions.sqlite');
+  const db = openConfiguredDatabase(),limiter=new CallLimiter();
+  const lineup=new LineupService(new SqliteLineupStore(db),new LimitedRosterProvider(new FakeRosterProvider(),limiter),{diagnose:event=>console.error(event)});
+  const discussion=new DiscussionService(new SqliteDiscussionStore(db),new FakeDiscussionProvider(),limiter);
+  try { lineup.recover();discussion.recover(); } catch(error) { db.close();throw error; }
+  const server = createApp(new DraftService(new SqliteDraftStore(db)),undefined,lineup,discussion).listen(port, '127.0.0.1', () => {
+    console.log(`本地服务已启动：http://127.0.0.1:${port}（阵容与讨论均使用Fake Provider，非真实AI）`);
   });
+  let stopping = false;
+  const cleanup=async()=>{if(stopping)return;stopping=true;try{await Promise.all([lineup.close(),discussion.close()]);}finally{db.close();release();}};
   server.once('error', () => {
-    db.close();
+    void cleanup();
     console.error('服务监听失败，请检查本机端口是否可用。');
     process.exitCode = 1;
   });
-  let stopping = false;
   const close = () => {
-    if (stopping) return;
-    stopping = true;
-    server.close(() => { void lineup.close().then(()=>db.close()); });
+    server.close(() => { void cleanup(); });
     server.closeAllConnections();
   };
   process.once('SIGINT', close);
   process.once('SIGTERM', close);
 } catch {
+  release();
   console.error('服务启动失败，请检查本地配置与运行环境。');
   process.exitCode = 1;
 }

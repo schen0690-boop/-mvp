@@ -4,10 +4,11 @@ import { AppError, invalidInput } from '../domain/errors.js';
 import { isObject } from '../domain/input.js';
 import { randomUUID } from 'node:crypto';
 import type { LineupService } from '../domain/lineup-service.js';
+import type { DiscussionService } from '../domain/discussion-service.js';
 
 export interface Diagnostic { requestId: string; code: 'INTERNAL_ERROR' }
 
-export function createApp(service: DraftService, diagnose: (event: Diagnostic) => void = event => console.error(event), lineup?: LineupService) {
+export function createApp(service: DraftService, diagnose: (event: Diagnostic) => void = event => console.error(event), lineup?: LineupService, discussion?: DiscussionService) {
   const app = express();
   app.disable('x-powered-by');
   app.disable('etag');
@@ -30,15 +31,18 @@ export function createApp(service: DraftService, diagnose: (event: Diagnostic) =
   app.post('/api/discussions', jsonOnly, parser, (req, res) => {
     const result = service.create(req.body);
     lineup?.assertAvailable(result.discussionId);
+    discussion?.assertAvailable(result.discussionId);
     res.status(result.replayed ? 200 : 201).json(result);
   });
   app.get('/api/discussions', (req, res) => {
     lineup?.assertAvailable();
+    discussion?.assertAvailable();
     if (Object.keys(req.query).some(key => key !== 'status')) invalidInput('列表含未声明的参数');
     res.json(service.list(req.query.status));
   });
   app.get('/api/discussions/:discussionId', (req, res) => {
     lineup?.assertAvailable(req.params.discussionId);
+    discussion?.assertAvailable(req.params.discussionId);
     res.json(service.get(req.params.discussionId));
   });
   if(lineup){
@@ -48,6 +52,14 @@ export function createApp(service: DraftService, diagnose: (event: Diagnostic) =
     });
     app.post('/api/discussions/:discussionId/lineup/confirm',jsonOnly,parser,(req,res)=>{
       res.json(lineup.confirm(req.params.discussionId,req.body));
+    });
+  }
+  if(discussion){
+    app.post('/api/discussions/:discussionId/start',jsonOnly,parser,(req,res)=>{
+      const result=discussion.start(req.params.discussionId,req.body);res.status(result.replayed?200:202).json(result);
+    });
+    app.post('/api/discussions/:discussionId/stop',jsonOnly,parser,(req,res)=>{
+      const snapshot=discussion.stop(req.params.discussionId,req.body);res.status(snapshot.status==='stopping'?202:200).json(snapshot);
     });
   }
   app.use(() => { throw new AppError('NOT_FOUND', '未找到请求的资源', 404); });
