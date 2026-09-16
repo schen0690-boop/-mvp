@@ -1,0 +1,135 @@
+{
+  "discussionId": "f57c29bc-a97e-45df-8ba7-c8076c0a139f",
+  "topic": "AI 如何改善教育？",
+  "expertCount": 2,
+  "status": "completed",
+  "version": 31,
+  "lastEventId": 38,
+  "createdAt": "2026-09-16T14:43:40.418Z",
+  "updatedAt": "2026-09-16T14:43:43.133Z",
+  "lineupRevision": 1,
+  "confirmedLineupRevision": 1,
+  "transcriptVersion": 3,
+  "roles": [
+    {
+      "role": "moderator",
+      "name": "林知远（虚构）",
+      "profession": "教育议题主持",
+      "title": "圆桌主持人",
+      "stance": "澄清概念，要求意见回应已有发言，并区分实证与假设。",
+      "memberId": "86fac841-2968-4c39-bac0-1f439b802b5c",
+      "color": "#193455",
+      "displayOrder": 0
+    },
+    {
+      "role": "expert",
+      "name": "陈思敏（虚构）",
+      "profession": "基础教育教学研究",
+      "title": "课堂实践研究员",
+      "stance": "关注教师工作负担、学习反馈和可评估的课堂效果，主张小范围试点。",
+      "memberId": "173a0e1f-f1c2-4b4d-bb75-fbb0f078ffa1",
+      "color": "#2157a5",
+      "displayOrder": 1
+    },
+    {
+      "role": "expert",
+      "name": "周衡（虚构）",
+      "profession": "教育公平与数据治理",
+      "title": "教育政策研究员",
+      "stance": "关注资源差异、学生隐私与偏差风险，要求说明弱势学生的参与条件。",
+      "memberId": "4137d8aa-8bf3-48e3-ad12-31493978aec1",
+      "color": "#137568",
+      "displayOrder": 2
+    }
+  ],
+  "utterances": [
+    {
+      "id": "7352b83e-79dd-42cf-b182-a8b873003d85",
+      "discussionId": "f57c29bc-a97e-45df-8ba7-c8076c0a139f",
+      "roleId": "86fac841-2968-4c39-bac0-1f439b802b5c",
+      "seq": 1,
+      "sentences": [
+        "请围绕课堂效果与教育公平提出可验证的意见。"
+      ],
+      "replyToUtteranceIds": [],
+      "createdAt": "2026-09-16T14:43:42.762Z"
+    },
+    {
+      "id": "9065ed37-b91e-4b56-8fde-7c1ca9ff6f46",
+      "discussionId": "f57c29bc-a97e-45df-8ba7-c8076c0a139f",
+      "roleId": "173a0e1f-f1c2-4b4d-bb75-fbb0f078ffa1",
+      "seq": 2,
+      "sentences": [
+        "回应第1条观点，我建议结合课堂证据进行小范围验证。"
+      ],
+      "replyToUtteranceIds": [
+        "7352b83e-79dd-42cf-b182-a8b873003d85"
+      ],
+      "createdAt": "2026-09-16T14:43:42.909Z"
+    },
+    {
+      "id": "ac23a6e6-e30a-47d8-bead-3d1668086ed5",
+      "discussionId": "f57c29bc-a97e-45df-8ba7-c8076c0a139f",
+      "roleId": "4137d8aa-8bf3-48e3-ad12-31493978aec1",
+      "seq": 3,
+      "sentences": [
+        "回应第2条观点，我建议结合课堂证据进行小范围验证。"
+      ],
+      "replyToUtteranceIds": [
+        "9065ed37-b91e-4b56-8fde-7c1ca9ff6f46"
+      ],
+      "createdAt": "2026-09-16T14:43:43.096Z"
+    }
+  ],
+  "synthesis": {
+    "sourceTranscriptVersion": 2,
+    "updatedAt": "2026-09-16T14:43:42.955Z",
+    "items": []
+  },
+  "summary": {
+    "status": "ready",
+    "text": "本场已提交3条发言，最后一条仍建议以课堂证据进行验证。这些意见需要实际检验，不能据此证明教育效果。",
+    "sourceTranscriptVersion": 3
+  },
+  "lastNotice": null,
+  "stopReason": "turn_limit",
+  "startedAt": "2026-09-16T14:43:42.688Z",
+  "endedAt": "2026-09-16T14:43:43.133Z",
+  "lineupGeneration": {
+    "generationId": "0f34417c-cffe-4a0e-81e5-f01f92ed1988",
+    "generationVersion": 1,
+    "startedAt": "2026-09-16T14:43:40.424Z",
+    "finishedAt": "2026-09-16T14:43:40.429Z"
+  },
+  "confirmedAt": "2026-09-16T14:43:40.432Z",
+  "runtime": {
+    "runId": "a2cbcfc8-b93c-42bf-af7a-113133b4b403",
+    "runDeadlineAt": "2026-09-16T14:45:42.688Z",
+    "stoppingAt": "2026-09-16T14:43:43.096Z",
+    "stopDeadlineAt": "2026-09-16T14:44:43.096Z"
+  },
+  "synthesisState": "ready",
+  "roleStates": [
+    {
+      "roleId": "86fac841-2968-4c39-bac0-1f439b802b5c",
+      "status": "idle",
+      "publicFocus": null,
+      "focusSourceTranscriptVersion": null,
+      "updatedAt": "2026-09-16T14:43:43.096Z"
+    },
+    {
+      "roleId": "173a0e1f-f1c2-4b4d-bb75-fbb0f078ffa1",
+      "status": "idle",
+      "publicFocus": "关注第2条的课堂证据",
+      "focusSourceTranscriptVersion": 2,
+      "updatedAt": "2026-09-16T14:43:43.096Z"
+    },
+    {
+      "roleId": "4137d8aa-8bf3-48e3-ad12-31493978aec1",
+      "status": "idle",
+      "publicFocus": "关注第2条的课堂证据",
+      "focusSourceTranscriptVersion": 2,
+      "updatedAt": "2026-09-16T14:43:43.096Z"
+    }
+  ]
+}

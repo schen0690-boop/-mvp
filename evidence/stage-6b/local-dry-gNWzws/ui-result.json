@@ -1,0 +1,71 @@
+{
+  "startedAt": "2026-09-16T14:45:10.979Z",
+  "codeRevision": "local-dry-run",
+  "localHttpStub": true,
+  "discussionId": "61b5d210-c5ef-4aec-b6b2-d830ace62009",
+  "runId": "d8292eed-16b9-433b-b5c9-d7fb905288ec",
+  "posts": [
+    "/api/discussions/61b5d210-c5ef-4aec-b6b2-d830ace62009/start"
+  ],
+  "steps": {
+    "startClickedOnce": true,
+    "runningScreenshot": true,
+    "savedAndDisplayed": true,
+    "summary": "ready",
+    "synthesis": true,
+    "refreshMatches": true
+  },
+  "sse": [
+    {
+      "type": "utterance.created",
+      "eventId": 8,
+      "dataVersion": 8,
+      "occurredAt": "2026-09-16T14:45:12.447Z",
+      "seq": 1
+    },
+    {
+      "type": "utterance.created",
+      "eventId": 19,
+      "dataVersion": 18,
+      "occurredAt": "2026-09-16T14:45:12.583Z",
+      "seq": 2
+    },
+    {
+      "type": "synthesis.updated",
+      "eventId": 23,
+      "dataVersion": 20,
+      "occurredAt": "2026-09-16T14:45:12.624Z",
+      "sourceTranscriptVersion": 2
+    },
+    {
+      "type": "utterance.created",
+      "eventId": 34,
+      "dataVersion": 30,
+      "occurredAt": "2026-09-16T14:45:12.722Z",
+      "seq": 3
+    },
+    {
+      "type": "discussion.status_changed",
+      "eventId": 36,
+      "dataVersion": 30,
+      "occurredAt": "2026-09-16T14:45:12.722Z",
+      "status": "stopping"
+    },
+    {
+      "type": "summary.ready",
+      "eventId": 37,
+      "dataVersion": 31,
+      "occurredAt": "2026-09-16T14:45:12.749Z"
+    },
+    {
+      "type": "discussion.status_changed",
+      "eventId": 38,
+      "dataVersion": 31,
+      "occurredAt": "2026-09-16T14:45:12.749Z",
+      "status": "completed"
+    }
+  ],
+  "outcome": "normal_path",
+  "browserClosed": true,
+  "endedAt": "2026-09-16T14:45:13.729Z"
+}

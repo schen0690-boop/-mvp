@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-09-16T14:48:14.611Z",
+  "secretPatternHits": [],
+  "histories": {
+    "docs/stage-6b-validation.md": true,
+    "docs/sources/development-prompts.md": true,
+    "docs/development-log.md": true
+  },
+  "protectedSame": true,
+  "prohibitedChanges": "",
+  "privateTracked": "",
+  "sourceHashes": {
+    "scripts/startup/launch.ts": "bd1cafdaf885cc789428a6d3e00ce1f38f7d370ab1b73711cd972fc2a9affe78",
+    "scripts/startup/owned-child.ts": "5dbc94635ab72398ac39bca3bcd225e869afef5bd72a3e975f4440f261ef81b1",
+    "scripts/startup/readiness.ts": "74e5172ad087b7b9c058f0505320e278862d6a44cf185c772bbbd6f7763e20a2",
+    "scripts/startup/stage6b.ts": "32536f0cc8ffcb8c4bd24816fb73224e4bdab338d142ce114d7462d9227f4225",
+    "tests/fixtures/startup/owned-child.cjs": "9ce8fd31f4e98c58dd0b403562dcadf5f2b71791e724417e9a3c1d768f2e7fcd",
+    "tests/integration/startup-prepared.test.ts": "fa1b0240edcec9f0ffb8e511ddf33612fbec92c9fc9b15b92a921b7a8f2154e0",
+    "tests/integration/startup-process.test.ts": "9d51dbd051144e7b0d582158d522d37ae30611aedfb2e75f11dda17f821d9254",
+    "tests/integration/startup-readiness.test.ts": "5b5af9b796051f0b9868637a18875f29ca30dd57b04732e1aaccd817e6a1dc88",
+    "tsconfig.startup.json": "b154322fd909e4a4f44bae5f8d01dc1c2b7080c551b723975ee2e02c35715704",
+    "scripts/stage6b-dry-run.mjs": "264ac2760dd415ab47a2e0a2b4c7c1a58d19d4a0a9001a2f4cafda50412e6f85",
+    "scripts/stage6b-local-backend.mjs": "b46e9715b0c7a7be1e79edfac9e3cac9499e44dd900ad29ccff5be7ca2379f16"
+  }
+}

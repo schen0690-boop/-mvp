@@ -1,0 +1,17 @@
+{
+  "originalCommandLine": 18,
+  "response": "native Fetch Response",
+  "responseStatus": 200,
+  "okType": "boolean",
+  "direct": {
+    "name": "TypeError",
+    "message": "r.ok is not a function"
+  },
+  "final": {
+    "name": "Error",
+    "message": "LOCAL_READY_TIMEOUT"
+  },
+  "elapsedMs": 15105,
+  "localHttpRequests": 141,
+  "officialRequests": 0
+}

@@ -1,0 +1,73 @@
+{
+  "startedAt": "2026-09-16T14:45:04.325Z",
+  "commands": [
+    {
+      "name": "startup static",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.startup.json",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "backend typecheck",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "affected backend",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/startup-readiness.test.ts",
+        "tests/integration/startup-process.test.ts",
+        "tests/integration/startup-prepared.test.ts",
+        "tests/integration/short-discussion.test.ts",
+        "tests/integration/guarded-discussion.test.ts",
+        "tests/unit/discussion-authorization.test.ts",
+        "--reporter=json",
+        "--outputFile=evidence/stage-6b/startup-fix/final-backend.json"
+      ],
+      "exitCode": 0,
+      "stdout": "JSON report written to D:/实测文件夹/evidence/stage-6b/startup-fix/final-backend.json\n",
+      "stderr": ""
+    },
+    {
+      "name": "snapshot consumers",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "web/vitest.config.ts",
+        "web/tests/api.test.ts",
+        "web/tests/lineup-api.test.ts",
+        "web/tests/runtime-api.test.tsx",
+        "--reporter=json",
+        "--outputFile=evidence/stage-6b/startup-fix/final-consumers.json"
+      ],
+      "exitCode": 0,
+      "stdout": "JSON report written to D:/实测文件夹/evidence/stage-6b/startup-fix/final-consumers.json\n",
+      "stderr": ""
+    },
+    {
+      "name": "same launcher rehearsal",
+      "args": [
+        "scripts/stage6b-dry-run.mjs"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"evidence\":\"D:\\\\实测文件夹\\\\evidence\\\\stage-6b\\\\startup-fix\\\\local-2026-09-16T14-45-09.780Z\\\\result.json\",\"steps\":[\"backend snapshot validated\",\"frontend proxy same snapshot validated\",\"browser short discussion + terminal refresh passed\"]}\n",
+      "stderr": ""
+    }
+  ],
+  "endedAt": "2026-09-16T14:45:13.801Z"
+}

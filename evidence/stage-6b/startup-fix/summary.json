@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-09-16T14:45:37.601Z",
+  "backendTests": 28,
+  "consumerTests": 26,
+  "network": {
+    "testOnly": true,
+    "provider": "local HTTP stub",
+    "loopbackRequests": 9,
+    "blockedExternal": 0,
+    "officialRequests": 0,
+    "privateConfigLoaded": false,
+    "closedAuthorization": true,
+    "counts": {
+      "ordinary": 8,
+      "summary": 1,
+      "total": 9
+    }
+  },
+  "originalAuthorizationFilesUnchanged": true,
+  "changed": [],
+  "originalAuthorizationClosed": true,
+  "ui": {
+    "discussionId": "61b5d210-c5ef-4aec-b6b2-d830ace62009",
+    "runId": "d8292eed-16b9-433b-b5c9-d7fb905288ec",
+    "posts": [
+      "/api/discussions/61b5d210-c5ef-4aec-b6b2-d830ace62009/start"
+    ],
+    "steps": {
+      "startClickedOnce": true,
+      "runningScreenshot": true,
+      "savedAndDisplayed": true,
+      "summary": "ready",
+      "synthesis": true,
+      "refreshMatches": true
+    },
+    "outcome": "normal_path",
+    "browserClosed": true
+  },
+  "snapshot": {
+    "status": "completed",
+    "expertUtterances": 2,
+    "synthesis": true,
+    "summary": "ready"
+  },
+  "evidence": "evidence/stage-6b/local-dry-gNWzws",
+  "processes": [
+    {
+      "code": 0,
+      "signal": null
+    },
+    {
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "code": 0,
+      "signal": null
+    }
+  ]
+}

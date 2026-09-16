@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": ".cache/startup",
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": [
+    "scripts/startup/**/*.ts",
+    "scripts/stage6b-dry-run.mjs"
+  ]
+}

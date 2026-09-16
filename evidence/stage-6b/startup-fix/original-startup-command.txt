@@ -1,0 +1,32 @@
+@'
+import {fork,spawn,execFileSync} from 'node:child_process';
+import {readFileSync,writeFileSync,readdirSync,existsSync} from 'node:fs';
+import {setTimeout as delay} from 'node:timers/promises';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+const out='evidence/stage-6b/live',prepared=JSON.parse(readFileSync('.local/stage-6b-live/prepared.json','utf8')),scope=JSON.parse(readFileSync('evidence/stage-6b/preflight-scope.json','utf8'));
+for(const [p,h] of Object.entries(scope.sourceHashes))assert.equal(createHash('sha256').update(readFileSync(p)).digest('hex'),h);
+assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),prepared.codeRevision);
+assert.equal(execFileSync('git',['diff','--name-only'],{encoding:'utf8'}).trim(),'');
+const dir='.local/stage-6b-live/authorization';assert.deepEqual(readdirSync(dir),['manifest.json']);
+const life={startedAt:new Date().toISOString(),codeRevision:prepared.codeRevision,discussionId:prepared.discussionId,runId:prepared.runId,processes:[],startupCorrection:'fork execArgv=[]; prior wrapper failed before service/run start, same untouched authorization'};let backend,front;
+const ended=child=>new Promise(resolve=>child.once('exit',(code,signal)=>resolve({pid:child.pid,code,signal})));let be,fe;
+try{
+ backend=fork('dist/live-stage6b.js',[],{execArgv:[],windowsHide:true,stdio:['ignore','pipe','pipe','ipc']});be=ended(backend);life.backendPid=backend.pid;
+ backend.stdout.on('data',d=>{const text=d.toString();process.stdout.write(text);try{life.backendSettings=JSON.parse(text);}catch{}});backend.stderr.on('data',()=>{});
+ const base='http://127.0.0.1:41882',url=base+'/api/discussions/'+prepared.discussionId;
+ async function ready(url){const until=Date.now()+15000;while(true){try{const r=await fetch(url);if(r.ok())return r;}catch{}if(Date.now()>until)throw Error('LOCAL_READY_TIMEOUT');await delay(100);}}
+ const initial=await(await ready(url)).json();assert.equal(initial.status,'lineup_confirmed');assert.equal(initial.roles.length,3);
+ front=spawn(process.execPath,['node_modules/vite/bin/vite.js','--config','web/vite.config.ts','--port','41881'],{windowsHide:true,env:{...process.env,WEB_API_TARGET:base,VITE_DISCUSSION_DEMO:'live-short'},stdio:['ignore','pipe','pipe']});fe=ended(front);life.frontendPid=front.pid;front.stdout.on('data',()=>{});front.stderr.on('data',()=>{});
+ await ready('http://127.0.0.1:41881');assert.equal(life.backendSettings?.provider,'deepseek');assert.equal(life.backendSettings.counts.total,0);assert.equal(life.backendSettings.closed,false);
+ writeFileSync(out+'/pre-start.json',JSON.stringify({...life,initialStatus:initial.status,allSourceHashesMatch:true,rosterSource:prepared.source},null,2),{flag:'wx'});
+ const ui=spawn(process.execPath,['scripts/stage6b-live-ui.mjs'],{windowsHide:true,stdio:['ignore','pipe','pipe']});ui.stdout.on('data',d=>process.stdout.write(d));ui.stderr.on('data',()=>{});life.ui=await ended(ui);
+ let s;const deadline=Date.now()+190000;do{try{const r=await fetch(url);if(r.ok())s=await r.json();else break;}catch{break;}if(!['running','stopping'].includes(s.status))break;await delay(500);}while(Date.now()<deadline);
+ life.finalReadStatus=s?.status??'unverified';if(s)writeFileSync(out+'/post-ui-snapshot.json',JSON.stringify(s,null,2),{flag:'wx'});
+}catch{life.error='LOCAL_OR_BROWSER_STEP_NOT_VERIFIED';process.exitCode=1;}
+finally{
+ if(front){front.kill();life.processes.push(await fe);}
+ if(backend){if(backend.connected){backend.send('shutdown',()=>{if(backend.connected)backend.disconnect();});}life.processes.push(await be);}
+ life.closedAuthorization=existsSync(dir+'/closed.json');life.endedAt=new Date().toISOString();writeFileSync(out+'/process-lifecycle-final.json',JSON.stringify(life,null,2),{flag:'wx'});console.log(JSON.stringify(life));
+}
+'@ | node --input-type=module

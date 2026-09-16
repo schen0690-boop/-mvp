@@ -214,3 +214,14 @@ node scripts/stage6b-live-ui.mjs
 本地回归命令`node scripts/stage6b-verify.mjs`不读私有配置或请求官方服务，含独立临时库/HTTP替身短流程；真实执行结果见[6B验证记录](docs/stage-6b-validation.md)。不要删除预算文件以清理环境，不提交验收数据库/原始授权记录。
 
 本次6B授权已于2026-09-16 22:20:51（UTC+8）因启动就绪脚本错误中止并关闭，尚未开始讨论，官方请求0。不得再次运行prepare/start或删除关闭记录以补测。上述命令保留为实施说明，当前不构成再次调用授权。实际受阻原因、纯读取验收和后续需重新明确授权的边界见6B验证记录。
+
+## 6B启动修复后的固定入口（当前仅零外呼）
+
+```powershell
+npm run typecheck:startup
+npm run rehearse:stage6b
+# 兼容原命令，同样编译并调用共享入口
+node scripts/stage6b-dry-run.mjs
+```
+
+新增启动代码位于scripts/startup，统一检查真实GET讨论快照及前端代理相同内容；不新增健康接口。测试夹具为testOnly，模型传输仅loopback，普通启动及生产协议不变。以后新真实验收获单独批准、准备有效新授权后才可使用`npm run build:startup`与`npm run launch:stage6b -- --live`；该入口不会创建授权，当前旧closed记录会在启动服务/加载密钥之前拒绝。不要重建旧记录，也不要再使用未经验证的临时启动命令。验证和已知范围见stage-6b-validation的“启动脚本修复”小节。

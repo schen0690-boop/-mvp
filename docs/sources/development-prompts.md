@@ -4493,3 +4493,7 @@ docs/stage-5c-validation.md。
 # P14 — 阶段6B短参数、一次性授权与单样本真实讨论（2026-09-16）
 
 用户附件a529d552-a987-47c5-8902-fa222912a5fd/pasted-text.txt原文完整复制至[stage-6b-request.md](stage-6b-request.md)，没有复制含密钥的历史消息。意图：仅一个预置阵容run，先本地验证20次硬限制，再实际验证真实讨论短路径并关闭权限。真实修正：本地浏览器拒绝120秒快照，定位为前端写死600000毫秒；先补复现测试，再仅允许120000或600000，不改变后端默认值。应用模型提示词不是此开发Prompt，历史原文保持不变。
+
+# P15 — 6B启动脚本修复与零外呼彩排
+
+本轮真实用户Prompt逐字归档[stage-6b-startup-fix-request.md](stage-6b-startup-fix-request.md)，取自实际当前会话用户消息，不复制密钥历史。意图：定位原临时命令，先本地复现，再让真实入口与彩排共享已类型检查/测试的启动检查和资源清理；旧授权保持关闭。本轮实际修正为原生Fetch ok属性和错误分类，Playwright ok()保留。原生ForkOptions字段类型错误不计业务RED。真实RED→GREEN、同入口彩排和保护哈希见stage-6b-validation追加小节。

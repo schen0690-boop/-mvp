@@ -20,10 +20,14 @@
     "test:e2e:local-adapter": "playwright test --config playwright.stage6a.config.ts",
     "typecheck:e2e": "tsc -p tsconfig.e2e.json",
     "config:check": "node dist/check-backend-config.js",
-    "live:stage4d": "node dist/live-server.js"
-    ,"config:stage6b": "node dist/check-stage6b-config.js"
-    ,"prepare:stage6b": "node dist/prepare-stage6b.js"
-    ,"live:stage6b": "node dist/live-stage6b.js"
+    "live:stage4d": "node dist/live-server.js",
+    "config:stage6b": "node dist/check-stage6b-config.js",
+    "prepare:stage6b": "node dist/prepare-stage6b.js",
+    "live:stage6b": "node dist/live-stage6b.js",
+    "typecheck:startup": "tsc -p tsconfig.startup.json --noEmit",
+    "build:startup": "tsc -p tsconfig.startup.json",
+    "launch:stage6b": "node .cache/startup/scripts/startup/stage6b.js",
+    "rehearse:stage6b": "npm run build:startup && npm run launch:stage6b -- --local"
   },
   "dependencies": {
     "express": "5.2.1",

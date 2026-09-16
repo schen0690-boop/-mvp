@@ -1,0 +1,26 @@
+{
+  "mode": "local",
+  "startedAt": "2026-09-16T14:45:09.781Z",
+  "steps": [
+    "backend snapshot validated",
+    "frontend proxy same snapshot validated",
+    "browser short discussion + terminal refresh passed"
+  ],
+  "processes": [
+    {
+      "code": 0,
+      "signal": null
+    },
+    {
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "root": "D:\\实测文件夹\\.tmp\\stage-6b\\dry-gNWzws",
+  "uiEvidence": "evidence/stage-6b/local-dry-gNWzws",
+  "finishedAt": "2026-09-16T14:45:13.781Z"
+}
