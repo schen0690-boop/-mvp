@@ -4,6 +4,7 @@ import type { DraftRecord, DraftStore } from '../domain/drafts.js';
 import { isObject } from '../domain/input.js';
 import { AppError } from '../domain/errors.js';
 import { readSnapshot } from './read-discussion.js';
+import {isRuntimeStatus} from '../domain/snapshot.js';
 
 export class SqliteDraftStore implements DraftStore {
   constructor(private readonly db: DatabaseSync) {}
@@ -57,13 +58,13 @@ function isTimestamp(value: unknown): value is string {
 function readRecord(row: unknown): DraftRecord {
   if (!isObject(row) || typeof row.id !== 'string' || typeof row.topic !== 'string' ||
       typeof row.expert_count !== 'number' || !Number.isInteger(row.expert_count) || row.expert_count < 1 || row.expert_count > 8 ||
-      !['created', 'generating_lineup', 'awaiting_confirmation', 'lineup_generation_failed', 'lineup_confirmed'].includes(String(row.status)) ||
+      (!['created', 'generating_lineup', 'awaiting_confirmation', 'lineup_generation_failed', 'lineup_confirmed'].includes(String(row.status))&&!isRuntimeStatus(row.status)) ||
       typeof row.version !== 'number' || !Number.isSafeInteger(row.version) || row.version < 1 ||
       typeof row.last_event_id !== 'number' || !Number.isSafeInteger(row.last_event_id) || row.last_event_id < 1 ||
       !isTimestamp(row.created_at) || !isTimestamp(row.updated_at)) {
     throw new Error('INVALID_STORED_DRAFT');
   }
-  if (row.status !== 'created' && row.status !== 'generating_lineup' && row.status !== 'awaiting_confirmation' && row.status !== 'lineup_generation_failed' && row.status !== 'lineup_confirmed') throw new Error('INVALID_STORED_STATUS');
+  if (row.status !== 'created' && row.status !== 'generating_lineup' && row.status !== 'awaiting_confirmation' && row.status !== 'lineup_generation_failed' && row.status !== 'lineup_confirmed'&&!isRuntimeStatus(row.status)) throw new Error('INVALID_STORED_STATUS');
   return { discussionId: row.id, topic: row.topic, expertCount: row.expert_count,
     status: row.status, version: row.version, lastEventId: row.last_event_id,
     createdAt: row.created_at, updatedAt: row.updated_at };

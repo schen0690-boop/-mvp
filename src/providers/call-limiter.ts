@@ -16,7 +16,7 @@ export class CallLimiter {
     if(started){this.count--;this.counts.set(id,(this.counts.get(id)??1)-1);}
     if(!ok)reject(value);this.pump();
    };
-   const abort=()=>finish(false,new ProviderError('cancelled'));
+   const abort=()=>finish(false,signal.reason instanceof ProviderError?signal.reason:new ProviderError('cancelled'));
    const entry:Waiting={id,launch:()=>{
     if(signal.aborted){abort();return;}if(performance.now()>=deadline){finish(false,new ProviderError('timeout'));return;}
     started=true;this.count++;this.counts.set(id,(this.counts.get(id)??0)+1);this.lastId=id;

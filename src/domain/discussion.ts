@@ -76,5 +76,7 @@ export function rankCandidates(c:Candidate[],input:DiscussionInput,waiting:Map<s
  const wait=(x:Candidate)=>waiting.get(x.member.memberId)??0;
  const relevance=(x:Candidate)=>['rebuttal','supplement'].includes(x.intent.intent)&&x.intent.replyToUtteranceIds.includes(input.utterances.at(-1)?.id??'')?1:0;
  const count=(x:Candidate)=>past.filter(u=>u.roleId===x.member.memberId).length;
- return [...pool].sort((a,b)=>Number(wait(b)>=3)-Number(wait(a)>=3)||relevance(b)-relevance(a)||wait(b)-wait(a)||count(a)-count(b)||a.member.memberId.localeCompare(b.member.memberId));
+ const ranked=[...pool].sort((a,b)=>Number(wait(b)>=3)-Number(wait(a)>=3)||relevance(b)-relevance(a)||wait(b)-wait(a)||count(a)-count(b)||a.member.memberId.localeCompare(b.member.memberId));
+ // The previous speaker is a fallback only after all alternatives fail validation.
+ return [...ranked,...valid.filter(c=>!pool.includes(c))];
 }

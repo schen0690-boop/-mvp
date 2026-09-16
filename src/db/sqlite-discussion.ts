@@ -28,7 +28,7 @@ export class SqliteDiscussionStore implements DiscussionStore {
   if(s.roles.length!==s.expertCount+1||s.roles.filter(m=>m.role==='moderator').length!==1)throw new Error('INVALID_CONFIRMED_ROLES');
   const time=now(),runId=randomUUID();
   this.db.prepare("UPDATE discussions SET status='running',run_id=?,start_request_id=?,run_epoch=1,started_at=?,run_deadline_at=?,call_limit=? WHERE id=? AND status='lineup_confirmed'")
-   .run(runId,input.requestId,time,new Date(Date.now()+600000).toISOString(),callBudget(s.expertCount),id);
+   .run(runId,input.requestId,time,new Date(Date.parse(time)+600000).toISOString(),callBudget(s.expertCount),id);
   for(const m of s.roles)this.db.prepare("INSERT INTO role_public_states VALUES (?,?,'idle',NULL,NULL,?)").run(id,m.memberId,time);
   this.events(id,[{type:'discussion.status_changed',payload:null}],time);return result(false);
  });
@@ -82,7 +82,7 @@ export class SqliteDiscussionStore implements DiscussionStore {
   this.events(id,[{type:'synthesis.updated',payload:{synthesis:this.state(id)!.snapshot.synthesis}},{type:'discussion.notice',payload:{notice:null}}],time);return true;
  });
  private stopMutation(id:string,reason:StopReason,time:string):void{
-  this.db.prepare("UPDATE discussions SET status='stopping',run_epoch=run_epoch+1,stop_reason=?,stopping_at=?,stop_deadline_at=?,frozen_transcript_version=transcript_version,synthesis_state=CASE WHEN synthesis_state='preparing' THEN 'failed' ELSE synthesis_state END WHERE id=? AND status='running'").run(reason,time,new Date(Date.now()+60000).toISOString(),id);
+  this.db.prepare("UPDATE discussions SET status='stopping',run_epoch=run_epoch+1,stop_reason=?,stopping_at=?,stop_deadline_at=?,frozen_transcript_version=transcript_version,synthesis_state=CASE WHEN synthesis_state='preparing' THEN 'failed' ELSE synthesis_state END WHERE id=? AND status='running'").run(reason,time,new Date(Date.parse(time)+60000).toISOString(),id);
   this.db.prepare("UPDATE role_public_states SET status='idle',updated_at=? WHERE discussion_id=?").run(time,id);
  }
  stop:DiscussionStore['stop']=(id,reason)=>transaction(this.db,()=>{
