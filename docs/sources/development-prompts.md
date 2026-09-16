@@ -2284,3 +2284,640 @@ Fake Provider 通过不等于真实模型已验证。
 不要自动进入真实模型接入或完整阵容 UI。
 
 ```
+
+
+## P7 - 阶段4C真实开发Prompt
+
+请基于已完成的阶段 4B，进入并实际执行：
+
+【阶段 4C：阵容生成与确认前端闭环 + Fake Provider E2E】
+
+项目根目录：
+D:\实测文件夹
+
+本阶段目标：
+
+让用户在现有中文界面真实完成：
+
+创建草稿
+→ 生成阵容
+→ 查看生成状态
+→ 查看主持人与专家
+→ 重新生成 / 失败重试
+→ 确认当前阵容
+→ 刷新后恢复正确状态。
+
+本阶段继续使用 Fake RosterGenerator。
+
+阶段编号固定为：
+- 4C：Fake Provider 下的阵容前端闭环；
+- 4D：真实模型 Adapter 与真实模型联调。
+
+本阶段不实现：
+真实模型、API Key、SSE、discussion runner、专家调度、
+Transcript、共识/分歧、主持人总结及完整演播厅。
+
+不得改变阶段 4B 已确认的 lineup 核心业务语义，
+除非真实联调发现明确的契约缺陷。
+
+━━━━━━━━━━━━━━━━━━
+一、先核对真实契约
+━━━━━━━━━━━━━━━━━━
+
+读取：
+
+- AGENTS.md
+- docs/lineup-design.md
+- docs/contracts.md
+- docs/ui-spec.md
+- docs/test-plan.md
+- docs/stage-3-validation.md
+- docs/stage-4b-validation.md
+- 阶段 4B 实施计划
+- lineup API / snapshot / 前端 API client
+- discussion detail 页面
+- 当前前端测试与 Playwright 配置
+- Git 状态
+
+必须从真实代码确认：
+
+- generation 请求/响应；
+- confirm 请求/响应；
+- generation/version 实际字段；
+- roles/member 公开结构；
+- status；
+- public error；
+- 409 响应结构。
+
+不要依据历史摘要重新定义字段。
+
+文档与实现若存在明确漂移，
+只修复漂移，不重新设计 4B。
+
+━━━━━━━━━━━━━━━━━━
+二、Skills 与实现边界
+━━━━━━━━━━━━━━━━━━
+
+使用现有：
+
+- frontend-design：阵容区域和卡片；
+- test-driven-development：交互逻辑；
+- systematic-debugging：联调故障；
+- verification-before-completion：最终验收。
+
+不安装或升级 Skill。
+
+这是已有 UI + API 的 bounded 扩展，
+不重新规划整个 lineup 子系统，
+按小任务实施并保持真实 TDD。
+
+保留阶段 3 已完成的：
+创建讨论、列表、详情、桌面布局和窄屏切换。
+
+阵容功能只扩展现有详情区域，
+不得重写整个 App 或提前搭建演播厅。
+
+━━━━━━━━━━━━━━━━━━
+三、五种 lineup 状态 UI
+━━━━━━━━━━━━━━━━━━
+
+严格以服务器 snapshot 为权威。
+
+### created
+
+显示：
+- 话题；
+- 专家人数；
+- “生成阵容”。
+
+不显示虚构成员或“开始讨论”。
+
+点击后按钮立即进入 disabled + loading 状态，
+防止重复提交。
+
+### generating_lineup
+
+显示：
+“正在生成主持人与专家阵容……”
+
+要求：
+- 禁止重复生成和确认；
+- 旧 lineup 不作为当前可确认阵容；
+- 页面刷新后若 snapshot 仍为 generating_lineup，
+  自动恢复状态同步。
+
+当前没有 SSE，
+因此本阶段允许使用 snapshot 轮询：
+
+- 固定约每 2 秒一次；
+- 单次页面监控窗口最多 60 次自动轮询；
+- discussion 切换、组件离开或状态终止后立即停止；
+- 轮询只执行 GET，不得重新触发 generation。
+
+若达到自动轮询上限，
+不得由前端把业务状态改成 lineup_generation_failed。
+
+此时：
+- 停止自动轮询；
+- 保留服务器最后一次确认的 generating_lineup 状态；
+- 显示“状态获取超时，请重新检查”；
+- 提供“重新检查状态”的 GET 操作。
+
+只有服务器明确返回 lineup_generation_failed，
+才能显示“重试生成”。
+
+### awaiting_confirmation
+
+展示当前有效阵容。
+
+主持人和专家均显示：
+- 姓名；
+- 职业；
+- Title；
+- 立场；
+- 服务端返回的系统颜色。
+
+显示：
+- “确认阵容”
+- “重新生成”
+
+明确提示阵容尚未确认。
+
+### lineup_generation_failed
+
+显示安全错误提示和：
+
+“重试生成”
+
+不得显示：
+Provider 原始错误、stack、SQL、内部 JSON 或隐藏推理。
+
+历史旧 lineup 即使仍在数据库，
+也不能恢复为当前可确认阵容。
+
+### lineup_confirmed
+
+展示已确认阵容，全部只读。
+
+不得提供：
+- 重新生成；
+- 取消确认；
+- 撤销；
+- 修改阵容；
+- 可工作的“开始讨论”。
+
+可显示：
+“阵容已确认，讨论功能将在后续阶段启用。”
+
+━━━━━━━━━━━━━━━━━━
+四、阵容卡片
+━━━━━━━━━━━━━━━━━━
+
+沿用阶段 3 已有视觉风格。
+
+主持人需有明确身份层级，
+专家使用响应式卡片布局。
+
+主要展示：
+
+姓名
+职业
+Title
+立场
+
+颜色使用服务端 color，
+仅作为边框、标识点或小面积强调。
+
+不要：
+- 前端随机分配颜色；
+- 虚构真人头像；
+- 外部头像服务；
+- 展示 memberId、generationId、revision 等内部字段。
+
+长文本必须正常换行，
+不得为了等高卡片裁掉重要内容。
+
+━━━━━━━━━━━━━━━━━━
+五、提交中状态
+━━━━━━━━━━━━━━━━━━
+
+以下用户动作都必须防止重复提交：
+
+- 生成阵容；
+- 重试生成；
+- 重新生成；
+- 确认阵容。
+
+点击后对应按钮立即：
+
+disabled + loading
+
+可采用转圈或“处理中…”文字。
+
+请求成功：
+按服务端最新 snapshot 更新 UI。
+
+请求失败：
+恢复按钮可点击，
+但不得擅自改变服务器业务状态。
+
+不得仅依靠按钮 disabled 作为业务并发控制，
+服务端仍是最终权威。
+
+━━━━━━━━━━━━━━━━━━
+六、确认阵容
+━━━━━━━━━━━━━━━━━━
+
+confirm 必须使用当前 snapshot 中
+contracts.md 定义的真实 generation/version 字段。
+
+不得由前端自行计算版本。
+
+成功：
+采用服务端返回 snapshot，
+进入 lineup_confirmed。
+
+### 409 冲突
+
+不得自动更换版本再次确认。
+
+若响应包含最新公开 snapshot：
+直接采用。
+
+否则：
+重新 GET 当前 discussion。
+
+然后：
+- 更新到服务器最新状态；
+- 提示：
+  “阵容已发生变化，请确认最新版本。”
+
+如果服务器已经 lineup_confirmed，
+直接恢复已确认状态。
+
+### confirm 非 409 错误
+
+如 500 / 503 / 网络请求失败：
+
+- 不得退出 awaiting_confirmation；
+- 不得清空当前阵容；
+- 不得自行重新确认；
+- 显示受控提示，例如：
+  “确认失败，请重试。”
+- 请求结束后恢复确认/重新生成按钮状态。
+
+内部错误正文不得直接展示给用户。
+
+━━━━━━━━━━━━━━━━━━
+七、重新生成与失败重试
+━━━━━━━━━━━━━━━━━━
+
+只有 awaiting_confirmation 可以重新生成。
+
+点击后按钮立即进入 loading。
+
+服务端一旦受理重新生成：
+
+- 使用返回的最新 snapshot；
+- 当前 lineup 立即失去确认资格；
+- UI 进入 generating_lineup；
+- 旧成员不再作为当前可确认阵容展示。
+
+新生成成功：
+展示新 lineup。
+
+新生成失败：
+只有服务器返回 lineup_generation_failed 后，
+才进入失败 UI。
+
+不得恢复旧 lineup 的确认能力。
+
+失败状态的“重试生成”
+必须再次调用真实 generation API，
+不能复用浏览器中的旧成功数据。
+
+━━━━━━━━━━━━━━━━━━
+八、网络中断与轮询
+━━━━━━━━━━━━━━━━━━
+
+网络错误与业务生成失败必须严格区分。
+
+轮询期间如果浏览器离线或请求因网络连接失败：
+
+- 不得将 discussion 改成 lineup_generation_failed；
+- 显示：
+  “网络连接中断，正在等待恢复……”
+  或等价提示；
+- 离线期间暂停主动轮询；
+- 离线时间不消耗正常轮询次数；
+- 网络恢复后继续读取同一 discussion 的最新 snapshot。
+
+不得因此重新触发 generation。
+
+若网络恢复后服务器返回：
+- awaiting_confirmation：展示阵容；
+- lineup_generation_failed：进入失败状态；
+- lineup_confirmed：恢复确认状态；
+- generating_lineup：继续剩余轮询。
+
+仅服务端明确业务失败，
+才能进入 lineup_generation_failed。
+
+━━━━━━━━━━━━━━━━━━
+九、刷新、discussion 切换与多 Tab
+━━━━━━━━━━━━━━━━━━
+
+所有业务状态以服务器 snapshot 为最终权威。
+
+刷新后必须恢复：
+
+created
+generating_lineup
+awaiting_confirmation
+lineup_generation_failed
+lineup_confirmed
+
+不得依靠 LocalStorage 保存 lineup 来恢复业务状态。
+
+### discussion 切换
+
+A 的 generation / polling / confirm 晚返回，
+不得覆盖当前正在查看的 B。
+
+切换后停止上一 discussion 的轮询副作用。
+
+### 同一 discussion 多 Tab
+
+不额外建设跨 Tab 同步协议。
+
+多个 Tab 中：
+服务器 snapshot 始终为最终权威。
+
+若另一 Tab 已经：
+- regenerate；
+- confirm；
+- 改变当前 generation；
+
+当前 Tab 下一次 GET / 操作冲突后
+必须接受服务器最新状态。
+
+不得因为本地历史状态拒绝渲染服务器的新版本。
+
+409 时按第六部分逻辑恢复最新 snapshot，
+并提示用户阵容已发生变化。
+
+━━━━━━━━━━━━━━━━━━
+十、前端契约边界
+━━━━━━━━━━━━━━━━━━
+
+前端只消费公开 API contract，
+不得导入数据库内部类型。
+
+扩展现有 runtime parser，
+支持阶段 4B 的新状态和 lineup 字段。
+
+服务端响应若不符合公开契约：
+
+- 显示受控错误；
+- 不伪造成员；
+- 不静默补默认值。
+
+旧 created snapshot 必须继续兼容。
+
+━━━━━━━━━━━━━━━━━━
+十一、TDD
+━━━━━━━━━━━━━━━━━━
+
+至少覆盖：
+
+1. created 显示生成；
+2. generation 防重复提交；
+3. generating 禁止确认/再次生成；
+4. 刷新 generating 后自动恢复轮询；
+5. 正常结果显示 1 主持人 + N 专家；
+6. profession/title/stance/color 正确；
+7. awaiting_confirmation 显示确认和重新生成；
+8. confirm 使用当前真实 generation/version；
+9. confirm 成功进入 confirmed；
+10. confirm 非 409 失败保留当前阵容并恢复按钮；
+11. confirm 409 恢复服务器最新 snapshot；
+12. regenerate 受理后旧 lineup 立即失去确认资格；
+13. regenerate 失败不恢复旧 lineup；
+14. failed 可以重试；
+15. confirmed 为只读且没有撤销/修改操作；
+16. 刷新 awaiting_confirmation 正确恢复；
+17. 刷新 confirmed 正确恢复；
+18. discussion 切换后旧结果不覆盖新页面；
+19. 同 discussion 多 Tab 的旧版本操作按服务器状态恢复；
+20. 网络离线不被误判为 generation failed；
+21. 网络恢复后继续状态同步；
+22. 自动轮询达到上限不会修改服务器业务状态；
+23. Provider 内部错误不进入 UI；
+24. 阶段 3 草稿流程无回归。
+
+真实 RED 必须来自未实现行为，
+不能把依赖、语法或路径错误算业务 RED。
+
+━━━━━━━━━━━━━━━━━━
+十二、Fake Provider 局部 E2E
+━━━━━━━━━━━━━━━━━━
+
+使用：
+
+真实 React
++ 真实 Express
++ 真实 SQLite migration
++ Fake RosterGenerator。
+
+正常主流程不得 mock API。
+
+至少覆盖：
+
+1.
+创建草稿
+→ 生成
+→ awaiting_confirmation
+→ 展示阵容
+→ 确认
+→ lineup_confirmed。
+
+2.
+awaiting_confirmation
+→ regenerate
+→ 新 lineup，
+旧版不能确认。
+
+3.
+generation failed
+→ retry
+→ 成功。
+
+4.
+generating_lineup 刷新
+→ 自动继续状态同步
+→ 最终展示结果。
+
+5.
+awaiting_confirmation / confirmed 刷新恢复。
+
+6.
+confirm 409
+→ 获取最新 snapshot
+→ 正确提示。
+
+7.
+confirm 500/503
+→ 当前 lineup 保留
+→ 可以再次确认。
+
+8.
+regenerate failure
+→ 旧 lineup 不重新开放确认。
+
+9.
+生成中切换 discussion
+→ 旧结果不污染当前页面。
+
+10.
+重复点击 generation / confirm
+→ 不产生非预期重复操作。
+
+11.
+浏览器离线后恢复
+→ 不进入业务失败状态
+→ 恢复状态同步。
+
+12.
+同一 discussion 两个 Tab 产生版本变化
+→ 旧 Tab 通过冲突/刷新接受服务器最新状态。
+
+故障场景优先通过：
+Fake Provider 依赖注入、测试配置、
+Playwright 网络能力或测试 fixture 控制。
+
+不要新增普通客户端可调用的生产故障接口。
+
+━━━━━━━━━━━━━━━━━━
+十三、响应式与人工检查
+━━━━━━━━━━━━━━━━━━
+
+检查：
+
+390 × 844
+1366 × 768
+2560 × 1080
+
+覆盖：
+- 1 / 4 / 8 位专家；
+- 长姓名、职业、Title、立场；
+- generating；
+- failed；
+- awaiting_confirmation；
+- confirmed；
+- loading / disabled；
+- 网络中断提示；
+- 键盘焦点；
+- 独立滚动。
+
+8 位专家不得让整个页面无限增长。
+
+至少保留：
+
+- 默认 4 专家桌面；
+- 8 专家桌面；
+- 390px 窄屏；
+- confirmed；
+- failed。
+
+━━━━━━━━━━━━━━━━━━
+十四、最终回归与 Git
+━━━━━━━━━━━━━━━━━━
+
+完成前实际运行：
+
+- 后端 typecheck / build；
+- 阶段 4B 后端和 HTTP 回归；
+- 前端 typecheck / build；
+- 阶段 3 前端回归；
+- 本阶段前端测试；
+- 原有 E2E；
+- 本阶段 lineup E2E。
+
+报告：
+测试数量、退出码、skip/only、
+异常 warning。
+
+不得为了前端方便放宽后端契约。
+
+继续使用当前仓库已确认的项目级 Git 身份。
+
+不得：
+rebase、squash、amend 旧提交、倒填时间。
+
+按实际任务合理提交，
+不要为凑数量制造提交。
+
+更新现有开发记录：
+
+- 本轮真实 Prompt；
+- frontend-design 使用情况；
+- UI 取舍；
+- RED → GREEN 代表记录；
+- E2E 结果；
+- 截图；
+- 实际 bug 与修复。
+
+历史 Prompt 不修改。
+
+本阶段可记录为：
+
+DDD 前端实现
++ TDD
++ 局部 E2E
+
+不得写成真实模型或完整产品 E2E 已完成。
+
+━━━━━━━━━━━━━━━━━━
+十五、完成标准与最终回复
+━━━━━━━━━━━━━━━━━━
+
+只有以下全部满足才算完成：
+
+- 可真实生成、重新生成、重试和确认阵容；
+- generating 来源于服务器状态；
+- 刷新 generating 可以恢复状态同步；
+- 阵容字段和颜色来自服务器；
+- stale 版本不能确认；
+- confirm 非冲突失败不会丢失当前阵容；
+- 409 能恢复最新 snapshot；
+- regenerate 失败不会恢复旧版确认能力；
+- 网络中断不被误判为业务失败；
+- 多 Tab 以服务器状态为准；
+- confirmed 不支持撤销或修改；
+- 阶段 3 无回归；
+- Fake Provider E2E 可重复通过；
+- 没有真实模型调用；
+- UI 不泄露内部错误；
+- 工作区最终干净。
+
+最终只报告：
+
+1. 用户现在能完成的完整流程；
+2. 主要新增/修改文件；
+3. 五种 lineup 状态 UI；
+4. 轮询、断网和刷新恢复方式；
+5. confirm 409 / 非 409 的实际行为；
+6. regenerate failure / stale / 多 Tab 的处理；
+7. 各层测试数量与退出码；
+8. RED → GREEN 代表证据；
+9. 截图路径；
+10. Git 提交；
+11. 尚未实现能力；
+12. 下一阶段建议。
+
+最后明确写：
+
+“阶段 4C 仍使用 Fake Provider，
+未接入或验证真实模型。”
+
+完成后停止，不自动进入阶段 4D。

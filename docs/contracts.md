@@ -173,3 +173,12 @@ Provider超时、传输/结构/业务错误发生在202之后：不补写HTTP错
 确认：POST `/api/discussions/{discussionId}/lineup/confirm`，body `{"generationId":"GET当前UUID","lineupRevision":1}`；用GET中的实际revision替代示例1。200含discussionId、snapshot、replayed；snapshot.status=lineup_confirmed，外层startedAt仍null。失败重试/重新生成复用/lineup路径，但必须新requestId及当前expectedGenerationId。占位字符串不能作为真实请求ID。
 
 当前Provider仅Fake。默认演示成功，不提供浏览器选择异常模式的接口。失败模式只能由测试注入Provider；不开放调试接口。可执行全链路示例：`node scripts/http-smoke.mjs --lineup`（先build，独立新库与进程）。公开事件已落库但没有SSE或事件读取HTTP。
+
+## 阶段4C浏览器消费约定（P7实现）
+
+不新增或放宽4B后端接口/DTO。web/src/api.ts增加generate/confirm，发送精确命令，严格校验成功正文、讨论/代次/版本关联及replayed/状态码。ApiError只保留HTTP状态和本地安全文案，不渲染错误响应正文。
+
+- created生成base=null；ready重新生成、failed重试使用当前generationId与新requestId。结果不确定重试沿用同一次请求；GET证明新代已受理后释放旧命令身份，真正失败重试必须新ID。
+- confirm冻结当前双版本；409另GET（错误正文无snapshot），明确提示变化，不自动重提。GET失败保留文本但锁住已知过时的操作，手动检查成功后恢复；非409确认失败保留卡片和固定中文错误，可重试。
+- 2秒串行GET，页面监测窗口最多60次自动查询；离线不计时补发，联网恢复计入剩余预算。终态/切换/卸载停止，隐藏详情暂停。上限只停止自动查询，不改业务status，允许显式手动GET；刷新/重新选择开启新页面窗口。
+- URL仅含discussion定位ID，GET恢复所有状态；无localStorage阵容缓存。每个详情选择代次与查询代次隔离迟到结果；同讨论拒绝较低snapshot.version回退。多Tab各自读取，通过409/下一次GET接受当前状态，无额外同步协议。

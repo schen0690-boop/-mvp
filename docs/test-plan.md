@@ -128,3 +128,38 @@ S4-15/17/29均由测试创建独立临时旧库，不使用或清空用户库；
 最终后端190项＝99项单元（旧输入38、候选38、Fake13、状态10）＋91项SQLite/HTTP集成。HTTP29项（原18＋阵容11）、迁移12项、维护入口2项都计入91，不额外相加。前端25项＝原18＋兼容7；Edge局部E2E10项＝原9＋API驱动状态兼容1。两个独立进程冒烟另计运行检查。最终命令与退出码见stage-4b-validation。
 
 S4-23/24的HTTP/DB边界已测试，4C完整卡片/按钮与冲突恢复交互未执行。S4-15迁移与HTTP由各自真实集成组合覆盖；S4-26恢复包括created/ready/confirmed保留及遗留生成失败，不代表所有进程崩溃/磁盘断电情形已验证。S4-32及人工质量仍为计划。T01–T20整场讨论/SSE未因本轮阵容测试自动通过。
+
+## 阶段4C实际验收（P7，2026-09-16）
+
+下表覆盖本次24项重点。前置为独立构造的指定snapshot或新建真实草稿；操作和预期由每行对应测试名称定义（测试文件中完整断言）。panel=web/tests/lineup-panel.test.tsx；controller=web/tests/lineup-controller.test.ts；api=web/tests/lineup-api.test.ts；新E2E=e2e/lineup.spec.ts。单元测试模拟HTTP API边界，系统局部E2E正常路径为真实React/Express/SQLite，仅外部Provider为Fake；500/503及请求等待为明确网络故障注入。
+
+| 编号 | 前置、操作和预期 | 实际测试 | 状态 |
+|---|---|---|---|
+| S4C-01 | created生成入口 | panel: created；E2E正常闭环 | 通过 |
+| S4C-02 | 生成防重 | controller: synchronous busy；E2E同一事件循环 | 通过 |
+| S4C-03 | 生成中禁确认/再生成 | controller: forbids/only ready；panel: generating | 通过 |
+| S4C-04 | 生成中刷新轮询 | controller: two-second；E2E生成中刷新 | 通过 |
+| S4C-05 | 1主持人+N专家 | panel: ready；E2E 1/4/8人数 | 通过 |
+| S4C-06 | 职业/头衔/立场/颜色 | panel: identity fields；E2E长字段 | 通过 |
+| S4C-07 | ready双操作 | panel: ready；E2E正常闭环 | 通过 |
+| S4C-08 | 确认真实双版本 | api/controller: exact versions | 通过 |
+| S4C-09 | 确认后confirmed | controller: confirmed；E2E正常闭环 | 通过 |
+| S4C-10 | 非409确认失败保留 | controller: 500/503/0；E2E500/503 | 通过 |
+| S4C-11 | 409恢复最新 | controller: reloads；E2E409及双Tab | 通过 |
+| S4C-12 | 重生成受理隐藏旧卡片 | controller: accepted result；E2E重新生成 | 通过 |
+| S4C-13 | 重生成失败不恢复旧版 | controller: older snapshot；E2E重新生成失败 | 通过 |
+| S4C-14 | 失败新代重试 | controller: retry/uncertain POST；E2EProvider失败重试 | 通过 |
+| S4C-15 | confirmed只读 | panel: read-only；E2E confirmed刷新 | 通过 |
+| S4C-16 | ready刷新 | E2E正常闭环 | 通过 |
+| S4C-17 | confirmed刷新 | E2E正常闭环 | 通过 |
+| S4C-18 | 切换讨论隔离 | controller: late generate/confirm/poll；E2E切换 | 通过 |
+| S4C-19 | 多Tab旧版本恢复 | E2E两个Tab | 通过 |
+| S4C-20 | 离线非业务失败 | controller: offline/network GET；E2E浏览器离线 | 通过 |
+| S4C-21 | 联网继续GET | controller: online；E2E浏览器离线 | 通过 |
+| S4C-22 | 上限不修改status | controller: 60 polls及恢复预算 | 通过 |
+| S4C-23 | 内部错误不入UI | api: safe HTTP/strict DTO；panel: escaped text；E2E500/503 | 通过 |
+| S4C-24 | 阶段3回归 | 原18前端及原9E2E全部执行 | 通过 |
+
+本轮前端68项＝原25＋新增43（API7、Controller28、Panel8）；本轮E2E26＝原10＋新增16。4B兼容用例保留真实API状态回归，旧“没有按钮/卡片”断言按P7改为新界面断言，不将旧阶段限制延续到本轮。后端190项全部回归，未修改后端测试或业务。
+
+S4-23/24的4C卡片/刷新/公开边界部分现已验证；S4-32真实模型仍未执行。T01–T20整场讨论、SSE、发言和共识等仍只保留既有计划。完整结果、退出码和RED→GREEN见stage-4c-validation。自动等待依据业务状态，生产轮询有2秒间隔；假时钟模拟60次上限，不让E2E固定休眠两分钟。

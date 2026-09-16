@@ -200,3 +200,9 @@ erDiagram
 | HTTP/前端 | src/http/app.ts、web/src/api.ts、App.tsx | 两个新POST、GET扩展、严格19/21字段解析和中文状态 |
 
 模型调用不跨数据库事务。每次状态变更一条discussion.status_changed，故4B的version与lastEventId数值相等；后续多事件设计仍须另行实现/验证。创建不调用Provider；确认不调度讨论。遗留generating在监听前原子转失败，不续跑；失败状态写入也失败则拒绝相关读取/操作，启动恢复失败则不监听。没有跨进程所有权锁，禁止多个后端共享一个运行库是运行前提。
+
+## 阶段4C实际前端增量
+
+web/src/api.ts负责阵容命令与严格DTO；controller.ts负责操作互斥、双版本确认、请求身份、有限串行轮询、取消及选择隔离；LineupPanel.tsx仅呈现五态和公开成员，App.tsx接入URL定位、在线/可见性事件。CSS仅扩展详情区卡片，不增加演播厅。
+
+没有后台任务平台或客户端阵容存储；浏览器状态由GET/命令快照恢复。生产src/、迁移001/002及Provider均未变。scripts/e2e-backend.mjs仅为测试组合入口，使用正式Express/服务/SQLite迁移与FakeProvider；测试门闩只在.tmp/stage-4c/gates按随机UUID释放，不开放故障HTTP端点。真实模型接入阶段固定为4D。

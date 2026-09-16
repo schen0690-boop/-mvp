@@ -187,3 +187,22 @@ Git继续使用已明确暂定的项目级schen / cs064210@163.com。保留2ae57
 尚未执行：真实模型协议/ID/价格/取消与能力检查、完整阵容UI、讨论调度/发言/共识/SSE、完整产品E2E和人工讨论质量、跨进程协调/磁盘断电验证、官方支持OS迁移、漏洞审计。实际开发工具仍Codex，题面关于其他工具的口径仍需出题方确认。
 
 后续交付核查：P0–P6为可取得的真实开发请求，不能据条数宣称全部交付完成；四阶段覆盖需结合实际产物，仍缺5组正式话题+对应阵容样例及1–1.5页完整工作流说明等最终材料。4B测试数据不冒充高质量样例。下一步建议4C阵容前端交互与Fake局部E2E，等待用户新授权，不自动接真实模型。
+
+## 阶段4C：阵容前端闭环与Fake局部E2E（2026-09-16）
+
+P7由本轮附件pasted-text.txt真实原文逐字追加，source.json记录原归档前缀字节长度/哈希和本轮原文哈希；未改P0–P6。意图是只扩展详情区，把4B后端操作落为用户可见闭环，DDD/TDD/局部E2E分别留证。实际修正包括重新生成夹具版本、未知POST后新代重试身份、离线恢复预算及409获取失败保护；细节和失败原输出见stage-4c-validation及evidence/stage-4c。
+
+实际使用Skills：
+
+| Skill | 实际SKILL.md路径 | 文件存在/读取/用于任务 | 执行验证 |
+|---|---|---|---|
+| frontend-design | D:\实测文件夹\.agents\skills\frontend-design\SKILL.md | 是/是/是，继承主色、字段层级、卡片/滚动设计及截图批评 | 前端测试与Edge截图；未执行安装脚本 |
+| test-driven-development | C:\Users\Administrator\.codex\skills\superpowers\skills\test-driven-development\SKILL.md | 是/是/是，API/controller/panel先业务RED | 真实命令JSON与最终68项 |
+| systematic-debugging | C:\Users\Administrator\.codex\skills\superpowers\skills\systematic-debugging\SKILL.md | 是/是/是，定位fixture/异步状态边界 | 回归通过，未把准备错误算RED |
+| verification-before-completion | C:\Users\Administrator\.codex\skills\superpowers\skills\verification-before-completion\SKILL.md | 是/是/是，完成前实际类型/构建/测试/来源检查 | 最终190/68/26，全部退出0 |
+
+Superpowers版本信息沿用既有记录6.1.0/f268f7c，本轮没有重新审计或升级；frontend-design沿用项目已提交文件，本轮不另行联网查版本。没有启用额外代理/worktree、真实模型或新增工具安装。
+
+已实现：五态阵容、当前版本确认/冲突恢复、生成失败重试、有限轮询、离线恢复、URL定位刷新、晚到响应隔离。测试正常路径真实React/Express/SQLite/Fake，网络异常用例明确故障注入。最终后端190、前端68、局部Edge E2E26；原草稿/后端测试保留。真实模型、讨论调度、SSE和完整系统E2E仍未执行。原阶段报告不重写为本轮成果；后续模型阶段固定4D。继续用户暂定本仓库署名schen/cs064210@163.com，按真实小任务提交，不改历史。
+
+最终交付清单仍需后续核查：P0–P7原文不能替代5组高质量话题及对应阵容样例、完整系统验证和1–1.5页工作流说明；不把Fake测试话题当正式样例。本轮结束等待新授权。
