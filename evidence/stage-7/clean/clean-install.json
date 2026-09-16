@@ -1,0 +1,38 @@
+{
+  "startedAt": "2026-09-16T15:52:47.1479541Z",
+  "endedAt": "2026-09-16T15:52:50.0633223Z",
+  "exitCode": 0,
+  "initialPaths": [
+    {
+      "path": "node_modules",
+      "exists": false
+    },
+    {
+      "path": ".env.backend.local",
+      "exists": false
+    },
+    {
+      "path": ".local",
+      "exists": false
+    },
+    {
+      "path": "dist",
+      "exists": false
+    },
+    {
+      "path": "web/dist",
+      "exists": false
+    },
+    {
+      "path": ".cache",
+      "exists": false
+    },
+    {
+      "path": "data",
+      "exists": false
+    }
+  ],
+  "node": "v24.16.0",
+  "npm": "11.13.0",
+  "output": "\r\nadded 127 packages in 3s\r\n"
+}

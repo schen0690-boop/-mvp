@@ -1,0 +1,24 @@
+[
+  {
+    "name": "dependencies",
+    "args": [
+      "scripts/check-dependencies.mjs"
+    ],
+    "startedAt": "2026-09-16T15:53:09.684Z",
+    "endedAt": "2026-09-16T15:53:10.161Z",
+    "exitCode": 0,
+    "output": "{\n  \"node\": \"v24.16.0\",\n  \"sqliteVersion\": \"3.53.0\",\n  \"packages\": {\n    \"express\": {\n      \"version\": \"5.2.1\",\n      \"path\": \"node_modules/express\"\n    },\n    \"react\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/react\"\n    },\n    \"react-dom\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/react-dom\"\n    },\n    \"@types/express\": {\n      \"version\": \"5.0.6\",\n      \"path\": \"node_modules/@types/express\"\n    },\n    \"@types/node\": {\n      \"version\": \"24.13.4\",\n      \"path\": \"node_modules/@types/node\"\n    },\n    \"typescript\": {\n      \"version\": \"7.0.2\",\n      \"path\": \"node_modules/typescript\"\n    },\n    \"vite\": {\n      \"version\": \"8.3.0\",\n      \"path\": \"node_modules/vite\"\n    },\n    \"vitest\": {\n      \"version\": \"5.0.1\",\n      \"path\": \"node_modules/vitest\"\n    },\n    \"@types/react\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/@types/react\"\n    },\n    \"@types/react-dom\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/@types/react-dom\"\n    },\n    \"@playwright/test\": {\n      \"version\": \"1.63.0\",\n      \"path\": \"node_modules/@playwright/test\"\n    }\n  },\n  \"resolution\": {\n    \"express\": \"node_modules\\\\express\\\\index.js\",\n    \"vitest\": \"node_modules\\\\vitest\\\\dist\\\\index.js\",\n    \"vite\": \"node_modules\\\\vite\\\\dist\\\\node\\\\index.js\",\n    \"typescript\": \"node_modules\\\\typescript\\\\lib\\\\version.cjs\"\n  },\n  \"lifecycleScripts\": [\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"lightningcss\",\n      \"version\": \"1.33.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"patch-package\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"path-to-regexp\",\n      \"version\": \"8.4.2\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"tinyexec\",\n      \"version\": \"1.3.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    }\n  ],\n  \"installationPolicy\": \"--ignore-scripts --no-audit --no-fund\",\n  \"lockVerified\": true,\n  \"formalDependenciesIndependent\": true\n}\n"
+  },
+  {
+    "name": "typecheck",
+    "args": [
+      "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "typecheck"
+    ],
+    "startedAt": "2026-09-16T15:53:10.162Z",
+    "endedAt": "2026-09-16T15:53:10.227Z",
+    "exitCode": 1,
+    "output": "node:internal/modules/cjs/loader:1503\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js'\r\n    at Module._resolveFilename (node:internal/modules/cjs/loader:1500:15)\r\n    at wrapResolveFilename (node:internal/modules/cjs/loader:1071:27)\r\n    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1095:10)\r\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1116:12)\r\n    at Module._load (node:internal/modules/cjs/loader:1285:25)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\r\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\r\n    at node:internal/main/run_main_module:33:47 {\r\n  code: 'MODULE_NOT_FOUND',\r\n  requireStack: []\r\n}\r\n\r\nNode.js v24.16.0\r\n"
+  }
+]

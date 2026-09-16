@@ -4,7 +4,7 @@
 
 只核对原题前三部分。题面原图本轮再次目视读取，第三部分仓库链接要求保留，第四部分提交方式不纳入。唯一逐项检查表为[requirements](requirements.md)，不另造需求体系。本报告区分本地自动化、历史真实单样本、人工检查和未验证事项。阶段7官方模型请求必须且实际保持0，旧4D/6B/R1授权关闭不变。
 
-当前候选修补已完成；干净目录最终结果将在本报告末尾追加。源码候选与实测命令以追加证据为准，不把本段写成已经复现成功。
+**本地交付准备完成，仍有两项外部交付待办：GitHub/Gitee仓库链接，以及出题方工具口径确认。** 最终候选ddf1dc2已从已跟踪源码在同机独立目录完成锁安装和全部本地验收；详见末节。真实质量、跨平台等限制不被本地测试覆盖。
 
 ## 交付材料与必要修补
 
@@ -69,3 +69,44 @@
 ## 首次干净复现发现与修正
 
 候选463101b在D:/Codex-delivery-check/stage7-d950261835/project从git archive导出；锁安装127包成功，README类型/构建/初始化/两次样例导入与正式Fake浏览器冒烟均退出0。完整后端回归402通过/1失败：新增普通配置工厂测试用local-test-credential，而已有HTTP stub严格要求local-stub-credential，返回LOCAL_STUB_FAILURE。定位为测试夹具输入不一致，不是供应商或产品故障；改为引用已有adapterConfig.apiKey，单文件回归通过。保留first-clean-verification.json；不把该夹具错误计作业务RED，不修改生产鉴权或放宽parser。修正测试后另提交候选、重新导出新目录并完整复验，不只在临时目录修补。
+
+## 最终干净目录复现（实际执行）
+
+- 被测源码：`ddf1dc251156149914fcffde3d6d962fd72653f6`，在463101b交付修补后仅修正测试虚拟凭据。导出方式为git archive，不复制工作树或私有内容。
+- 独立目录：`D:/Codex-delivery-check/stage7-final-11d59eb050/project`，来源元数据见[reproduction-final-source.json](../evidence/stage-7/reproduction-final-source.json)。这是同机新目录，不是跨平台认证；archive不含Git历史，原仓库历史仍保留。
+- 初始确认node_modules、私有.env、.local、数据库、dist/web/dist、.cache均不存在。Node24.16.0/npm11.13.0；根目录唯一正式依赖安装127包，npm ci --ignore-scripts --no-audit --no-fund退出0，未运行生命周期脚本；没有改锁、force、全局升级或浏览器下载。
+- 安装时间2026-09-16T15:52:47Z–15:52:50Z；正式冒烟15:53:38Z–15:53:45Z；完整回归15:54:01Z–15:58:13Z，均为UTC（本地UTC+8）。机器时钟实录，不倒填。
+- README四项npm类型检查、三项构建、db:init及db:seed连续两次均退出0。两次导入相同五个ID，人工创建的样例在页面可见；自动化另验证不覆盖用户数据/确认状态及整批失败回滚。
+- 执行记录命令包装器曾错误假设npm-cli在Program Files，实际报MODULE_NOT_FOUND、未执行该次类型检查；随后直接使用README的npm.cmd命令逐条运行。保留readme-command-wrapper-error.json；这是取证命令错误，非产品故障/业务RED，没有修改临时目录源码绕过问题。
+
+| 最终实际命令/检查 | 结果 | 退出码 |
+|---|---|---|
+| npm ci --ignore-scripts --no-audit --no-fund | 127包，锁安装成功 | 0 |
+| node scripts/check-dependencies.mjs | 精确版本/锁一致；模块解析在新目录node_modules，无探针/Codex缓存依赖 | 0 |
+| npm run typecheck、typecheck:web、typecheck:e2e、typecheck:startup | 4项通过 | 各0 |
+| npm run build、build:web、build:startup | 后端、前端、启动脚本构建成功 | 各0 |
+| npm run db:init；npm run db:seed ×2 | 新库001→002→003；5组导入及幂等 | 各0 |
+| node scripts/delivery-smoke.mjs | 正式默认入口：可见5组→人工确认→开始→13公开发言和总结→刷新→停服只读重开一致；integrity_check=ok | 0 |
+| node scripts/delivery-verify.mjs | 顺序执行下面所有正式套件，无整条自动重跑 | 0 |
+| Vitest后端全套 | **403/403**，51文件；177单元+226集成（含SQLite/HTTP/SSE/适配器/启动），无跳过 | 0 |
+| Vitest前端全套 | **91/91**，12文件，无跳过 | 0 |
+| Playwright stage5c Fake核心E2E | **37/37**，0 skipped/unexpected/flaky，retries=0 | 0 |
+| Playwright stage6a本地HTTP适配器E2E | **2/2**，成功与总结降级，0 skipped/unexpected/flaky | 0 |
+| node scripts/stage6b-dry-run.mjs | 共享launch/readiness，本地短讨论/SSE中途/总结/刷新/关闭，独立testOnly夹具 | 0 |
+| 安全扫描、前端构建符号扫描 | 历史887文本blob无凭据形态命中；前端3文件未混入指定后端配置符号；42受保护文件哈希无变化 | 0 |
+
+完整argv、时间、退出码与套件输出：[clean/verification.json](../evidence/stage-7/clean/verification.json)；[逐文件数量](../evidence/stage-7/clean/test-counts.json)；[安装](../evidence/stage-7/clean/clean-install.json)；[README命令](../evidence/stage-7/clean/readme-commands.json)。原始Vitest/Playwright JSON保留在新目录evidence/stage-7/raw（忽略、不提交）；仓库只存筛选报告/截图，不存数据库、测试授权原始记录或trace。
+
+正式默认Fake冒烟discussion为4e42b672-a468-4a0e-af6d-3a3adc0b2b28；[smoke](../evidence/stage-7/clean/smoke.json)记录停服重开与页面恢复。[样例截图](../evidence/stage-7/clean/samples.png)与[结束截图](../evidence/stage-7/clean/clean-completed.png)。Fake文字存在模板重复，只作为状态/持久化/上下文工程链路证据，不代表自然语言质量。
+
+真实适配器经本地HTTP替身的[成功](../evidence/stage-7/clean/local-success.json)/[总结失败](../evidence/stage-7/clean/local-failure.json)分开记录；不是本轮真实DeepSeek结果。[共享启动结果](../evidence/stage-7/clean/startup-result.json)与[页面事件](../evidence/stage-7/clean/startup-ui-result.json)保留独立testOnly运行。官方请求为0：未加载私有配置；Fake或显式本机stub注入；所有验证子进程Fetch拒绝非本机，普通浏览器冒烟也拦截非本机地址；未执行任何live/prepare入口。该结论不是供应商账单查询结果。
+
+## 最终界面复查、清理与交付边界
+
+本轮实际目视检查新目录生成的样例/结束、desktop-running、narrow-studio、studio-8-experts、summary-unavailable、lineup-390-1-bottom、desktop-4-members截图，位于[clean/screenshots](../evidence/stage-7/clean/screenshots)。中文、模式标识、真实状态文本、长文区域和错误提示正常；窄屏长标题在限定区域滚动，未改变整体布局。自动化另覆盖独立滚动、焦点、1/4/8专家及非空观点更新/引用跳转。记录既有低优先级无障碍改进，不宣称所有浏览器或辅助设备通过。
+
+本轮服务/独立浏览器已关闭，41861/41862、41871/41872、41881/41882、41901/41902、41912无监听。Playwright结束遗留两个本轮测试库.owner：核实绝对路径位于本次独立目录.tmp下且记录PID19488/6456已退出后仅移除这两个锁，库和其他目录保留；这是Windows测试退出清理限制，不自动删除未知锁。[清理证据](../evidence/stage-7/cleanup.json)。共享启动器与正式默认入口均自行正常释放owner。旧4D/6B/R1库、授权和计数哈希不变，保持closed；私有配置仍忽略且未跟踪。没有清空旧预算，没有新增真实授权。
+
+Git实际提交：463101b（交付小修/样例/文档）、ddf1dc2（测试夹具修正）；最终证据以随本报告的文档提交归档。最终回归之后只追加文档与筛选证据，源码/样例/配置未改，因此不重复机械全测。使用既有项目身份schen，未改写历史、未创建远程或推送。
+
+**待用户/出题方处理：**（1）第三部分GitHub/Gitee仓库链接尚缺，需另行授权创建与推送；（2）确认实际Codex开发是否符合题面工具口径，不补造Claude Code使用记录。**未验证：**真实非空观点语义、长期多话题质量、性能/负载、跨平台/移动真机、Mermaid渲染及完整无障碍/安全认证。R1真实短样本与4D真实阵容仅沿用历史证据，本轮不追加调用。到此停止，不自动发布或执行新的真实讨论。

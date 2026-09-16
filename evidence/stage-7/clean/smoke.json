@@ -1,0 +1,15 @@
+{
+  "officialRequests": 0,
+  "startedAt": "2026-09-16T15:53:38.608Z",
+  "steps": [
+    "5 sample lineups visible",
+    "manual confirm/start",
+    "formal Fake runner completed",
+    "refresh same",
+    "own services and browser closed",
+    "stop then readonly reopen identical"
+  ],
+  "source": "ddf1dc251156149914fcffde3d6d962fd72653f6",
+  "discussionId": "4e42b672-a468-4a0e-af6d-3a3adc0b2b28",
+  "finishedAt": "2026-09-16T15:53:45.792Z"
+}

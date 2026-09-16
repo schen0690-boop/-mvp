@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-09-16T15:59:15.7567891Z",
+  "ports": [
+    41861,
+    41862,
+    41871,
+    41872,
+    41881,
+    41882,
+    41901,
+    41902,
+    41912
+  ],
+  "listeners": [],
+  "lockActions": [
+    {
+      "path": "D:\\Codex-delivery-check\\stage7-final-11d59eb050\\project\\.tmp\\stage-5c\\browser-pXnltt\\test.sqlite.owner",
+      "pid": 19488,
+      "pidExited": true,
+      "action": "removed only owned leftover test lock; database retained"
+    },
+    {
+      "path": "D:\\Codex-delivery-check\\stage7-final-11d59eb050\\project\\.tmp\\stage-6a\\browser-TQQwQT\\test.sqlite.owner",
+      "pid": 6456,
+      "pidExited": true,
+      "action": "removed only owned leftover test lock; database retained"
+    }
+  ],
+  "privateDataTouched": false,
+  "ownBrowserClosedByTest": true
+}

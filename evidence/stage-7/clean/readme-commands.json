@@ -1,0 +1,72 @@
+[
+  {
+    "command": "npm run typecheck",
+    "startedAt": "2026-09-16T15:53:27.1926577Z",
+    "endedAt": "2026-09-16T15:53:28.6506404Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 typecheck\r\n> tsc -p tsconfig.json\r\n\r\n"
+  },
+  {
+    "command": "npm run typecheck:web",
+    "startedAt": "2026-09-16T15:53:28.6969146Z",
+    "endedAt": "2026-09-16T15:53:30.1414987Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 typecheck:web\r\n> tsc -p web/tsconfig.json\r\n\r\n"
+  },
+  {
+    "command": "npm run typecheck:e2e",
+    "startedAt": "2026-09-16T15:53:30.1472492Z",
+    "endedAt": "2026-09-16T15:53:31.2585958Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 typecheck:e2e\r\n> tsc -p tsconfig.e2e.json\r\n\r\n"
+  },
+  {
+    "command": "npm run typecheck:startup",
+    "startedAt": "2026-09-16T15:53:31.2615788Z",
+    "endedAt": "2026-09-16T15:53:32.3154900Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 typecheck:startup\r\n> tsc -p tsconfig.startup.json --noEmit\r\n\r\n"
+  },
+  {
+    "command": "npm run build",
+    "startedAt": "2026-09-16T15:53:32.3179821Z",
+    "endedAt": "2026-09-16T15:53:33.5757031Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 build\r\n> tsc -p tsconfig.build.json\r\n\r\n"
+  },
+  {
+    "command": "npm run build:web",
+    "startedAt": "2026-09-16T15:53:33.5782162Z",
+    "endedAt": "2026-09-16T15:53:35.1945734Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 build:web\r\n> vite build --config web/vite.config.ts\r\n\r\nvite v8.3.0 building client environment for production...\r\ntransforming...\r\n✓ 32 modules transformed.\r\nrendering chunks...\r\ncomputing gzip size...\r\nweb/dist/index.html                   0.36 kB │ gzip:  0.28 kB\r\nweb/dist/assets/index-BDq7qi_x.css   12.14 kB │ gzip:  3.21 kB\r\nweb/dist/assets/index-BjnaXU0m.js   275.21 kB │ gzip: 84.19 kB\r\n\r\n✓ built in 311ms\r\n"
+  },
+  {
+    "command": "npm run build:startup",
+    "startedAt": "2026-09-16T15:53:35.1966377Z",
+    "endedAt": "2026-09-16T15:53:36.2949242Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 build:startup\r\n> tsc -p tsconfig.startup.json\r\n\r\n"
+  },
+  {
+    "command": "npm run db:init",
+    "startedAt": "2026-09-16T15:53:36.2965441Z",
+    "endedAt": "2026-09-16T15:53:36.8418835Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 db:init\r\n> node dist/init-db.js\r\n\r\n数据库初始化完成；已有数据保持不变。\r\n"
+  },
+  {
+    "command": "npm run db:seed",
+    "startedAt": "2026-09-16T15:53:36.8435763Z",
+    "endedAt": "2026-09-16T15:53:37.4332573Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 db:seed\r\n> node dist/seed.js\r\n\r\n{\"source\":\"本地预置虚构阵容，非真实模型生成\",\"discussionIds\":[\"4e42b672-a468-4a0e-af6d-3a3adc0b2b28\",\"d95b5881-478f-4178-921f-161112c37010\",\"1c1da5e3-49ae-4e6f-b045-f43d14672bdb\",\"c162c750-0d3c-48f5-99be-f363525ef7a7\",\"946b3d7a-8f27-4206-9840-1167668acd3b\"]}\r\n"
+  },
+  {
+    "command": "npm run db:seed",
+    "startedAt": "2026-09-16T15:53:37.4348506Z",
+    "endedAt": "2026-09-16T15:53:37.9914054Z",
+    "exitCode": 0,
+    "output": "\r\n> ai-roundtable-mvp@0.1.0 db:seed\r\n> node dist/seed.js\r\n\r\n{\"source\":\"本地预置虚构阵容，非真实模型生成\",\"discussionIds\":[\"4e42b672-a468-4a0e-af6d-3a3adc0b2b28\",\"d95b5881-478f-4178-921f-161112c37010\",\"1c1da5e3-49ae-4e6f-b045-f43d14672bdb\",\"c162c750-0d3c-48f5-99be-f363525ef7a7\",\"946b3d7a-8f27-4206-9840-1167668acd3b\"]}\r\n"
+  }
+]

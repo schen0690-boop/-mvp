@@ -1,0 +1,318 @@
+{
+  "backend": {
+    "passed": 403,
+    "failed": 0,
+    "pending": 0,
+    "suites": 51,
+    "files": [
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/confirm.test.ts",
+        "passed": 6,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/deepseek-http.test.ts",
+        "passed": 5,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/deepseek-pipeline.test.ts",
+        "passed": 13,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/discussion-adapter-http.test.ts",
+        "passed": 21,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/discussion-adapter-runner.test.ts",
+        "passed": 11,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/discussion-controls.test.ts",
+        "passed": 7,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/discussion-http.test.ts",
+        "passed": 6,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/discussion-runner.test.ts",
+        "passed": 12,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/discussion-store.test.ts",
+        "passed": 10,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/drafts.test.ts",
+        "passed": 14,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/generation-resilience.test.ts",
+        "passed": 9,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/generation.test.ts",
+        "passed": 10,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/guarded-discussion.test.ts",
+        "passed": 5,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/guarded-roster.test.ts",
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/http.test.ts",
+        "passed": 20,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/lineup-http.test.ts",
+        "passed": 11,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/list.test.ts",
+        "passed": 8,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/migrations.test.ts",
+        "passed": 12,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/ownership.test.ts",
+        "passed": 1,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/runtime-migration.test.ts",
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/runtime.test.ts",
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/samples.test.ts",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/schema.test.ts",
+        "passed": 1,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/server-shutdown.test.ts",
+        "passed": 1,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/short-discussion.test.ts",
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/sse.test.ts",
+        "passed": 8,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/startup-prepared.test.ts",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/startup-process.test.ts",
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/startup-readiness.test.ts",
+        "passed": 12,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/integration/startup-settlement.test.ts",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/acceptance-paths.test.ts",
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/app-providers.test.ts",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/backend-config.test.ts",
+        "passed": 1,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/call-limiter.test.ts",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/deepseek-config.test.ts",
+        "passed": 9,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/deepseek-discussion.test.ts",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/deepseek.test.ts",
+        "passed": 26,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/discussion-authorization.test.ts",
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/discussion-config.test.ts",
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/discussion.test.ts",
+        "passed": 15,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/fake-discussion.test.ts",
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/fake-roster.test.ts",
+        "passed": 13,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/generation.test.ts",
+        "passed": 10,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/input.test.ts",
+        "passed": 38,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/lineup.test.ts",
+        "passed": 38,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/live-authorization.test.ts",
+        "passed": 6,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/sse-backpressure.test.ts",
+        "passed": 1,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/tests/unit/test-network-boundary.test.ts",
+        "passed": 1,
+        "failed": 0
+      }
+    ]
+  },
+  "frontend": {
+    "passed": 91,
+    "failed": 0,
+    "pending": 0,
+    "suites": 12,
+    "files": [
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/api.test.ts",
+        "passed": 11,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/controller.test.ts",
+        "passed": 7,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/discussion-stream.test.ts",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/events.test.ts",
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/lineup-api.test.ts",
+        "passed": 7,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/lineup-controller.test.ts",
+        "passed": 28,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/lineup-panel.test.tsx",
+        "passed": 9,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/lineup.test.ts",
+        "passed": 7,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/provider-label.test.ts",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/runtime-api.test.tsx",
+        "passed": 8,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/runtime-controls.test.ts",
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "path": "D:/Codex-delivery-check/stage7-final-11d59eb050/project/web/tests/studio.test.tsx",
+        "passed": 2,
+        "failed": 0
+      }
+    ]
+  }
+}

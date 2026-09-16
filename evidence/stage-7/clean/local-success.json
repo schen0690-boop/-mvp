@@ -1,0 +1,19 @@
+{
+  "label": "真实适配器经本地 HTTP 替身验证",
+  "officialRequests": 0,
+  "discussionId": "e349da1e-ce86-4fd2-9afb-f89e8c031802",
+  "runId": "3e58e53e-8a93-4058-8815-d30d939de593",
+  "streamed": true,
+  "middleTranscriptVersion": 3,
+  "finalTranscriptVersion": 13,
+  "summary": {
+    "status": "ready",
+    "text": "本场已提交13条发言，最后一条仍建议以课堂证据进行验证。这些意见需要实际检验，不能据此证明教育效果。",
+    "sourceTranscriptVersion": 13
+  },
+  "counters": {
+    "calls_used": 49,
+    "summary_calls_used": 1
+  },
+  "refreshMatches": true
+}

@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-09-16T16:02:21.185Z",
+  "testedSource": "ddf1dc251156149914fcffde3d6d962fd72653f6",
+  "sourceChanges": [],
+  "prefixResults": [
+    {
+      "path": "docs/sources/development-prompts.md",
+      "oldPrefixUnchanged": true
+    },
+    {
+      "path": "docs/development-log.md",
+      "oldPrefixUnchanged": true
+    }
+  ],
+  "stage7PromptVerbatim": true,
+  "pendingCredentialShapeHits": [],
+  "brokenCurrentDocLinks": [],
+  "privateConfigTracked": false
+}

@@ -1,0 +1,211 @@
+{
+  "stage": 7,
+  "codeRevision": "ddf1dc251156149914fcffde3d6d962fd72653f6",
+  "directory": "D:\\Codex-delivery-check\\stage7-final-11d59eb050\\project",
+  "node": "v24.16.0",
+  "startedAt": "2026-09-16T15:54:01.836Z",
+  "officialRequests": 0,
+  "networkBoundary": "child fetch loopback only; Fake and injected local stub; no env file loading",
+  "commands": [
+    {
+      "name": "initial backend build",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.build.json"
+      ],
+      "startedAt": "2026-09-16T15:54:01.839Z",
+      "endedAt": "2026-09-16T15:54:02.584Z",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "dependencies",
+      "args": [
+        "scripts/check-dependencies.mjs"
+      ],
+      "startedAt": "2026-09-16T15:54:02.585Z",
+      "endedAt": "2026-09-16T15:54:02.693Z",
+      "exitCode": 0,
+      "output": "{\n  \"node\": \"v24.16.0\",\n  \"sqliteVersion\": \"3.53.0\",\n  \"packages\": {\n    \"express\": {\n      \"version\": \"5.2.1\",\n      \"path\": \"node_modules/express\"\n    },\n    \"react\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/react\"\n    },\n    \"react-dom\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/react-dom\"\n    },\n    \"@types/express\": {\n      \"version\": \"5.0.6\",\n      \"path\": \"node_modules/@types/express\"\n    },\n    \"@types/node\": {\n      \"version\": \"24.13.4\",\n      \"path\": \"node_modules/@types/node\"\n    },\n    \"typescript\": {\n      \"version\": \"7.0.2\",\n      \"path\": \"node_modules/typescript\"\n    },\n    \"vite\": {\n      \"version\": \"8.3.0\",\n      \"path\": \"node_modules/vite\"\n    },\n    \"vitest\": {\n      \"version\": \"5.0.1\",\n      \"path\": \"node_modules/vitest\"\n    },\n    \"@types/react\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/@types/react\"\n    },\n    \"@types/react-dom\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/@types/react-dom\"\n    },\n    \"@playwright/test\": {\n      \"version\": \"1.63.0\",\n      \"path\": \"node_modules/@playwright/test\"\n    }\n  },\n  \"resolution\": {\n    \"express\": \"node_modules\\\\express\\\\index.js\",\n    \"vitest\": \"node_modules\\\\vitest\\\\dist\\\\index.js\",\n    \"vite\": \"node_modules\\\\vite\\\\dist\\\\node\\\\index.js\",\n    \"typescript\": \"node_modules\\\\typescript\\\\lib\\\\version.cjs\"\n  },\n  \"lifecycleScripts\": [\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"lightningcss\",\n      \"version\": \"1.33.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"patch-package\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"path-to-regexp\",\n      \"version\": \"8.4.2\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"tinyexec\",\n      \"version\": \"1.3.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    }\n  ],\n  \"installationPolicy\": \"--ignore-scripts --no-audit --no-fund\",\n  \"lockVerified\": true,\n  \"formalDependenciesIndependent\": true\n}\n"
+    },
+    {
+      "name": "backend",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "--reporter=json",
+        "--outputFile=evidence/stage-7/raw/backend.json"
+      ],
+      "startedAt": "2026-09-16T15:54:02.694Z",
+      "endedAt": "2026-09-16T15:54:18.996Z",
+      "exitCode": 0,
+      "output": "JSON report written to D:/Codex-delivery-check/stage7-final-11d59eb050/project/evidence/stage-7/raw/backend.json\n"
+    },
+    {
+      "name": "frontend",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "web/vitest.config.ts",
+        "--reporter=json",
+        "--outputFile=evidence/stage-7/raw/frontend.json"
+      ],
+      "startedAt": "2026-09-16T15:54:18.997Z",
+      "endedAt": "2026-09-16T15:54:21.242Z",
+      "exitCode": 0,
+      "output": "JSON report written to D:/Codex-delivery-check/stage7-final-11d59eb050/project/evidence/stage-7/raw/frontend.json\n"
+    },
+    {
+      "name": "typecheck tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "startedAt": "2026-09-16T15:54:21.242Z",
+      "endedAt": "2026-09-16T15:54:22.231Z",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "typecheck web/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "web/tsconfig.json",
+        "--noEmit"
+      ],
+      "startedAt": "2026-09-16T15:54:22.232Z",
+      "endedAt": "2026-09-16T15:54:23.237Z",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "typecheck tsconfig.e2e.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.e2e.json",
+        "--noEmit"
+      ],
+      "startedAt": "2026-09-16T15:54:23.238Z",
+      "endedAt": "2026-09-16T15:54:23.935Z",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "typecheck tsconfig.startup.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.startup.json",
+        "--noEmit"
+      ],
+      "startedAt": "2026-09-16T15:54:23.936Z",
+      "endedAt": "2026-09-16T15:54:24.568Z",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "backend build",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.build.json"
+      ],
+      "startedAt": "2026-09-16T15:54:24.569Z",
+      "endedAt": "2026-09-16T15:54:25.453Z",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "frontend build",
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "web/vite.config.ts"
+      ],
+      "startedAt": "2026-09-16T15:54:25.454Z",
+      "endedAt": "2026-09-16T15:54:26.094Z",
+      "exitCode": 0,
+      "output": "vite v8.3.0 building client environment for production...\ntransforming...\n✓ 32 modules transformed.\nrendering chunks...\ncomputing gzip size...\nweb/dist/index.html                   0.36 kB │ gzip:  0.28 kB\nweb/dist/assets/index-BDq7qi_x.css   12.14 kB │ gzip:  3.21 kB\nweb/dist/assets/index-BjnaXU0m.js   275.21 kB │ gzip: 84.19 kB\n\n✓ built in 215ms\n"
+    },
+    {
+      "name": "startup build",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.startup.json"
+      ],
+      "startedAt": "2026-09-16T15:54:26.095Z",
+      "endedAt": "2026-09-16T15:54:26.884Z",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "Fake E2E",
+      "args": [
+        "node_modules/playwright/cli.js",
+        "test",
+        "--config",
+        "playwright.stage5c.config.ts"
+      ],
+      "startedAt": "2026-09-16T15:54:26.884Z",
+      "endedAt": "2026-09-16T15:57:49.820Z",
+      "exitCode": 0,
+      "output": "[WebServer] (node:7496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n\nRunning 37 tests using 1 worker\n\n(node:5984) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n  ok  1 e2e\\drafts.spec.ts:5:1 › 真实流程：默认4专家创建、全部列表、详情与刷新读取 (2.5s)\n  ok  2 e2e\\interaction.spec.ts:17:1 › 真实流程：8位专家与active过滤，明确再次同题创建 (1.2s)\n  ok  3 e2e\\interaction.spec.ts:30:1 › 真实流程：空白/人数空值拒绝；Unicode500/501边界；HTML作为文本 (1.5s)\n  ok  4 e2e\\interaction.spec.ts:55:1 › 故障注入：服务端已保存但响应丢失，重试原请求不重复落库 (1.2s)\n  ok  5 e2e\\interaction.spec.ts:73:1 › 故障注入：提交期间重复点击，创建成功后列表失败可独立恢复 (1.2s)\n  ok  6 e2e\\interaction.spec.ts:88:1 › 故障注入：旧详情迟到不能覆盖新选择；详情失败后可重载 (1.3s)\n  ok  7 e2e\\layout.spec.ts:6:3 › 真实布局：390x844，区域访问、键盘与独立滚动 (2.0s)\n  ok  8 e2e\\layout.spec.ts:6:3 › 真实布局：1366x768，区域访问、键盘与独立滚动 (2.1s)\n  ok  9 e2e\\layout.spec.ts:6:3 › 真实布局：2560x1080，区域访问、键盘与独立滚动 (2.4s)\n  ok 10 e2e\\lineup-compat.spec.ts:3:1 › 4B消费者回归：真实HTTP状态与4C卡片一致 (1.1s)\n  ok 11 e2e\\lineup.spec.ts:18:1 › 正常闭环：4专家，确认及ready/confirmed刷新由SQLite恢复 (4.5s)\n  ok 12 e2e\\lineup.spec.ts:26:1 › 重新生成新阵容，旧generation无法确认 (6.5s)\n  ok 13 e2e\\lineup.spec.ts:32:1 › Provider失败显示安全错误，重试新代成功；失败刷新 (6.2s)\n  ok 14 e2e\\lineup.spec.ts:36:1 › 生成中刷新继续GET，不再次生成；释放受控Provider后完成 (4.0s)\n  ok 15 e2e\\lineup.spec.ts:40:1 › confirm409读取新快照并提示，不自动确认 (4.1s)\n  ok 16 e2e\\lineup.spec.ts:46:31 › 网络故障注入：confirm 500保留卡片并允许重试 (4.3s)\n  ok 17 e2e\\lineup.spec.ts:46:31 › 网络故障注入：confirm 503保留卡片并允许重试 (4.2s)\n  ok 18 e2e\\lineup.spec.ts:52:1 › 重新生成失败隐藏旧卡片且禁止确认，重试可恢复 (8.8s)\n  ok 19 e2e\\lineup.spec.ts:55:1 › 生成中切换讨论，旧结果不污染B (1.9s)\n  ok 20 e2e\\lineup.spec.ts:60:1 › 同一事件循环重复点击生成和确认，各只提交一次 (4.0s)\n  ok 21 e2e\\lineup.spec.ts:65:1 › 浏览器离线保留生成态，联网GET恢复而非POST重发 (4.1s)\n  ok 22 e2e\\lineup.spec.ts:69:1 › 两个Tab：旧Tab冲突接受新版，另一Tab确认后重新GET恢复已确认 (7.1s)\n  ok 23 e2e\\lineup.spec.ts:74:85 › 阵容布局 390x844 / 1专家长字段与键盘滚动 (4.1s)\n  ok 24 e2e\\lineup.spec.ts:74:85 › 阵容布局 1366x768 / 8专家长字段与键盘滚动 (3.9s)\n  ok 25 e2e\\lineup.spec.ts:74:85 › 阵容布局 2560x1080 / 8专家长字段与键盘滚动 (3.9s)\n  ok 26 e2e\\lineup.spec.ts:81:1 › 真实确认请求等待时禁用两个按钮，成功后恢复为只读 (3.6s)\n  ok 27 e2e\\runtime.spec.ts:25:1 › 完整动态流程经Vite SSE：中途观点、自然收尾、总结及刷新同一记录 (16.1s)\n  ok 28 e2e\\runtime.spec.ts:31:1 › 同场两位观察者共享runner，另一个Tab开始可实时发现 (8.8s)\n  ok 29 e2e\\runtime.spec.ts:36:1 › 两场并行、首页加入、切换与刷新；结束A不影响B (14.1s)\n  ok 30 e2e\\runtime.spec.ts:42:1 › 离线期间运行到终态，重连补齐不重复；终态丢失由GET恢复 (17.5s)\n  ok 31 e2e\\runtime.spec.ts:47:1 › start与stop响应丢失后只读核对，不重复提交；致命失败保留发言 (9.7s)\n  ok 32 e2e\\runtime.spec.ts:53:1 › 真实SSE在发言事务半批处断开，界面不显示半批并能完整恢复 (6.3s)\n  ok 33 e2e\\runtime.spec.ts:64:1 › 用户向上阅读时保留滚动位置，点击新消息才回到底部 (12.1s)\n  ok 34 e2e\\runtime.spec.ts:70:81 › 演播厅布局390，1专家、滚动与键盘 (5.0s)\n  ok 35 e2e\\runtime.spec.ts:70:81 › 演播厅布局1366，4专家、滚动与键盘 (5.3s)\n  ok 36 e2e\\runtime.spec.ts:70:81 › 演播厅布局2560，8专家、滚动与键盘 (5.8s)\n  ok 37 e2e\\runtime.spec.ts:77:1 › 主动结束进入收尾，总结失败与已保存发言同时保留 (5.3s)\n\n  37 passed (3.4m)\n"
+    },
+    {
+      "name": "HTTP adapter E2E",
+      "args": [
+        "node_modules/playwright/cli.js",
+        "test",
+        "--config",
+        "playwright.stage6a.config.ts"
+      ],
+      "startedAt": "2026-09-16T15:57:49.821Z",
+      "endedAt": "2026-09-16T15:58:07.280Z",
+      "exitCode": 0,
+      "output": "[WebServer] (node:6456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:468) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n\nRunning 2 tests using 1 worker\n\n(node:10572) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n  ok 1 e2e-local\\discussion-adapter.spec.ts:6:34 › 真实适配器经本地HTTP替身验证：完整流程与刷新 (7.6s)\n  ok 2 e2e-local\\discussion-adapter.spec.ts:6:34 › 真实适配器经本地HTTP替身验证：总结降级 (6.3s)\n\n  2 passed (16.6s)\n"
+    },
+    {
+      "name": "shared startup rehearsal",
+      "args": [
+        "scripts/stage6b-dry-run.mjs"
+      ],
+      "startedAt": "2026-09-16T15:58:07.280Z",
+      "endedAt": "2026-09-16T15:58:13.330Z",
+      "exitCode": 0,
+      "output": "{\"evidence\":\"D:\\\\Codex-delivery-check\\\\stage7-final-11d59eb050\\\\project\\\\evidence\\\\stage-6b\\\\startup-fix\\\\local-2026-09-16T15-58-08.168Z\\\\result.json\",\"steps\":[\"backend snapshot validated\",\"frontend proxy same snapshot validated\",\"same run read-only settlement: completed\",\"browser short discussion + terminal refresh passed\"]}\n"
+    }
+  ],
+  "counts": {
+    "backend": 403,
+    "frontend": 91,
+    "backendPending": 0,
+    "frontendPending": 0,
+    "fakeE2E": {
+      "startTime": "2026-09-16T15:54:28.352Z",
+      "duration": 201439.889,
+      "expected": 37,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "httpE2E": {
+      "startTime": "2026-09-16T15:57:50.693Z",
+      "duration": 16563.257999999998,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "finishedAt": "2026-09-16T15:58:13.335Z"
+}
