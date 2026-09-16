@@ -1,0 +1,17 @@
+{
+  "startedAt": "2026-09-16T14:19:18.911Z",
+  "codeRevision": "c11588f4c1499432651c8f68730fcad3b33ae08d",
+  "discussionId": "a36fb985-9c1b-4a0a-b04b-a66922451732",
+  "runId": "d27adb45-8267-4cd3-b834-7f8d6048b372",
+  "processes": [
+    {
+      "pid": 22116,
+      "code": 1,
+      "signal": null
+    }
+  ],
+  "backendPid": 22116,
+  "error": "LOCAL_OR_BROWSER_STEP_NOT_VERIFIED",
+  "closedAuthorization": false,
+  "endedAt": "2026-09-16T14:19:33.964Z"
+}

@@ -1,0 +1,19 @@
+{
+  "mode": "closed authorization read only",
+  "postRequests": [],
+  "stage": "read",
+  "error": {
+    "name": "TypeError",
+    "message": "apiRequestContext.get: Invalid URL"
+  },
+  "front": {
+    "pid": 4428,
+    "code": null,
+    "signal": "SIGTERM"
+  },
+  "backend": {
+    "pid": 11308,
+    "code": 0,
+    "signal": null
+  }
+}

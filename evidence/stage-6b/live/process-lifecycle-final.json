@@ -1,0 +1,52 @@
+{
+  "startedAt": "2026-09-16T14:20:36.845Z",
+  "codeRevision": "c11588f4c1499432651c8f68730fcad3b33ae08d",
+  "discussionId": "a36fb985-9c1b-4a0a-b04b-a66922451732",
+  "runId": "d27adb45-8267-4cd3-b834-7f8d6048b372",
+  "processes": [
+    {
+      "pid": 8352,
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "startupCorrection": "fork execArgv=[]; prior wrapper failed before service/run start, same untouched authorization",
+  "backendPid": 8352,
+  "backendSettings": {
+    "provider": "deepseek",
+    "port": 41882,
+    "discussionId": "a36fb985-9c1b-4a0a-b04b-a66922451732",
+    "runId": "d27adb45-8267-4cd3-b834-7f8d6048b372",
+    "counts": {
+      "ordinary": 0,
+      "summary": 0,
+      "total": 0
+    },
+    "closed": false,
+    "settings": {
+      "topic": "AI 如何改善教育？",
+      "expertCount": 2,
+      "expertTurns": 2,
+      "runDurationMs": 120000,
+      "stopDurationMs": 60000,
+      "callDurationMs": 30000,
+      "totalRequests": 20,
+      "ordinaryRequests": 18,
+      "summaryRequests": 2,
+      "model": "deepseek-flash",
+      "thinking": "disabled",
+      "stream": false,
+      "responseFormat": "json_object",
+      "tokenLimits": {
+        "assessIntent": 512,
+        "generateUtterance": 768,
+        "extractSynthesis": 4096,
+        "summarize": 1024
+      }
+    },
+    "key": "密钥已配置"
+  },
+  "error": "LOCAL_OR_BROWSER_STEP_NOT_VERIFIED",
+  "closedAuthorization": true,
+  "endedAt": "2026-09-16T14:20:51.932Z"
+}

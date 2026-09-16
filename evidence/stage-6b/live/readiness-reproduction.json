@@ -1,0 +1,25 @@
+{
+  "mode": "read-only readiness reproduction with permanently closed authorization",
+  "attempts": [
+    {
+      "error": "TypeError",
+      "code": "ECONNREFUSED"
+    },
+    {
+      "error": "TypeError",
+      "code": "ECONNREFUSED"
+    },
+    {
+      "error": "TypeError",
+      "code": "ECONNREFUSED"
+    },
+    {
+      "status": 200
+    }
+  ],
+  "status": "lineup_confirmed",
+  "exit": {
+    "code": 0,
+    "signal": null
+  }
+}

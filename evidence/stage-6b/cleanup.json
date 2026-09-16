@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-09-16T14:28:08.5013666Z",
+  "listening": [],
+  "liveServerLockExists": false,
+  "liveDatabaseOwnerExists": false,
+  "authorizationFiles": [
+    "closed.json",
+    "manifest.json"
+  ],
+  "browser": "independent contexts closed in finally; see read-only-ui-final.json",
+  "databaseAndBudget": "preserved; no reset or deletion"
+}

@@ -1,0 +1,19 @@
+{
+  "mode": "read-only after authorization closed",
+  "postRequests": [],
+  "startedAt": "2026-09-16T14:23:18.856Z",
+  "result": "read-only UI not fully verified",
+  "errorCode": "TypeError",
+  "browserClosed": true,
+  "front": {
+    "pid": 7892,
+    "code": null,
+    "signal": "SIGTERM"
+  },
+  "backend": {
+    "pid": 20352,
+    "code": 0,
+    "signal": null
+  },
+  "endedAt": "2026-09-16T14:23:22.534Z"
+}

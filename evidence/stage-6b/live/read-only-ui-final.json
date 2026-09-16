@@ -1,0 +1,20 @@
+{
+  "mode": "closed authorization read only",
+  "postRequests": [],
+  "startedAt": "2026-09-16T14:24:53.607Z",
+  "result": "confirmed roster displayed/refreshed; discussion never started",
+  "refreshMatches": true,
+  "version": 4,
+  "browserClosed": true,
+  "front": {
+    "pid": 19724,
+    "code": null,
+    "signal": "SIGTERM"
+  },
+  "backend": {
+    "pid": 276,
+    "code": 0,
+    "signal": null
+  },
+  "endedAt": "2026-09-16T14:24:56.401Z"
+}

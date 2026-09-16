@@ -326,3 +326,5 @@ P13来自本轮用户真实消息，完整文字归档sources/stage-6a-request.m
 P14原附件逐字归档sources/stage-6b-request.md；阶段6A f4b2022起点干净，身份沿用schen/cs064210@163.com。已有using-superpowers、writing-plans、TDD、systematic-debugging、verification-before-completion实际用于本轮，路径为C:\Users\Administrator\.codex\skills\superpowers\skills下各同名SKILL.md，using-superpowers另读Codex接口参考；无安装/版本更新/子代理/worktree。当前会话按阶段计划执行，授权无需重复申请。
 
 新增绑定短参数、独立固定授权、受限入口/预置阵容/安全配置检查和一次浏览器执行脚本；指标仅扩展白名单。默认流程、003、4D库/预算/私有文件不修改。代表业务RED→GREEN见stage-6b-validation；本地发现前端120秒快照不兼容，先失败测试后最小解析修复。最后代码修改后完整371后端/90前端/37Fake E2E/2本地HTTP E2E/1短流程/三类型两构建均退出0；本地阶段官方请求0。准备代码提交后才开始真实run，过程中冻结源码/提示词/参数。
+
+6B执行结论（本轮结束）：受阻、真实模型请求0。准备版本c11588f后完成独立预置阵容；临时启动编排先遇Node --input-type继承问题，随后把Fetch Response.ok属性当方法，误判就绪并触发shutdown关闭授权。这是本轮执行脚本错误，不是供应商故障。授权尚未start且无slot，仍按规则保持关闭，不绕过保护补跑。关闭后仅GET/页面观察/刷新和只读重开，阵容状态一致；没有真实发言/提炼/总结可审阅。另只读截图脚本baseURL缺失经本地修正，未调用任何模型。详见stage-6b-validation及live/result-summary。历史Prompt保持，无密钥归档，4D记录不动。

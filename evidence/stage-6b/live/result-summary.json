@@ -1,0 +1,71 @@
+{
+  "conclusion": "blocked before start; no model requests",
+  "checkedAt": "2026-09-16T14:26:10.416Z",
+  "codeRevision": "c11588f4c1499432651c8f68730fcad3b33ae08d",
+  "discussionId": "a36fb985-9c1b-4a0a-b04b-a66922451732",
+  "plannedRunId": "d27adb45-8267-4cd3-b834-7f8d6048b372",
+  "persistedRuntimeRunId": null,
+  "generationId": "0e4c3821-3676-46c1-a006-81615f854e56",
+  "lineupRevision": 1,
+  "rosterSource": "本地固定虚构阵容，非模型生成",
+  "members": [
+    {
+      "name": "林知远（虚构）",
+      "role": "moderator",
+      "profession": "教育议题主持",
+      "title": "圆桌主持人",
+      "stance": "澄清概念，要求意见回应已有发言，并区分实证与假设。"
+    },
+    {
+      "name": "陈思敏（虚构）",
+      "role": "expert",
+      "profession": "基础教育教学研究",
+      "title": "课堂实践研究员",
+      "stance": "关注教师工作负担、学习反馈和可评估的课堂效果，主张小范围试点。"
+    },
+    {
+      "name": "周衡（虚构）",
+      "role": "expert",
+      "profession": "教育公平与数据治理",
+      "title": "教育政策研究员",
+      "stance": "关注资源差异、学生隐私与偏差风险，要求说明弱势学生的参与条件。"
+    }
+  ],
+  "status": "lineup_confirmed",
+  "version": 4,
+  "expertUtterances": 0,
+  "openingUtterances": 0,
+  "synthesisCalls": 0,
+  "summaryCalls": 0,
+  "counts": {
+    "ordinaryReservations": 0,
+    "summaryReservations": 0,
+    "fetchInvocations": 0,
+    "responses": 0,
+    "officialRosterRequests": 0,
+    "officialDiscussionRequests": 0
+  },
+  "usage": "未取得（无调用）",
+  "started": false,
+  "closed": {
+    "reason": "shutdown",
+    "closedAt": "2026-09-16T14:20:51.908Z"
+  },
+  "readOnlyReopen": {
+    "integrity": "ok",
+    "sameSnapshot": true
+  },
+  "startupRootCause": {
+    "scope": "temporary orchestration command, not committed business code",
+    "first": "fork inherited --input-type=module and exited before service initialization",
+    "second": "Native Response.ok is a boolean; temporary readiness loop called r.ok() and swallowed TypeError, then timed out and closed authorization",
+    "localReproduction": {
+      "name": "TypeError",
+      "message": "response.ok is not a function"
+    },
+    "correctCheck": "if (r.ok) return r;",
+    "serviceEvidence": "closed authorization GET returned 200 via both native fetch and node:http"
+  },
+  "afterClosure": "Only GET/display/refresh/read-only SQLite; no start POST, no authorization reset",
+  "limitations": "No real utterance, SSE discussion flow, synthesis, summary or semantic quality verified"
+}
