@@ -33,12 +33,12 @@ for (const [width,height] of [[390,844],[1366,768],[2560,1080]] as const) {
     await expect(detail.getByText('阵容尚未生成',{exact:true})).toBeVisible();
     if(width>=900) expect(await scroll.evaluate(el=>el.scrollTop)).toBe(listPosition);
     await detail.locator('.pane-scroll').evaluate(el=>{el.scrollTop=0;});
-    mkdirSync('evidence/stage-4b/screenshots',{recursive:true});
-    await page.screenshot({path:`evidence/stage-4b/screenshots/${width}x${height}-detail.png`});
+    mkdirSync('evidence/stage-4c/screenshots',{recursive:true});
+    await page.screenshot({path:`evidence/stage-4c/screenshots/${width}x${height}-detail.png`});
     if(width<900) {
       const nav=page.getByRole('navigation',{name:'区域选择'});
       await nav.getByRole('button',{name:'新建讨论'}).click(); await expect(page.getByLabel('讨论话题',{exact:true})).toBeVisible();
-      await page.screenshot({path:`evidence/stage-4b/screenshots/${width}x${height}-create.png`});
+      await page.screenshot({path:`evidence/stage-4c/screenshots/${width}x${height}-create.png`});
       await nav.getByRole('button',{name:'讨论列表'}).click(); await expect(list).toBeVisible();
       expect(await scroll.evaluate(el=>el.scrollTop)).toBeGreaterThan(0);
     }

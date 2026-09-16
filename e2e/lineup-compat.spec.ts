@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
-test('4B消费者兼容：真实HTTP生成与确认后，旧详情安全显示状态且没有阵容操作UI',async({page,request})=>{
+test('4B消费者回归：真实HTTP状态与4C卡片一致',async({page,request})=>{
   const topic=`兼容检查 ${randomUUID()}`;
   const created=await request.post('/api/discussions',{data:{topic,requestId:randomUUID()}});
   expect(created.status()).toBe(201);const body=await created.json();const path=`/api/discussions/${body.discussionId}`;
@@ -9,12 +9,12 @@ test('4B消费者兼容：真实HTTP生成与确认后，旧详情安全显示�
   await page.goto('/');await page.getByRole('button',{name:topic,exact:true}).click();
   const detail=page.getByRole('region',{name:'草稿详情'});
   await expect(detail.locator('.detail-state .badge')).toHaveText('阵容待确认');
-  await expect(page.getByRole('button',{name:/生成阵容|确认阵容|重新生成/})).toHaveCount(0);
+  await expect(detail.getByRole('button',{name:'确认阵容',exact:true})).toBeVisible();
   const ready=await (await request.get(path)).json();
   expect((await request.post(`${path}/lineup/confirm`,{data:{generationId:ready.lineupGeneration.generationId,lineupRevision:ready.lineupRevision}})).status()).toBe(200);
   await detail.getByRole('button',{name:'重新加载详情'}).click();
   await expect(detail.locator('.detail-state .badge')).toHaveText('阵容已确认');
   await expect(detail.getByText('讨论尚未开始',{exact:true})).toBeVisible();
-  await expect(detail.getByText('示例主持人',{exact:true})).toHaveCount(0);
+  await expect(detail.getByText('示例主持人',{exact:true})).toBeVisible();
   await expect(detail.getByText('阵容尚未生成',{exact:true})).toHaveCount(0);
 });

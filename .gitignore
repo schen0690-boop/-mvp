@@ -24,3 +24,5 @@ playwright-report/
 /.tmp/
 /evidence/stage-3/raw/
 /evidence/stage-4b/raw/
+
+/evidence/stage-4c/raw/

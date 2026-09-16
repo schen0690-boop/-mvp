@@ -1,13 +1,13 @@
 import { defineConfig } from '@playwright/test';
 import { mkdirSync, mkdtempSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-mkdirSync('.tmp/stage-4b', { recursive: true });
-const database = join(mkdtempSync(resolve('.tmp/stage-4b/browser-')), 'test.sqlite');
+mkdirSync('.tmp/stage-4c', { recursive: true });
+const database = join(mkdtempSync(resolve('.tmp/stage-4c/browser-')), 'test.sqlite');
 export default defineConfig({
   testDir: './e2e', workers: 1, retries: 0, forbidOnly: true, timeout: 20000,
   expect: { timeout: 5000 },
-  outputDir: 'evidence/stage-4b/raw/results',
-  reporter: [['list'], ['json', { outputFile: 'evidence/stage-4b/raw/report.json' }]],
+  outputDir: 'evidence/stage-4c/raw/results',
+  reporter: [['list'], ['json', { outputFile: 'evidence/stage-4c/raw/report.json' }]],
   use: { baseURL: 'http://127.0.0.1:41841', browserName: 'chromium', channel: 'msedge',
     headless: true, viewport: { width: 1366, height: 768 }, screenshot: 'only-on-failure', trace: 'retain-on-failure' },
   webServer: [
