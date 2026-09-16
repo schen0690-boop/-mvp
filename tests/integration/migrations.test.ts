@@ -77,7 +77,7 @@ it('002从空库依次建立两版本，仅必要表', () => {
   migrateDatabase(db, 2);
   expect(tables()).toEqual(['discussions', 'lineup_members', 'public_events', 'schema_migrations']);
   expect(db.prepare('SELECT id FROM schema_migrations ORDER BY id').all()).toEqual([{ id: 1 }, { id: 2 }]);
-  assertCurrentSchema(db);
+  expect(()=>assertCurrentSchema(db)).toThrow('MIGRATION_REQUIRED');
 });
 it('002升级真实旧草稿并保留旧19字段与原始事件，重开重复安全', () => {
   const { created, input } = seed();
@@ -88,7 +88,7 @@ it('002升级真实旧草稿并保留旧19字段与原始事件，重开重复�
   expect(db.prepare('SELECT * FROM public_events').all()).toEqual(events);
   expect(db.prepare('SELECT generation_version,lineup_revision,current_generation_id FROM discussions').get())
     .toEqual({ generation_version: 0, lineup_revision: 0, current_generation_id: null });
-  db.close(); db = new DatabaseSync(path); migrateDatabase(db, 2); assertCurrentSchema(db);
+  db.close(); db = new DatabaseSync(path); migrateDatabase(db, 2); expect(()=>assertCurrentSchema(db)).toThrow('MIGRATION_REQUIRED');
   expect(db.prepare('SELECT * FROM schema_migrations').all()).toEqual(rows);
   expect(new DraftService(new SqliteDraftStore(db)).create(input).replayed).toBe(true);
 });

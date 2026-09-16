@@ -2,12 +2,13 @@ import { DatabaseSync } from 'node:sqlite';
 import { createHash } from 'node:crypto';
 import { schemaV1 } from './schema-v1.js';
 import { schemaV2 } from './schema-v2.js';
+import { schemaV3 } from './schema-v3.js';
 
 const ledgerSql = `CREATE TABLE schema_migrations (
   id INTEGER PRIMARY KEY CHECK(id > 0), name TEXT NOT NULL UNIQUE,
   checksum TEXT NOT NULL, applied_at TEXT NOT NULL
 ) STRICT;`;
-const migrations = [{ id: 1, name: '001_draft_baseline', sql: schemaV1 }, { id: 2, name: '002_lineup', sql: schemaV2 }];
+const migrations = [{ id: 1, name: '001_draft_baseline', sql: schemaV1 }, { id: 2, name: '002_lineup', sql: schemaV2 }, {id:3,name:'003_discussion_runtime',sql:schemaV3}];
 function fingerprint(db: DatabaseSync): string {
   return JSON.stringify(db.prepare('SELECT type,name,tbl_name,sql FROM sqlite_schema ORDER BY name').all()
     .map(row => ({ ...row, sql: typeof row.sql === 'string' ? row.sql.replace(/\s+/g, ' ').trim() : row.sql })));
@@ -18,6 +19,7 @@ function expectedSchema(version: number): string {
     reference.exec(schemaV1);
     if (version > 0) reference.exec(ledgerSql);
     if (version >= 2) { reference.exec('PRAGMA foreign_keys=OFF'); reference.exec(schemaV2); }
+    if (version >= 3) reference.exec(schemaV3);
     return fingerprint(reference);
   } finally { reference.close(); }
 }
@@ -33,7 +35,7 @@ function history(db: DatabaseSync): number {
   });
   return rows.length;
 }
-export function migrateDatabase(db: DatabaseSync, target: 1 | 2 = 2): void {
+export function migrateDatabase(db: DatabaseSync, target: 1 | 2 | 3 = 3): void {
   db.exec('PRAGMA foreign_keys = OFF; PRAGMA busy_timeout = 3000;');
   try {
     db.exec('BEGIN IMMEDIATE');
@@ -47,7 +49,7 @@ export function migrateDatabase(db: DatabaseSync, target: 1 | 2 = 2): void {
       db.prepare('INSERT INTO schema_migrations VALUES (1, ?, ?, ?)').run('001_draft_baseline',
         createHash('sha256').update(schemaV1).digest('hex'), new Date().toISOString());
     }
-    if (current < 2 && target === 2) {
+    if (current < 2 && target >= 2) {
       const oldColumns = 'id,hex(topic) AS topic,expert_count,status,version,last_event_id,create_request_id,created_at,updated_at';
       const before = JSON.stringify(db.prepare(`SELECT ${oldColumns} FROM discussions ORDER BY id`).all());
       const events = JSON.stringify(db.prepare('SELECT * FROM public_events ORDER BY discussion_id,event_id').all());
@@ -56,6 +58,17 @@ export function migrateDatabase(db: DatabaseSync, target: 1 | 2 = 2): void {
           events !== JSON.stringify(db.prepare('SELECT * FROM public_events ORDER BY discussion_id,event_id').all())) throw new Error('MIGRATION_DATA_CHANGED');
       db.prepare('INSERT INTO schema_migrations VALUES (2, ?, ?, ?)').run('002_lineup',
         createHash('sha256').update(schemaV2).digest('hex'), new Date().toISOString());
+    }
+    if (current < 3 && target >= 3) {
+      const columns = db.prepare('PRAGMA table_info(discussions)').all().map(r => r.name).join(',');
+      const before = JSON.stringify(db.prepare(`SELECT ${columns} FROM discussions ORDER BY id`).all());
+      const events = JSON.stringify(db.prepare('SELECT * FROM public_events ORDER BY discussion_id,event_id').all());
+      const members = JSON.stringify(db.prepare('SELECT * FROM lineup_members ORDER BY member_id').all());
+      db.exec(schemaV3);
+      if (before !== JSON.stringify(db.prepare(`SELECT ${columns} FROM discussions ORDER BY id`).all()) ||
+          events !== JSON.stringify(db.prepare('SELECT * FROM public_events ORDER BY discussion_id,event_id').all()) ||
+          members !== JSON.stringify(db.prepare('SELECT * FROM lineup_members ORDER BY member_id').all())) throw new Error('MIGRATION_DATA_CHANGED');
+      db.prepare('INSERT INTO schema_migrations VALUES (3, ?, ?, ?)').run('003_discussion_runtime', createHash('sha256').update(schemaV3).digest('hex'),new Date().toISOString());
     }
     if (db.prepare('PRAGMA foreign_key_check').all().length || db.prepare('PRAGMA integrity_check').get()?.integrity_check !== 'ok') {
       throw new Error('MIGRATION_INTEGRITY_FAILED');
