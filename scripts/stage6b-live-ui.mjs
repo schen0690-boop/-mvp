@@ -1,12 +1,14 @@
+import {acceptancePaths} from '../dist/live/acceptance-paths.js';
 // Explicit one-shot browser execution. A second invocation cannot click start again.
 import {chromium,expect} from '@playwright/test';
 import {mkdirSync,writeFileSync,readFileSync,existsSync,readdirSync} from 'node:fs';
 import {resolve,relative,isAbsolute,basename} from 'node:path';
 import assert from 'node:assert/strict';
 const local=process.argv.includes('--local'),readonly=process.argv.includes('--read-only');
-const root=local?resolve(process.argv[process.argv.indexOf('--local')+1]):resolve('.local/stage-6b-live');
+const r1=process.argv.includes('--r1');assert(!(local&&r1));const profile=acceptancePaths(r1?['--r1']:[]);
+const root=local?resolve(process.argv[process.argv.indexOf('--local')+1]):resolve(profile.root);
 if(local){const rel=relative(resolve('.tmp/stage-6b'),root);assert(rel&&!rel.startsWith('..')&&!isAbsolute(rel));}
-const out=local?'evidence/stage-6b/local-'+basename(root):'evidence/stage-6b/live',prepared=JSON.parse(readFileSync(root+'/prepared.json','utf8')),id=prepared.discussionId,auth=root+'/authorization';
+const out=local?'evidence/stage-6b/local-'+basename(root):profile.evidence,prepared=JSON.parse(readFileSync(root+'/prepared.json','utf8')),id=prepared.discussionId,auth=root+'/authorization';
 mkdirSync(out,{recursive:true});const save=(name,value)=>writeFileSync(out+'/'+name+'.json',JSON.stringify(value,null,2)+'\n',{flag:'wx'});
 if(!readonly){assert(!existsSync(auth+'/started.json')&&!existsSync(auth+'/closed.json'));assert(!readdirSync(auth).some(f=>/^(ordinary|summary)-\d+\.json$/.test(f)));}
 const record={startedAt:new Date().toISOString(),codeRevision:prepared.codeRevision,localHttpStub:local,discussionId:id,runId:prepared.runId,posts:[],steps:{},sse:[]};

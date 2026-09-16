@@ -1,0 +1,12 @@
+{
+  ".local/stage-6b-live/authorization/closed.json": "1c9f8193bb3d52046a28161dcd2668e412124781331d2c47a02f6bebd3a79967",
+  ".local/stage-6b-live/authorization/manifest.json": "4ae4832944deecdc80025cc52388406449373c0d3519614363148675dfcdf8ec",
+  ".local/stage-6b-live/discussions.sqlite": "0f2db8a70e701c4007075f2d69843b1e6b2509016c9e80aad6fd6848315a2919",
+  ".local/stage-6b-live/prepared.json": "1101dadce89ee4094e109390ba92219b7f7f85621b9e5856977ef19aac2c0852",
+  ".local/stage-4d-live/authorization/binding.json": "af23cf992452e08be5b0bab4daec08319e1e9e7ed107e62f184c5adce39cd4b5",
+  ".local/stage-4d-live/authorization/closed.json": "998667de784771300c963b490adf7eec1f833c32b895e9220b4b68d42ae52ba3",
+  ".local/stage-4d-live/authorization/request-1.json": "17ccad8e20c3ebf248a9bd1100c63dc4a07327c350ea165f940fd06280ad0617",
+  ".local/stage-4d-live/authorization/result-1.json": "5a16cb50ada97b19a2384ac97e129cf815bd3f90f8bbf8b3e705fd40cdb4d8eb",
+  ".local/stage-4d-live/discussions.sqlite": "83e25370d0655bb54cc8b264c06f223c4444b7881bd506745cb3fe851bfd1944",
+  ".local/stage-6b-once.json": "9f98bc4e358a7f6e6dce2a46aa74e02d4e9cd9e4f8ab4867b82b04aa85b88e34"
+}

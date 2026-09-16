@@ -225,3 +225,15 @@ node scripts/stage6b-dry-run.mjs
 ```
 
 新增启动代码位于scripts/startup，统一检查真实GET讨论快照及前端代理相同内容；不新增健康接口。测试夹具为testOnly，模型传输仅loopback，普通启动及生产协议不变。以后新真实验收获单独批准、准备有效新授权后才可使用`npm run build:startup`与`npm run launch:stage6b -- --live`；该入口不会创建授权，当前旧closed记录会在启动服务/加载密钥之前拒绝。不要重建旧记录，也不要再使用未经验证的临时启动命令。验证和已知范围见stage-6b-validation的“启动脚本修复”小节。
+
+## P16授权的6B-R1独立入口
+
+项目根目录中，先类型检查/编译及定向测试并提交准备代码，再执行：
+
+```powershell
+npm run config:stage6b
+npm run prepare:stage6b:r1
+npm run launch:stage6b:r1
+```
+
+launch脚本已由build:startup编译，直接复用已验证的共享启动/快照检查/前端代理/独立Edge/清理；不可临时写另一个启动脚本。固定R1独立库、锚点、授权和证据位置见stage-6b-validation。旧授权不重开。prepare只允许不存在的R1路径；已有记录必须核对，不删除重建。后端41882、前端41881，均loopback；只有一个页面start。源码版本必须匹配准备锚点。真实运行成功、最终失败或中止即关闭此次授权，不补第二场。

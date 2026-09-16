@@ -1,9 +1,10 @@
+import {acceptancePaths} from './live/acceptance-paths.js';
 // Explicit acceptance entry only. No automatic initialization or alternate database is allowed.
 import express from 'express';
 import {readFileSync,openSync,closeSync,unlinkSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
-import {stage6bAnchor,stage6bRoot,projectRoot,stage6bSettings} from './live/stage6b-settings.js';
+import {projectRoot,stage6bSettings} from './live/stage6b-settings.js';
 import {loadStage6bConfig} from './live/stage6b-config.js';
 import {DiscussionAuthorization} from './live/discussion-authorization.js';
 import {GuardedDiscussionProvider} from './live/guarded-discussion.js';
@@ -17,6 +18,7 @@ import {DiscussionService} from './domain/discussion-service.js';
 import {createApp} from './http/app.js';
 import {restrictStage6bWrites} from './live/stage6b-http.js';
 try{
+ const profile=acceptancePaths(process.argv.slice(2)),stage6bRoot=join(projectRoot,profile.root),stage6bAnchor=join(projectRoot,profile.anchor);
  const file=join(stage6bRoot,'discussions.sqlite'),dir=join(stage6bRoot,'authorization');
  if(!existsSync(file)||!existsSync(join(dir,'manifest.json')))throw Error();
  const prepared=JSON.parse(readFileSync(join(stage6bRoot,'prepared.json'),'utf8')),anchor=JSON.parse(readFileSync(stage6bAnchor,'utf8'));

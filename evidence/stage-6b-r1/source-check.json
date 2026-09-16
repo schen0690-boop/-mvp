@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-09-16T15:03:55.208Z",
+  "hits": [],
+  "sourceHashes": {
+    "src/live/acceptance-paths.ts": "d30ce0ca04b2ebbc60e6ae39b4f05e3aec0906956e4f794e984c27254dc26511",
+    "tests/integration/startup-settlement.test.ts": "a209fe0837d56b013c02670988d6e757d360376e8d96cbd997b6c3dfd39a4c7e",
+    "tests/unit/acceptance-paths.test.ts": "5b3ef2e7632be721b5d37ac196c7a6f14d2b8da93e2074fd7df3cb9f8c48eac7",
+    "package.json": "cb63e34626159144a3270cf5156d417a20e8f1609915e7846cac6e27ad25fe92",
+    "scripts/stage6b-live-ui.mjs": "068890ac9b61493cf6a68a6d21c2de0f6d1f009be9f2f9fd872412704e831425",
+    "scripts/startup/launch.ts": "698c7b8ce5e089e8ff8885dd57d9ac3316115d7da058c758404fd4671b4dc6fa",
+    "scripts/startup/readiness.ts": "85833d720e614203468034e45610381d7c98d83b8bdf1c55f51108a7827b9d87",
+    "scripts/startup/stage6b.ts": "64b729e75113814650ef189d45f9442987c690952142fd4ff425dfbc01d981ec",
+    "src/live-stage6b.ts": "473bee6275241017425e5a31781be9ea38e5e5869677c371dd88ba94c744235e",
+    "src/prepare-stage6b.ts": "2b0bb0e347e8a9e451c2cd5ce6989b7abf13b6fb36505eddfebcf84fb5ece0cc"
+  }
+}

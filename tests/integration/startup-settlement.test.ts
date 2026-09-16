@@ -1,0 +1,6 @@
+import {test,expect} from 'vitest';import {readFileSync} from 'node:fs';
+import {waitForRunTerminal} from '../../scripts/startup/readiness.js';import {decodeSnapshot} from '../../web/src/api.js';
+const dir='evidence/stage-6b/local-dry-gNWzws/';const running=decodeSnapshot(JSON.parse(readFileSync(dir+'running.json','utf8'))),terminal=decodeSnapshot(JSON.parse(readFileSync(dir+'terminal.json','utf8')));
+test('browser exit only GETs same run until terminal; does not cancel legal summary',async()=>{let n=0;const methods:string[]=[];const transport:typeof fetch=async(_url,init)=>{methods.push(init?.method??'GET');return Response.json(n++?terminal:running);};expect(await waitForRunTerminal('http://127.0.0.1',terminal.runtime!.runId,{transport,timeoutMs:300,intervalMs:1})).toEqual(terminal);expect(methods).toEqual(['GET','GET']);});
+test('another run result cannot satisfy read-only settlement',async()=>{await expect(waitForRunTerminal('http://127.0.0.1',crypto.randomUUID(),{transport:async()=>Response.json(terminal)})).rejects.toThrow('UNEXPECTED_RUN');});
+test('unverified server state returns finite error without repeat start',async()=>{await expect(waitForRunTerminal('http://127.0.0.1',terminal.runtime!.runId,{transport:async()=>Response.json({}, {status:503})})).rejects.toMatchObject({code:'HTTP_NOT_READY',status:503});});

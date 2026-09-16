@@ -4497,3 +4497,7 @@ docs/stage-5c-validation.md。
 # P15 — 6B启动脚本修复与零外呼彩排
 
 本轮真实用户Prompt逐字归档[stage-6b-startup-fix-request.md](stage-6b-startup-fix-request.md)，取自实际当前会话用户消息，不复制密钥历史。意图：定位原临时命令，先本地复现，再让真实入口与彩排共享已类型检查/测试的启动检查和资源清理；旧授权保持关闭。本轮实际修正为原生Fetch ok属性和错误分类，Playwright ok()保留。原生ForkOptions字段类型错误不计业务RED。真实RED→GREEN、同入口彩排和保护哈希见stage-6b-validation追加小节。
+
+# P16 — 6B-R1独立单样本真实讨论验收
+
+用户真实原文归档[stage-6b-r1-request.md](stage-6b-r1-request.md)，取自实际本轮消息，未复制密钥历史。意图：复用已验证启动逻辑，新的独立20次授权执行一个短样本；不是重新开启旧6B。实施只增加固定--r1路径选项和浏览器异常后的同run只读有限收尾。代表性路径及收尾RED→GREEN、本地预检与实际运行分开记录在原stage-6b-validation。

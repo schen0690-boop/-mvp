@@ -1,0 +1,80 @@
+{
+  "startedAt": "2026-09-16T15:02:04.036Z",
+  "officialRequests": 0,
+  "commands": [
+    {
+      "name": "startup typecheck",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.startup.json",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "backend typecheck",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "backend build",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.build.json"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "browser script syntax",
+      "args": [
+        "--check",
+        "scripts/stage6b-live-ui.mjs"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "targeted regression",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/unit/acceptance-paths.test.ts",
+        "tests/integration/startup-settlement.test.ts",
+        "tests/integration/startup-readiness.test.ts",
+        "tests/integration/startup-process.test.ts",
+        "tests/integration/startup-prepared.test.ts",
+        "tests/integration/short-discussion.test.ts",
+        "tests/integration/guarded-discussion.test.ts",
+        "tests/unit/discussion-authorization.test.ts",
+        "--reporter=json",
+        "--outputFile=evidence/stage-6b-r1/regression.json"
+      ],
+      "exitCode": 0,
+      "stdout": "JSON report written to D:/实测文件夹/evidence/stage-6b-r1/regression.json\n",
+      "stderr": ""
+    },
+    {
+      "name": "shared launcher local rehearsal",
+      "args": [
+        "scripts/stage6b-dry-run.mjs"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"evidence\":\"D:\\\\实测文件夹\\\\evidence\\\\stage-6b\\\\startup-fix\\\\local-2026-09-16T15-02-09.701Z\\\\result.json\",\"steps\":[\"backend snapshot validated\",\"frontend proxy same snapshot validated\",\"same run read-only settlement: completed\",\"browser short discussion + terminal refresh passed\"]}\n",
+      "stderr": ""
+    }
+  ],
+  "finishedAt": "2026-09-16T15:02:13.982Z"
+}

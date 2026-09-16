@@ -1,9 +1,10 @@
+import {acceptancePaths} from './live/acceptance-paths.js';
 // Explicit one-time preparation. No model transport is constructed here.
 import {existsSync,mkdirSync} from 'node:fs';
 import {join,dirname} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
-import {stage6bAnchor,stage6bRoot,projectRoot,stage6bSettings,presetRoster} from './live/stage6b-settings.js';
+import {projectRoot,stage6bSettings,presetRoster} from './live/stage6b-settings.js';
 import {DiscussionAuthorization,writeOnce} from './live/discussion-authorization.js';
 import {initializeConfiguredDatabase,openConfiguredDatabase} from './runtime.js';
 import {DraftService} from './domain/drafts.js';
@@ -11,6 +12,7 @@ import {SqliteDraftStore} from './db/sqlite-drafts.js';
 import {SqliteLineupStore} from './db/sqlite-lineup.js';
 import {LineupService} from './domain/lineup-service.js';
 try{
+ const profile=acceptancePaths(process.argv.slice(2)),stage6bRoot=join(projectRoot,profile.root),stage6bAnchor=join(projectRoot,profile.anchor);
  if(existsSync(stage6bAnchor)||existsSync(stage6bRoot))throw Error('ALREADY_PREPARED');
  const codeRevision=execFileSync('git',['rev-parse','HEAD'],{cwd:projectRoot,encoding:'utf8'}).trim();
  const authorizationId=randomUUID(),runId=randomUUID(),database=join(stage6bRoot,'discussions.sqlite');mkdirSync(dirname(stage6bAnchor),{recursive:true});

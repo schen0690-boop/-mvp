@@ -1,8 +1,9 @@
+import {acceptancePaths} from '../../src/live/acceptance-paths.js';
 import {readFileSync,existsSync,readdirSync,mkdirSync,writeFileSync} from 'node:fs';
 import {resolve,relative,isAbsolute,basename,join} from 'node:path';
 import {createServer} from 'node:net';
 import {isObject,validateUuid} from '../../src/domain/input.js';
-import {waitForSnapshot,cleanupOnce,type Binding} from './readiness.js';
+import {waitForSnapshot,waitForRunTerminal,cleanupOnce,type Binding} from './readiness.js';
 import {startOwned,type OwnedChild} from './owned-child.js';
 export interface Prepared extends Binding {runId:string;testOnly?:boolean}
 export function readPrepared(root:string,local:boolean):Prepared{
@@ -29,27 +30,29 @@ async function localRoot(owned:OwnedChild):Promise<string>{
  });
 }
 /** One shared orchestration for local rehearsal and the separately authorized live entry. */
-export async function launchStage6b(mode:'local'|'live'):Promise<void>{
+export async function launchStage6b(mode:'local'|'live'|'r1'):Promise<void>{
  // No preparation/authorization creation here. The old closed live record fails before spawning or loading secrets.
- let root=resolve('.local/stage-6b-live'),prepared:Prepared|undefined;
- if(mode==='live')prepared=readPrepared(root,false);
+ const profile=acceptancePaths(mode==='r1'?['--r1']:[]);
+ let root=resolve(profile.root),prepared:Prepared|undefined;
+ if(mode!=='local')prepared=readPrepared(root,false);
  await portFree(41882);await portFree(41881);
- const output=resolve('evidence/stage-6b/startup-fix',`${mode}-${new Date().toISOString().replaceAll(':','-')}`);mkdirSync(output,{recursive:true});
+ const output=resolve(mode==='r1'?'evidence/stage-6b-r1/launch':'evidence/stage-6b/startup-fix',`${mode}-${new Date().toISOString().replaceAll(':','-')}`);mkdirSync(output,{recursive:true});
  const report:{mode:string;startedAt:string;steps:string[];processes:unknown[];error?:{name:string;message:string};finishedAt?:string;root?:string;uiEvidence?:string}={mode,startedAt:new Date().toISOString(),steps:[],processes:[]};
  const owned:OwnedChild[]=[];const cleanup=cleanupOnce([async()=>{const errors:unknown[]=[];for(const process of [...owned].reverse()){try{await process.stop();report.processes.push(await process.exited);}catch(error){errors.push(error);}}if(errors.length)throw new AggregateError(errors,'CHILD_CLEANUP_FAILED');}]);
  let interrupted=false;const assertActive=()=>{if(interrupted)throw Error('STARTUP_INTERRUPTED');};
  const interrupt=()=>{interrupted=true;void cleanup().catch(()=>{process.exitCode=1;});};process.once('SIGINT',interrupt);process.once('SIGTERM',interrupt);
  try{
   const env:NodeJS.ProcessEnv={...process.env,DEEPSEEK_API_KEY:'',DISCUSSION_PROVIDER:'fake',ROSTER_PROVIDER:'fake'};
-  const backend=startOwned(mode==='local'?'scripts/stage6b-local-backend.mjs':'dist/live-stage6b.js',[],env,true);owned.push(backend);
+  const backend=startOwned(mode==='local'?'scripts/stage6b-local-backend.mjs':'dist/live-stage6b.js',mode==='r1'?['--r1']:[],env,true);owned.push(backend);
   if(mode==='local'){root=await localRoot(backend);prepared=readPrepared(root,true);}if(!prepared)throw Error('PREPARATION_MISSING');report.root=root;assertActive();
   const path=`/api/discussions/${prepared.discussionId}`;
   const initial=await waitForSnapshot('http://127.0.0.1:41882'+path,prepared);report.steps.push('backend snapshot validated');assertActive();
   const front=startOwned('node_modules/vite/bin/vite.js',['--config','web/vite.config.ts','--port','41881'],{...env,WEB_API_TARGET:'http://127.0.0.1:41882',VITE_DISCUSSION_DEMO:mode==='local'?'local-http':'live-short'});owned.push(front);
   const proxied=await waitForSnapshot('http://127.0.0.1:41881'+path,prepared);
   if(JSON.stringify(initial)!==JSON.stringify(proxied))throw Error('PROXY_SNAPSHOT_MISMATCH');report.steps.push('frontend proxy same snapshot validated');assertActive();
-  const ui=startOwned('scripts/stage6b-live-ui.mjs',mode==='local'?['--local',root]:[],env);owned.push(ui);const result=await ui.exited;
-  const uiEvidence=mode==='local'?'evidence/stage-6b/local-'+basename(root):'evidence/stage-6b/live';report.uiEvidence=uiEvidence;
+  const ui=startOwned('scripts/stage6b-live-ui.mjs',mode==='local'?['--local',root]:mode==='r1'?['--r1']:[],env);owned.push(ui);const result=await ui.exited;
+  const uiEvidence=mode==='local'?'evidence/stage-6b/local-'+basename(root):profile.evidence;report.uiEvidence=uiEvidence;
+  const observed=await waitForRunTerminal('http://127.0.0.1:41882'+path,prepared.runId);writeFileSync(join(output,'post-ui-snapshot.json'),JSON.stringify(observed,null,2));report.steps.push('same run read-only settlement: '+observed.status);
   const uiRecord:unknown=JSON.parse(readFileSync(join(uiEvidence,'ui-result.json'),'utf8'));
   if(result.code!==0||!isObject(uiRecord)||uiRecord.outcome!=='normal_path')throw Error('UI_NOT_NORMAL_PATH_NO_RETRY');report.steps.push('browser short discussion + terminal refresh passed');
  }catch(error){report.error={name:error instanceof Error?error.name:'UnknownError',message:error instanceof Error?error.message:'UNKNOWN_STARTUP_ERROR'};throw error;}

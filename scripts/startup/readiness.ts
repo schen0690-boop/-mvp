@@ -48,3 +48,19 @@ export function cleanupOnce(actions:ReadonlyArray<()=>Promise<void>>):()=>Promis
  let completion:Promise<void>|undefined;
  return ()=>completion??= (async()=>{const errors:unknown[]=[];for(const action of actions){try{await action();}catch(error){errors.push(error);}}if(errors.length)throw new AggregateError(errors,'OWNED_RESOURCE_CLEANUP_FAILED');})();
 }
+
+/** Read-only settlement after browser exit; never issues a start/stop or model operation. */
+export async function waitForRunTerminal(url:string,runId:string,options:ReadyOptions={}):Promise<DraftSnapshot>{
+ const endpoint=new URL(url);if(endpoint.protocol!=='http:'||endpoint.hostname!=='127.0.0.1')throw new ReadinessError('NON_LOCAL_READINESS_URL');
+ const end=performance.now()+(options.timeoutMs??190000),transport=options.transport??fetch;
+ while(performance.now()<end){
+  const response=await transport(url,{signal:AbortSignal.timeout(Math.max(1,Math.floor(Math.min(options.requestTimeoutMs??1500,end-performance.now())))),redirect:'error'});
+  if(!response.ok){await response.body?.cancel();throw new ReadinessError('HTTP_NOT_READY',response.status);}
+  const snapshot=decodeSnapshot(await response.json());
+  if(snapshot.status==='lineup_confirmed')return snapshot; // Start may never have been accepted; do not send it again.
+  if(snapshot.runtime?.runId!==runId)throw Error('UNEXPECTED_RUN');
+  if(snapshot.status==='completed'||snapshot.status==='failed')return snapshot;
+  await delay(Math.max(1,Math.min(options.intervalMs??500,end-performance.now())));
+ }
+ throw new ReadinessError('RUN_RESULT_UNVERIFIED');
+}
