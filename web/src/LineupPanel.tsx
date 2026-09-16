@@ -8,7 +8,7 @@ export function LineupPanel({snapshot,busy,error,notice,checking,generate,confir
   const offline=notice.startsWith('网络连接中断');
   return <section className="lineup-panel" aria-label="讨论阵容" aria-busy={busy}>
     <h3>讨论阵容</h3>
-    <p className="help">当前为演示阵容（Fake Provider），角色为虚构，不代表真实人物观点。</p>
+    <p className="help">以下为虚拟嘉宾，不代表真实人物参与或观点。</p>
     {error&&<p className="error" role="alert">{error}</p>}
     {notice&&<div className="sync-notice"><p role="status">{notice}</p><button disabled={checking||busy||offline} onClick={recheck}>重新检查状态</button></div>}
     {snapshot.status==='created'&&<div className="lineup-empty"><h3>阵容尚未生成</h3><p>根据当前话题生成一位主持人与{snapshot.expertCount}位专家，再由你确认。</p><button className="primary" disabled={busy||offline} onClick={generate}>{busy?'正在提交…':'生成阵容'}</button></div>}
