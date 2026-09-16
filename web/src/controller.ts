@@ -5,12 +5,12 @@ export interface State {
   filter: 'active' | 'all'; items: DraftListItem[]; listLoading: boolean; listError: string;
   selectedId: string; detail: DraftSnapshot | null; detailLoading: boolean; detailError: string;
   panel: 'create' | 'list' | 'detail';
-  actionBusy: boolean; actionError: string; syncNotice: string; checking: boolean;
+  actionBusy: boolean; actionError: string; syncNotice: string; checking: boolean; needsRefresh:boolean;
 }
 export class Controller {
   private state: State = { topic: '', count: '4', busy: false, createError: '', saved: false, filter: 'active',
     items: [], listLoading: false, listError: '', selectedId: '', detail: null, detailLoading: false, detailError: '', panel: 'create',
-    actionBusy:false,actionError:'',syncNotice:'',checking:false };
+    actionBusy:false,actionError:'',syncNotice:'',checking:false,needsRefresh:false };
   private listeners = new Set<() => void>();
   private operation: Readonly<CreateInput> | undefined;
   private listVersion = 0;
@@ -42,7 +42,7 @@ export class Controller {
       this.stopMonitor();this.polls=0;this.generationOperation=undefined;
       this.detailVersion++;
       this.update({ saved: true, detail: result.snapshot, selectedId: result.discussionId,
-        detailLoading: false, detailError: '', panel: 'detail', filter: 'all',actionBusy:false,actionError:'',syncNotice:'' });
+        detailLoading: false, detailError: '', panel: 'detail', filter: 'all',actionBusy:false,actionError:'',syncNotice:'',needsRefresh:false });
       this.schedule();
       await this.loadList('all');
     } catch (error) {
@@ -62,7 +62,7 @@ export class Controller {
   async select(id: string): Promise<void> {
     this.disposed=false;this.stopMonitor();this.polls=0;this.generationOperation=undefined;
     const version = ++this.detailVersion;
-    this.update({ selectedId: id, detail: null, detailLoading: true, detailError: '', panel: 'detail',actionBusy:false,actionError:'',syncNotice:'',checking:false });
+    this.update({ selectedId: id, detail: null, detailLoading: true, detailError: '', panel: 'detail',actionBusy:false,actionError:'',syncNotice:'',checking:false,needsRefresh:false });
     try {
       const detail = await this.api.get(id);
       if (version === this.detailVersion) {this.update({ detail });this.schedule();}
@@ -79,7 +79,9 @@ export class Controller {
   private adopt(detail:DraftSnapshot) {
     const old=this.state.detail;
     if(old?.discussionId===detail.discussionId && old.version>detail.version)return;
-    this.update({detail,syncNotice:''});
+    if(detail.lineupGeneration&&this.generationOperation&&detail.lineupGeneration.generationId!==this.generationOperation.expectedGenerationId)this.generationOperation=undefined;
+    this.update({detail,syncNotice:'',needsRefresh:false});
+    if(old?.status==='generating_lineup'&&detail.status!=='generating_lineup')void this.loadList();
   }
   private schedule() {
     clearTimeout(this.timer);
@@ -103,7 +105,7 @@ export class Controller {
   async confirm(): Promise<void> {await this.command('confirm');}
   private async command(kind:'generate'|'confirm') {
     const detail=this.state.detail;
-    if(this.disposed||!this.connected||this.state.actionBusy||!detail)return;
+    if(this.disposed||!this.connected||this.state.actionBusy||this.state.needsRefresh||!detail)return;
     if(kind==='confirm'?detail.status!=='awaiting_confirmation':!['created','awaiting_confirmation','lineup_generation_failed'].includes(detail.status))return;
     const version=this.detailVersion;this.stopMonitor();this.update({actionBusy:true,actionError:''});
     try {
@@ -121,7 +123,7 @@ export class Controller {
       if(version!==this.detailVersion)return;
       if(error instanceof ApiError&&error.status===409) {
         this.generationOperation=undefined;
-        this.update({actionError:'阵容已发生变化，请确认最新版本。'});
+        this.update({actionError:'阵容已发生变化，请确认最新版本。',needsRefresh:true});
         try {const current=await this.api.get(detail.discussionId);if(version===this.detailVersion)this.adopt(current);}
         catch {if(version===this.detailVersion)this.update({syncNotice:'状态读取失败，请重新检查'});}
       } else this.update({actionError:kind==='confirm'?'确认失败，请重试。':'生成请求未确认，请重试或重新检查状态。'});
@@ -132,7 +134,15 @@ export class Controller {
   online(online:boolean): void {
     this.connected=online;
     if(!online){this.stopMonitor();this.update({syncNotice:'网络连接中断，正在等待恢复……'});}
-    else {this.update({syncNotice:''});void this.recheck();}
+    else {
+      this.update({syncNotice:''});
+      if(!this.shown||this.disposed)return;
+      if(this.state.detail?.status==='generating_lineup'){
+        if(this.polls>=60){this.update({syncNotice:'状态获取超时，请重新检查'});return;}
+        this.polls++;
+      }
+      void this.recheck();
+    }
   }
   visible(visible:boolean): void {this.shown=visible;if(!visible)this.stopMonitor();else this.schedule();}
   dispose(): void {this.disposed=true;this.detailVersion++;this.listVersion++;this.stopMonitor();}

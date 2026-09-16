@@ -65,3 +65,22 @@ it('poll is serial and cancelled on switch/dispose; late results ignored',async(
   vi.mocked(api.get).mockResolvedValue(draft);await c.select('B');wait.resolve(ready);await vi.advanceTimersByTimeAsync(20000);expect(c.getState().selectedId).toBe('B');expect(c.getState().detail).toEqual(draft);c.dispose();await vi.advanceTimersByTimeAsync(20000);expect(api.get).toHaveBeenCalledTimes(3);
 });
 it('hidden detail pauses and resumes monitoring',async()=>{vi.useFakeTimers();const {api,c}=setup(generating);await c.select(id);c.visible(false);await vi.advanceTimersByTimeAsync(6000);expect(api.get).toHaveBeenCalledTimes(1);c.visible(true);await vi.advanceTimersByTimeAsync(2000);expect(api.get).toHaveBeenCalledTimes(2);});
+it('uncertain POST resolved by GET failure uses a NEW request/base for actual retry',async()=>{
+  const {api,c}=setup(draft,{generate:vi.fn().mockRejectedValueOnce(new ApiError('network',0)).mockResolvedValue(result(generating))});
+  await c.select(id);await c.generate();vi.mocked(api.get).mockResolvedValue(failed);await c.recheck();await c.generate();
+  const calls=vi.mocked(api.generate).mock.calls;expect(calls[1]![1].requestId).not.toBe(calls[0]![1].requestId);expect(calls[1]![1].expectedGenerationId).toBe(failed.lineupGeneration!.generationId);
+});
+it('late confirm and failed GET cannot overwrite a newly selected discussion',async()=>{
+  const wait=deferred<{discussionId:string;snapshot:DraftSnapshot;replayed:boolean}>();const {api,c}=setup(ready,{confirm:()=>wait.promise});await c.select(id);const a=c.confirm();vi.mocked(api.get).mockResolvedValue(draft);await c.select('B');wait.resolve({discussionId:id,snapshot:confirmed,replayed:false});await a;expect(c.getState()).toMatchObject({selectedId:'B',detail:draft,actionError:'',actionBusy:false});
+});
+it('poll success after regenerate failure cannot restore older ready snapshot',async()=>{
+  const newerFailed={...failed,version:5,lastEventId:5};const {api,c}=setup(newerFailed);await c.select(id);vi.mocked(api.get).mockResolvedValue(ready);await c.recheck();expect(c.getState().detail).toEqual(newerFailed);
+});
+it('offline recovery respects exhausted automatic budget and hidden detail',async()=>{
+  vi.useFakeTimers();const {api,c}=setup(generating);await c.select(id);c.visible(false);c.online(false);c.online(true);await vi.advanceTimersByTimeAsync(0);expect(api.get).toHaveBeenCalledTimes(1);
+  c.visible(true);await vi.advanceTimersByTimeAsync(122000);expect(api.get).toHaveBeenCalledTimes(61);c.online(false);c.online(true);await vi.advanceTimersByTimeAsync(0);expect(api.get).toHaveBeenCalledTimes(61);expect(c.getState().syncNotice).toBe('状态获取超时，请重新检查');
+});
+it('409 GET failure prevents confirming known-stale cards until manual snapshot succeeds',async()=>{
+  const {api,c}=setup(ready,{confirm:vi.fn(async()=>{throw new ApiError('conflict',409);})});await c.select(id);vi.mocked(api.get).mockRejectedValueOnce(new ApiError('network',0));await c.confirm();await c.confirm();expect(api.confirm).toHaveBeenCalledTimes(1);
+  await c.recheck();await c.confirm();expect(api.confirm).toHaveBeenCalledTimes(2);
+});
