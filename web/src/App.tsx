@@ -1,13 +1,30 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createApi, statusLabels } from './api.js';
 import { Controller } from './controller.js';
+import { LineupPanel } from './LineupPanel.js';
 import './styles.css';
 
 const time = (value: string) => new Date(value).toLocaleString('zh-CN', { hour12: false });
 export function App() {
   const [controller] = useState(() => new Controller(createApi()));
   const state = useSyncExternalStore(controller.subscribe, controller.getState);
-  useEffect(() => { void controller.loadList(); }, [controller]);
+  useEffect(() => {
+    void controller.loadList();
+    const id=new URL(location.href).searchParams.get('discussion');
+    if(id)void controller.select(id);
+    const online=()=>controller.online(navigator.onLine);
+    window.addEventListener('online',online);window.addEventListener('offline',online);
+    if(!navigator.onLine)online();
+    return ()=>{window.removeEventListener('online',online);window.removeEventListener('offline',online);controller.dispose();};
+  }, [controller]);
+  useEffect(()=>{
+    if(state.selectedId){const url=new URL(location.href);url.searchParams.set('discussion',state.selectedId);history.replaceState(null,'',url);}
+  },[state.selectedId]);
+  useEffect(()=>{
+    const visible=()=>controller.visible(document.visibilityState==='visible'&&(window.innerWidth>=900||state.panel==='detail'));
+    visible();window.addEventListener('resize',visible);document.addEventListener('visibilitychange',visible);
+    return ()=>{window.removeEventListener('resize',visible);document.removeEventListener('visibilitychange',visible);};
+  },[controller,state.panel]);
   const detail = state.detail;
   const count = [...state.topic.trim()].length;
   return <div className="app-shell">
@@ -68,8 +85,8 @@ export function App() {
             <h3 className="topic-title">{detail.topic}</h3>
             <dl className="metadata"><div><dt>专家人数</dt><dd>{detail.expertCount} 位专家（不含主持人）</dd></div>
               <div><dt>创建时间</dt><dd>{time(detail.createdAt)}</dd></div><div><dt>更新时间</dt><dd>{time(detail.updatedAt)}</dd></div></dl>
-            {detail.status==='created' ? <div className="lineup-empty"><h3>阵容尚未生成</h3><p>当前保存的是讨论草稿。主持人和专家名单还未生成，讨论尚未开始。</p></div> :
-              <div className="lineup-empty"><h3>{statusLabels[detail.status]}</h3><p>{detail.lastNotice?.message ?? (detail.status==='generating_lineup'?'正在生成阵容。可重新加载详情查看状态。':'当前阵容状态已保存，讨论尚未开始。')}</p></div>}
+            <LineupPanel snapshot={detail} busy={state.actionBusy} error={state.actionError} notice={state.syncNotice} checking={state.checking} blocked={state.needsRefresh}
+              generate={()=>void controller.generate()} confirm={()=>void controller.confirm()} recheck={()=>void controller.recheck()}/>
           </> : <div className="empty"><div className="empty-symbol" aria-hidden="true">▤</div><h3>选一条草稿，继续整理想法</h3><p>从列表中选择讨论，或先创建一个新话题。</p></div>}
         </div>
       </section>
