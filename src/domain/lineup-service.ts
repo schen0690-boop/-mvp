@@ -86,12 +86,12 @@ export class LineupService {
         if (ok && typeof value === 'string') resolve(value);
         else reject(ok ? new RosterValidationError('LINEUP_INVALID_STRUCTURE') : value);
       };
-      const abort = () => { finish(false, new ProviderError('timeout')); controller.abort(); };
+      const abort = () => { const error=new ProviderError(signal.aborted?'cancelled':'timeout');finish(false,error);controller.abort(error); };
       const timer = setTimeout(abort, Math.max(0, deadline - performance.now()));
       signal.addEventListener('abort', abort, {once:true});
       if (signal.aborted) { abort(); return; }
       try {
-        void this.provider.generateRoster(input, { signal: controller.signal, deadline, ...(repairIssues ? {repairIssues} : {}) })
+        void this.provider.generateRoster(input, { signal: controller.signal, deadline, generationId:result.generationId, ...(repairIssues ? {repairIssues} : {}) })
           .then(raw => finish(true, raw), error => finish(false, error));
       } catch (error) { finish(false, error); }
     });
@@ -103,6 +103,8 @@ export class LineupService {
     for (let attempt = 0; attempt < 2; attempt++) {
       let members: LineupMember[];
       try {
+        const before=this.storage(()=>this.store.read(result.discussionId))?.snapshot;
+        if(before?.status!=='generating_lineup'||before.lineupGeneration?.generationId!==result.generationId||before.lineupGeneration.generationVersion!==result.generationVersion){this.diagnostic(result,'STALE_GENERATION_RESULT');return;}
         const raw = await this.attempt(result,input,signal,Math.min(deadline,performance.now()+30000),repairIssues);
         let current: DiscussionSnapshot | undefined;
         try { current = this.store.read(result.discussionId)?.snapshot; }
@@ -113,9 +115,9 @@ export class LineupService {
         members = enrichRoster(parseRoster(raw,input.expertCount));
       } catch (error) {
         const code: NoticeCode = signal.aborted ? 'LINEUP_INTERRUPTED' : error instanceof RosterValidationError ? error.code : error instanceof ProviderError
-          ? error.kind === 'configuration' ? 'LINEUP_PROVIDER_CONFIGURATION' : error.kind === 'timeout' ? 'LINEUP_TIMEOUT' : 'LINEUP_PROVIDER_UNAVAILABLE'
+          ? error.kind === 'configuration' ? 'LINEUP_PROVIDER_CONFIGURATION' : error.kind === 'timeout' ? 'LINEUP_TIMEOUT' : error.kind==='cancelled'?'LINEUP_INTERRUPTED':'LINEUP_PROVIDER_UNAVAILABLE'
           : 'LINEUP_PROVIDER_UNAVAILABLE';
-        if (attempt === 1 || signal.aborted || performance.now() >= deadline || code === 'LINEUP_PROVIDER_CONFIGURATION') {
+        if (attempt === 1 || signal.aborted || performance.now() >= deadline || code === 'LINEUP_PROVIDER_CONFIGURATION'||error instanceof ProviderError&&!error.retryable) {
           this.fail(result,code); return;
         }
         repairIssues = error instanceof RosterValidationError ? [{path:'roles',rule:error.code}] : undefined;
