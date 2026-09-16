@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
-const shots='evidence/stage-5b/screenshots';
+const shots='evidence/stage-5c/screenshots';
 const detail=(page:Page)=>page.getByRole('region',{name:'草稿详情'});
 const action=(page:Page,name:string)=>detail(page).getByRole('button',{name,exact:true});
 async function create(page:Page,topic='阵容流程',count=4){
@@ -18,7 +18,7 @@ test('正常闭环：4专家，确认及ready/confirmed刷新由SQLite恢复',as
   const id=await create(page);await generate(page);await expect(detail(page).locator('.member-card')).toHaveCount(5);await shot(page,'desktop-4');
   await detail(page).locator('.member-card').first().scrollIntoViewIfNeeded();await detail(page).locator('.pane-scroll').evaluate(el=>{const card=el.querySelector<HTMLElement>('.member-card');if(card)el.scrollTop+=card.getBoundingClientRect().top-el.getBoundingClientRect().top;});await shot(page,'desktop-4-members');
   const before=await snap(page,id);await page.reload();await ready(page);expect((await snap(page,id)).roles).toEqual(before.roles);
-  await action(page,'确认阵容').click();await expect(detail(page).getByText('阵容已确认，讨论功能将在后续阶段启用。')).toBeVisible();await page.reload();
+  await action(page,'确认阵容').click();await expect(detail(page).getByText('阵容已确认，可以开始讨论。')).toBeVisible();await page.reload();
   await expect(detail(page).locator('.member-card')).toHaveCount(5);await expect(action(page,'重新生成')).toHaveCount(0);await detail(page).locator('.confirmed-notice').scrollIntoViewIfNeeded();await shot(page,'confirmed');
   expect((await snap(page,id)).utterances).toEqual([]);
 });
@@ -46,7 +46,7 @@ for(const status of [500,503])test(`网络故障注入：confirm ${status}保留
   await create(page);await generate(page);const names=await detail(page).locator('.member-card h4').allTextContents();
   await page.route('**/lineup/confirm',route=>route.fulfill({status,contentType:'application/json',body:JSON.stringify({error:{message:'private SQL stack'}})}),{times:1});
   await action(page,'确认阵容').click();await expect(detail(page).getByText('确认失败，请重试。')).toBeVisible();expect(await detail(page).locator('.member-card h4').allTextContents()).toEqual(names);await expect(page.getByText('private SQL stack')).toHaveCount(0);
-  await action(page,'确认阵容').click();await expect(detail(page).getByText('阵容已确认，讨论功能将在后续阶段启用。')).toBeVisible();
+  await action(page,'确认阵容').click();await expect(detail(page).getByText('阵容已确认，可以开始讨论。')).toBeVisible();
 });
 test('重新生成失败隐藏旧卡片且禁止确认，重试可恢复',async({page})=>{
   await create(page,'[regen-fail]');await generate(page);await action(page,'重新生成').click();await expect(action(page,'重试生成')).toBeVisible();await expect(detail(page).locator('.member-card')).toHaveCount(0);await expect(action(page,'确认阵容')).toHaveCount(0);await page.reload();await expect(detail(page).locator('.member-card')).toHaveCount(0);await action(page,'重试生成').click();await ready(page);
@@ -59,7 +59,7 @@ test('生成中切换讨论，旧结果不污染B',async({page})=>{
 test('同一事件循环重复点击生成和确认，各只提交一次',async({page})=>{
   await create(page);const paths:string[]=[];page.on('request',r=>{if(r.method()==='POST')paths.push(new URL(r.url()).pathname);});
   await action(page,'生成阵容').evaluate((el:HTMLButtonElement)=>{el.click();el.click();});await ready(page);
-  await action(page,'确认阵容').evaluate((el:HTMLButtonElement)=>{el.click();el.click();});await expect(detail(page).getByText('阵容已确认，讨论功能将在后续阶段启用。')).toBeVisible();expect(paths.filter(p=>p.endsWith('/lineup'))).toHaveLength(1);expect(paths.filter(p=>p.endsWith('/confirm'))).toHaveLength(1);
+  await action(page,'确认阵容').evaluate((el:HTMLButtonElement)=>{el.click();el.click();});await expect(detail(page).getByText('阵容已确认，可以开始讨论。')).toBeVisible();expect(paths.filter(p=>p.endsWith('/lineup'))).toHaveLength(1);expect(paths.filter(p=>p.endsWith('/confirm'))).toHaveLength(1);
 });
 test('浏览器离线保留生成态，联网GET恢复而非POST重发',async({page,context})=>{
   const gate=randomUUID();await create(page,`[gate:${gate}]`);let posts=0;page.on('request',r=>{if(r.method()==='POST')posts++;});await action(page,'生成阵容').click();await expect(detail(page).getByText('正在生成主持人与专家阵容……')).toBeVisible();
@@ -68,7 +68,7 @@ test('浏览器离线保留生成态，联网GET恢复而非POST重发',async({p
 test('两个Tab：旧Tab冲突接受新版，另一Tab确认后重新GET恢复已确认',async({page,context})=>{
   await create(page);await generate(page);const other=await context.newPage();await other.goto(page.url());await ready(other);await action(other,'重新生成').click();await ready(other);
   await action(page,'确认阵容').click();await expect(detail(page).getByText('阵容已发生变化，请确认最新版本。')).toBeVisible();await ready(page);
-  await action(other,'确认阵容').click();await expect(detail(other).getByText('阵容已确认，讨论功能将在后续阶段启用。')).toBeVisible();await action(page,'重新加载详情').click();await expect(detail(page).getByText('阵容已确认，讨论功能将在后续阶段启用。')).toBeVisible();await other.close();
+  await action(other,'确认阵容').click();await expect(detail(other).getByText('阵容已确认，可以开始讨论。')).toBeVisible();await action(page,'重新加载详情').click();await expect(detail(page).getByText('阵容已确认，可以开始讨论。')).toBeVisible();await other.close();
 });
 for(const [width,height,count] of [[390,844,1],[1366,768,8],[2560,1080,8]] as const)test(`阵容布局 ${width}x${height} / ${count}专家长字段与键盘滚动`,async({page})=>{
   await page.setViewportSize({width,height});await create(page,'[long] 长字段阵容',count);await generate(page);await expect(detail(page).locator('.member-card')).toHaveCount(count+1);
@@ -82,5 +82,5 @@ test('真实确认请求等待时禁用两个按钮，成功后恢复为只读',
   let releaseRequest!:()=>void;const gate=new Promise<void>(resolve=>{releaseRequest=resolve;});
   await page.route('**/lineup/confirm',async route=>{await gate;await route.continue();});
   await action(page,'确认阵容').click();await expect(action(page,'确认阵容')).toBeDisabled();await expect(action(page,'重新生成')).toBeDisabled();await expect(detail(page).getByText('正在提交…')).toBeVisible();
-  releaseRequest();await expect(detail(page).getByText('阵容已确认，讨论功能将在后续阶段启用。')).toBeVisible();
+  releaseRequest();await expect(detail(page).getByText('阵容已确认，可以开始讨论。')).toBeVisible();
 });

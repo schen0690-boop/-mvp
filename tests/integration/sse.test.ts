@@ -1,4 +1,4 @@
-import {afterEach,expect,it} from 'vitest';
+import {afterEach,expect,it,vi} from 'vitest';
 import {createServer,type Server} from 'node:http';
 import {once} from 'node:events';
 import {discussionFixture} from '../helpers/discussion.js';
@@ -7,7 +7,7 @@ import {SqliteEventSource} from '../../src/db/public-events.js';
 import {subscriberCount} from '../../src/db/commit-notifications.js';
 import {randomUUID} from 'node:crypto';
 const cleanups:(()=>Promise<void>)[]=[];
-afterEach(async()=>{for(const close of cleanups.splice(0).reverse())await close();});
+afterEach(async()=>{for(const close of cleanups.splice(0).reverse())await close();vi.useRealTimers();});
 async function fixture(){
  const f=await discussionFixture(2);const server=createServer(createApp(f.drafts,undefined,undefined,undefined,new SqliteEventSource(f.db)));
  server.listen(0,'127.0.0.1');await once(server,'listening');const address=server.address();if(!address||typeof address==='string')throw Error('TEST_ADDRESS');
@@ -60,4 +60,10 @@ it('其他讨论的事务不会在当前流中串场，未知讨论404',async()=
 });
 it('非法游标及未知参数返回400而不是打开流',async()=>{
  const f=await fixture();for(const query of ['?after=-1','?after=1.2','?after=1&after=2','?unknown=1'])expect((await fetch(f.url+query)).status).toBe(400);
+});
+it('HTTP真实心跳字节不产生事件，关闭响应移除全部订阅',async()=>{
+ const f=await fixture();vi.useFakeTimers({toFake:['setInterval','clearInterval']});
+ const r=await fetch(f.url+'?after='+f.confirmed.lastEventId,{signal:f.abort.signal});const reader=r.body!.getReader();const chunk=reader.read();await vi.advanceTimersByTimeAsync(15000);
+ expect(new TextDecoder().decode((await chunk).value)).toContain(': heartbeat\n\n');expect(f.store.state(f.id)!.snapshot).toEqual(f.confirmed);await reader.cancel();
+ f.server.closeAllConnections();await new Promise<void>(resolve=>setImmediate(resolve));await new Promise<void>(resolve=>setImmediate(resolve));expect(subscriberCount(f.db)).toBe(0);expect(vi.getTimerCount()).toBe(0);
 });
