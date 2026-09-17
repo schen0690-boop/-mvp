@@ -38,3 +38,7 @@ playwright-report/
 /evidence/stage-6a/raw/
 /evidence/stage-6b/raw/
 /evidence/stage-7/raw/
+
+# Reviewer delivery artifacts and disposable verification output
+/交付包/
+/evidence/reviewer-portability/raw/

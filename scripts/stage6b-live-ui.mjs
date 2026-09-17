@@ -1,3 +1,4 @@
+import {browserOptions} from './reviewer-tools.mjs';
 import {acceptancePaths} from '../dist/live/acceptance-paths.js';
 // Explicit one-shot browser execution. A second invocation cannot click start again.
 import {chromium,expect} from '@playwright/test';
@@ -15,7 +16,7 @@ const record={startedAt:new Date().toISOString(),codeRevision:prepared.codeRevis
 const suffix=readonly?'-recovery-'+Date.now():'';save('ui-start'+suffix,record);
 let browser,context,page,stage='open';
 try{
- browser=await chromium.launch({channel:'msedge',headless:true});context=await browser.newContext({baseURL:'http://127.0.0.1:41881',viewport:{width:1600,height:1000}});page=await context.newPage();page.setDefaultTimeout(12000);
+ browser=await chromium.launch({...browserOptions(process.env.E2E_BROWSER),headless:true});context=await browser.newContext({baseURL:'http://127.0.0.1:41881',viewport:{width:1600,height:1000}});page=await context.newPage();page.setDefaultTimeout(12000);
  await page.route('**/*',route=>new URL(route.request().url()).origin==='http://127.0.0.1:41881'?route.continue():route.abort());
  page.on('request',r=>{if(r.method()==='POST')record.posts.push(new URL(r.url()).pathname);});
  await page.exposeFunction('recordPublicEvent',event=>record.sse.push(event));

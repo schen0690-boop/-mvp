@@ -4,28 +4,22 @@
 
 **默认Fake、无需密钥。** 历史真实证据：4D一次阵容；6B原验收受阻且0请求；6B-R1预置阵容下两次专家发言、一次合法空提炼、9次真实请求。它们是独立记录；授权均关闭，不得重开或补跑。详见[总交付报告](docs/delivery-validation.md)。
 
-## 实测环境与安装
+## 验收方快速开始（默认 Fake，无需密钥）
 
-Windows 10、Node.js 24.16.0、npm 11.13.0、已安装Microsoft Edge独立测试上下文。Windows其他版本、Linux/macOS、移动真机未验证；移动视口不是移动真机认证。Node要求`>=24.16.0 <25`（node:sqlite）。
+安装官方 Node.js **>=24.16.0 且 <25**（推荐已验证的24.16.0），并确保能访问npm包仓库。解压或克隆后，在包含package.json的根目录打开终端；路径可自行选择，不依赖开发者的D盘。无需单独安装SQLite、Python、Git（ZIP运行时）或全局前端工具。
 
 在仓库根目录执行。正式应用只有根package.json/package-lock.json；web使用同一依赖，tools/env-probe是历史实验，不需安装它来运行应用。
 
-```powershell
+以下命令适用于PowerShell、CMD、macOS/Linux终端，逐条运行；失败时先处理提示，不跳过失败步骤。
+
+```text
+node scripts/check-environment.mjs
 npm ci --ignore-scripts --no-audit --no-fund
-node scripts/check-dependencies.mjs
-npm run typecheck
-npm run typecheck:web
-npm run typecheck:e2e
-npm run typecheck:startup
-npm run build
-npm run build:web
-npm run build:startup
-npm run db:init
-npm run db:seed
+npm run setup
 npm start
 ```
 
-安装仅使用锁定依赖并禁生命周期脚本，不使用全局包、探针或Codex缓存。禁止用force、升级版本或打开未知安装脚本掩盖安装失败；`check-dependencies`核对版本和本目录解析路径。浏览器测试使用现有Edge，不自动下载浏览器。
+环境检查可在安装依赖前执行，只检查Node和SQLite内存读写，不读取私有配置或打开应用库。setup核对锁定依赖、编译前后端、初始化数据库并导入五组样例；已有数据不覆盖，再次执行前先停后端。默认库为data/discussions.sqlite，不使用历史.local验收库。安装禁止生命周期脚本，不使用全局包或Codex缓存，不删除锁文件或升级依赖掩盖失败。
 
 另开终端，在同一根目录：
 
@@ -33,7 +27,15 @@ npm start
 npm run dev:web
 ```
 
-访问 http://127.0.0.1:5173 。后端默认 http://127.0.0.1:3000 ，只监听回环。两个终端各按Ctrl+C关闭。默认不加载任何.env文件；仅存在密钥不会选择真实Provider。
+访问 http://127.0.0.1:5173 。后端默认 http://127.0.0.1:3000 ，只监听回环。确认页脚阵容与讨论均为Fake，再按创建、生成阵容、确认、开始、结束和刷新操作；也可查看预置样例。两个终端各按Ctrl+C关闭。默认不加载任何.env文件；仅存在密钥不会选择真实Provider。若终端已有Provider、DATABASE_PATH或PORT变量，先核对，初次验收建议使用默认设置。
+
+### 环境范围与准备问题
+
+- 已实测Windows10、Node24.16.0及锁定依赖；此前Edge通过，本轮Chromium结果见[验收环境改进记录](docs/delivery-validation.md#验收环境便利性改进)。Windows11、macOS、Linux尚未实际复验，不能标为通过；在各自系统重新安装依赖，不复制其他电脑的node_modules。
+- 人工访问页面不强制Edge。自动化测试默认Playwright Chromium，可选择已安装的Edge/Chrome；浏览器安装另有[官方系统要求](https://playwright.dev/docs/intro#system-requirements)，Windows10本机成功不等于官方支持认证。
+- 找不到node/npm时，安装指定Node并重新打开终端；PowerShell若拦截npm.ps1，可用npm.cmd执行相同命令，无需修改全局执行策略。
+- `npm ci`失败先检查网络/代理，不能用force或删除锁文件解决；`node scripts/check-environment.mjs --dependencies`检查依赖，详细差异见`node scripts/check-dependencies.mjs`。
+- 端口或数据库占用时按下文维护说明处理，不结束未知进程、不删除未知锁或数据库。
 
 ### 五组可见样例
 
@@ -101,21 +103,33 @@ React 19.3.0/Vite 8.3.0/TypeScript 7.0.2；Express 5.2.1；SQLite内置驱动；
 
 ## 本地测试与复现
 
-```powershell
+人工使用应用不必下载测试浏览器。运行E2E前，安装项目Playwright版本对应的Chromium（会下载浏览器及配套资源，不装全局工具），再检查实际启动能力：
+
+```text
+node node_modules/playwright/cli.js install chromium
+npm run check:browser
 npm test
 npm run test:web
 npm run test:e2e
 npm run test:e2e:local-adapter
+npm run typecheck
+npm run typecheck:web
+npm run typecheck:e2e
+npm run typecheck:startup
+npm run typecheck:tools
+npm run build:startup
 npm run rehearse:stage6b
-# 对应交付的完整顺序验证（自动分配测试库、保存报告）
-node scripts/delivery-verify.mjs
-# 已初始化并导入样例后，正式默认入口+浏览器+停服重开冒烟
-node scripts/delivery-smoke.mjs
 ```
 
-Vitest网络边界只允许本机；Fake E2E和HTTP替身入口明确注入替身，重试为0，不读私有配置。整套验证脚本清除继承模型配置并安装子进程网络保护。E2E使用41861/41862，HTTP替身41871/41872，启动彩排41881/41882，交付冒烟41901/41902。占用即失败，不复用未知服务。测试库在.tmp；记录在evidence/stage-7。不要并行运行占用相同端口的验证。
+Linux缺少浏览器系统依赖时，可由验收者按需执行 `node node_modules/playwright/cli.js install --with-deps chromium`，可能需要管理员权限并安装系统包；项目不会自动执行。参考[官方浏览器安装说明](https://playwright.dev/docs/browsers#install-system-dependencies)。离线或受限机器需要事先准备下载访问，不能承诺离线首次安装。
 
-干净目录应来自指定提交的`git archive`，不复制node_modules/.env/.local/数据库/构建物；按上述锁文件安装和命令执行。源码快照没有Git历史，不是完整源码仓库交付；完整历史在原Git仓库。
+若使用已安装的Edge，可跳过Chromium下载：PowerShell先执行 `$env:E2E_BROWSER="msedge"`，CMD执行 `set E2E_BROWSER=msedge`，macOS/Linux执行 `export E2E_BROWSER=msedge`，再运行check:browser和测试。Chrome对应值为`chrome`；恢复默认设为`chromium`。未知值报错，不会静默改用其他浏览器。
+
+Vitest网络边界只允许本机；Fake E2E和HTTP替身入口明确注入替身，重试为0，不读私有配置。rehearse:stage6b运行本地HTTP替身，使用当前浏览器选择，不是旧真实验收入口。E2E使用41861/41862，HTTP替身41871/41872，启动彩排41881/41882，交付冒烟41901/41902。占用即失败，不复用未知服务；请顺序运行。
+
+历史交付辅助脚本delivery-verify/delivery-smoke与记录保留，详情见交付报告；重新执行时不要覆盖历史证据。setup只负责准备，以上测试属于进一步验收，不要求普通用户每次启动都执行。
+
+干净目录可重新克隆、解压交付ZIP或从指定提交git archive导出；不复制node_modules/.env/.local/数据库/构建物，按上述锁文件安装。ZIP及源码快照不含Git历史，完整历史通过GitHub仓库查阅。
 
 ## 文档与限制
 

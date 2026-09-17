@@ -1,5 +1,9 @@
 # 开发过程记录
 
+## 验收环境便利性改进（2026-09-17）
+
+用户授权依照前轮建议改进并更新ZIP/GitHub，原文另存sources/reviewer-portability-request.md。沿用brainstorming已确认方向、writing-plans拆分、TDD和verification-before-completion；不启用代理/worktree。只扩展环境检查、浏览器选择、准备命令及文档，旧真实授权和业务代码不动。用户自行编辑的独立Prompt和工作流文件保留，不纳入源码包。
+
 ## 当前：阶段1B实际执行记录
 
 - 日期：2026-09-15。用户已授权局部环境探针，实际工作目录为 `D:\实测文件夹\tools\env-probe`。没有重新初始化或搬移Git。

@@ -30,7 +30,11 @@
     "rehearse:stage6b": "npm run build:startup && npm run launch:stage6b -- --local",
     "prepare:stage6b:r1": "node dist/prepare-stage6b.js --r1",
     "launch:stage6b:r1": "node .cache/startup/scripts/startup/stage6b.js --r1",
-    "db:seed": "node dist/seed.js"
+    "db:seed": "node dist/seed.js",
+    "check:env": "node scripts/check-environment.mjs",
+    "check:browser": "node scripts/check-environment.mjs --browser",
+    "typecheck:tools": "tsc -p tsconfig.tools.json",
+    "setup": "npm run check:env && node scripts/check-dependencies.mjs && npm run build && npm run build:web && npm run db:init && npm run db:seed"
   },
   "dependencies": {
     "express": "5.2.1",

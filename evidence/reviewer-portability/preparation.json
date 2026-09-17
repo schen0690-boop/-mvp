@@ -1,0 +1,31 @@
+{
+  "at": "2026-09-17T15:52:04.068164+08:00",
+  "red": {
+    "passed": 4,
+    "failed": 10,
+    "exitCode": 1
+  },
+  "green": {
+    "passed": 14,
+    "failed": 0,
+    "exitCode": 0
+  },
+  "targeted": {
+    "passed": 17,
+    "failed": 0,
+    "exitCode": 0
+  },
+  "protectedFiles": 42,
+  "changedProtected": [],
+  "browserInstall": {
+    "command": "node node_modules/playwright/cli.js install chromium",
+    "exitCode": 0,
+    "chromium": "153.0.8010.12",
+    "revision": 1243
+  },
+  "browserLaunch": {
+    "chromium": 0,
+    "msedge": 0
+  },
+  "officialModelRequests": 0
+}
