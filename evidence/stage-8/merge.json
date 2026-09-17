@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-09-17T03:31:35.080Z",
+  "commit": "921f337dc22c4cbb1cf11395753cfb23ea459d41",
+  "parents": [
+    "0bfafeaa846addb114d282948a301acd5c2baf05",
+    "21ae9431093775c7ed8873fb73a67c8f728e36f8"
+  ],
+  "tree": "47fba9d2ec4b33068e10ea2e0b6c5df358a871d4",
+  "originalTree": "47fba9d2ec4b33068e10ea2e0b6c5df358a871d4",
+  "onlyConflict": "README.md",
+  "resolution": "Restored exact accepted local README; index tree identical before merge commit",
+  "remoteInitialization": "21ae9431093775c7ed8873fb73a67c8f728e36f8"
+}

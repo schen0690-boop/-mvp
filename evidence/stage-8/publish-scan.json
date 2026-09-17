@@ -1,0 +1,8 @@
+{
+  "checkedAt": "2026-09-17T03:33:38.759Z",
+  "head": "921f337dc22c4cbb1cf11395753cfb23ea459d41",
+  "textBlobs": 932,
+  "hits": [],
+  "blobsOver20MiB": [],
+  "screenshotReview": "Reused stage7 scope and selected screenshot checks; same image blobs, new Mermaid SVG checked locally in closure. No new app screenshots before publication."
+}

@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-09-17T03:30:26.715Z",
+  "branch": "main",
+  "localHead": "0bfafeaa846addb114d282948a301acd5c2baf05",
+  "localTree": "47fba9d2ec4b33068e10ea2e0b6c5df358a871d4",
+  "testedApplication": "ddf1dc251156149914fcffde3d6d962fd72653f6",
+  "applicationDiff": "",
+  "fetchUrl": "https://github.com/schen0690-boop/-mvp.git",
+  "pushUrl": "https://github.com/schen0690-boop/-mvp.git",
+  "activeHooks": [],
+  "localActions": [],
+  "credentialHelper": "manager; no credential content read"
+}

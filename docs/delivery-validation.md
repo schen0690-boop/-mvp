@@ -154,3 +154,17 @@ Git实际提交：463101b（交付小修/样例/文档）、ddf1dc2（测试夹�
 `node --check scripts/check-delivery-links.mjs`、`node scripts/check-delivery-links.mjs`及git diff --check均实际执行；未重新安装应用依赖、未启动应用服务、未执行迁移或全量产品测试。两个小脚本仅用于交付材料，不在package脚本/运行入口中引用。
 
 独立Edge及临时回环渲染服务已在finally关闭（本次端口44269）；隔离依赖和预览保留可复查，没有删除未知进程或用户文件。没有访问私有配置正文、数据库或授权记录，没有模型请求。原始验收证据及历史Prompt前缀保持，应用锁不变。两项外部待办仍是GitHub/Gitee实际链接及评阅访问、出题方对Codex工具口径的确认；真实非空观点语义、长期质量、跨平台/移动真机、全面安全/无障碍仍未验证。停止，不发布、不继续扩功能。
+
+## 阶段8发布准备与认证阻塞（2026-09-17）
+
+用户P19明确授权唯一现有仓库[GitHub schen0690-boop/-mvp](https://github.com/schen0690-boop/-mvp)的受控合并、正常main推送与远程核验；不授权新建/改名/改变可见性/强推。起点本地main干净，HEAD为0bfafeaa846addb114d282948a301acd5c2baf05，文件树47fba9d2ec4b33068e10ea2e0b6c5df358a871d4，应用仍对应ddf1dc2。不存在origin时添加指定HTTPS地址，fetch/push展开后均唯一且相同，不含凭据。
+
+实际远程main为21ae9431093775c7ed8873fb73a67c8f728e36f8，仅一个README文件、内容为# -mvp，无共同祖先。按授权执行allow-unrelated-histories/no-commit/no-ff，仅README发生add/add冲突；精确保留原本地完整版README。git write-tree与原候选完全相同后创建合并921f337dc22c4cbb1cf11395753cfb23ea459d41，双亲为原本地候选和远程初始化提交，54个可达提交全部保留，没有改写历史。
+
+使用现有Git Credential Manager尝试正常推送，退出128：没有可用认证，交互被禁，尚未上传代码。随后ls-remote核对远程仍为初始化21ae943，不能当作推送成功。已请用户本人运行git credential-manager github login --browser --username schen0690-boop完成官方登录；未读取/索取密码或Token，也未用其他账户凭据。登录后仍需正常推送、匿名网页与7图检查、非浅远程克隆，当前这些交付核验均未完成。
+
+本次匿名GitHub API已返回200、private=false、visibility=public、default_branch=main，但只证明占位仓库可读，不证明项目已发布。没有改变仓库可见性，没有新增Actions/Secrets/Pages/Release；本地只有.sample hooks且core.hooksPath未配置，远程初始化树无Actions。
+
+发布安全补查覆盖932可达文本对象（含SVG及example），凭据形态命中0；历史路径无私有.env、数据库、.local或node_modules；20MiB以上blob为0。截图沿用相同blob的阶段7审查，新Mermaid SVG由阶段7收口目视；模式扫描不等于全面安全保证。旧42个受保护文件哈希不变，旧授权closed保持。证据在[stage-8](../evidence/stage-8)：preflight、merge、security-scan、publish-scan、history-paths、anonymous-before、push-attempt。原验收记录未覆盖，官方模型请求0，未启动应用/浏览器/真实服务，未重跑产品测试。
+
+当前状态：**发布受阻于认证，不能标记“远程仓库及评阅访问完成”**。远程完整克隆、最终HEAD/树/历史、关键页面及Mermaid GitHub实际渲染待认证后继续。本轮只新增发布记录和原Prompt，源码/依赖/配置/样例未变；另一个外部待办仍是出题方对Codex工具口径的确认。没有任何新信息允许改写为Claude Code使用记录。

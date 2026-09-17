@@ -1,0 +1,12 @@
+{
+  "recordedAt": "2026-09-17T03:36:29.834Z",
+  "command": "git -c push.followTags=false push -u origin main:main",
+  "exitCode": 128,
+  "category": "authentication unavailable",
+  "safeError": "Cannot prompt because user interactivity has been disabled; could not read Username for https://github.com",
+  "expectedLocalCommit": "921f337dc22c4cbb1cf11395753cfb23ea459d41",
+  "remoteAfterFailure": "21ae9431093775c7ed8873fb73a67c8f728e36f8",
+  "remoteVerifiedBy": "git ls-remote origin refs/heads/main",
+  "pushed": false,
+  "officialModelRequests": 0
+}
