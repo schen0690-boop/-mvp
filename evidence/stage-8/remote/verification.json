@@ -1,0 +1,360 @@
+{
+  "startedAt": "2026-09-17T03:54:47.099Z",
+  "anonymous": true,
+  "storageStateLoaded": false,
+  "base": "https://github.com/schen0690-boop/-mvp",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://github.com/schen0690-boop/-mvp/blob/main/README.md",
+      "status": 200
+    },
+    {
+      "file": "src",
+      "url": "https://github.com/schen0690-boop/-mvp/tree/main/src",
+      "status": 200
+    },
+    {
+      "file": "web",
+      "url": "https://github.com/schen0690-boop/-mvp/tree/main/web",
+      "status": 200
+    },
+    {
+      "file": "tests",
+      "url": "https://github.com/schen0690-boop/-mvp/tree/main/tests",
+      "status": 200
+    },
+    {
+      "file": "e2e",
+      "url": "https://github.com/schen0690-boop/-mvp/tree/main/e2e",
+      "status": 200
+    },
+    {
+      "file": "scripts",
+      "url": "https://github.com/schen0690-boop/-mvp/tree/main/scripts",
+      "status": 200
+    },
+    {
+      "file": "docs",
+      "url": "https://github.com/schen0690-boop/-mvp/tree/main/docs",
+      "status": 200
+    },
+    {
+      "file": "docs/contracts.md",
+      "url": "https://github.com/schen0690-boop/-mvp/blob/main/docs/contracts.md",
+      "status": 200
+    },
+    {
+      "file": "src/sample-data.ts",
+      "url": "https://github.com/schen0690-boop/-mvp/blob/main/src/sample-data.ts",
+      "status": 200
+    },
+    {
+      "file": "docs/sources/development-prompts.md",
+      "url": "https://github.com/schen0690-boop/-mvp/blob/main/docs/sources/development-prompts.md",
+      "status": 200
+    },
+    {
+      "file": "docs/workflow.md",
+      "url": "https://github.com/schen0690-boop/-mvp/blob/main/docs/workflow.md",
+      "status": 200
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "url": "https://github.com/schen0690-boop/-mvp/blob/main/docs/delivery-validation.md",
+      "status": 200
+    }
+  ],
+  "diagrams": [
+    {
+      "file": "docs/architecture.md",
+      "index": 1,
+      "pageStatus": 200,
+      "status": "rendered",
+      "type": "er",
+      "width": 985,
+      "height": 655,
+      "visibleLabels": [
+        "contains",
+        "contains",
+        "records",
+        "records",
+        "speaks",
+        "speaks",
+        "extracts",
+        "extracts",
+        "cites",
+        "cites",
+        "supports",
+        "supports",
+        "exposes",
+        "exposes",
+        "emits",
+        "emits",
+        "discussions",
+        "lineup_members",
+        "utterances",
+        "findings",
+        "finding_evidence",
+        "role_public_states",
+        "public_events"
+      ],
+      "screenshot": "evidence/stage-8/remote/architecture-1-ready.png",
+      "recheck": "Initial capture was a rendering transition; waited for ER role, entity label and nonzero layout",
+      "checkedAt": "2026-09-17T03:58:30.235Z"
+    },
+    {
+      "file": "docs/architecture.md",
+      "index": 2,
+      "pageStatus": 200,
+      "status": "rendered",
+      "type": "stateDiagram",
+      "width": 623.78125,
+      "height": 740,
+      "visibleLabels": [
+        "generate",
+        "generate",
+        "validated",
+        "validated",
+        "failure",
+        "failure",
+        "retry",
+        "retry",
+        "regenerate",
+        "regenerate",
+        "confirm_current_version",
+        "confirm_current_version",
+        "start_current_version",
+        "start_current_version",
+        "user_or_limit",
+        "user_or_limit",
+        "summary_ready_or_unavailable",
+        "summary_ready_or_unavailable",
+        "fatal_or_restart",
+        "fatal_or_restart",
+        "fatal_or_restart",
+        "fatal_or_restart",
+        "created",
+        "generating_lineup",
+        "awaiting_confirmation",
+        "lineup_generation_failed",
+        "lineup_confirmed",
+        "running",
+        "stopping",
+        "completed",
+        "failed"
+      ],
+      "screenshot": "evidence/stage-8/remote/architecture-2.png"
+    },
+    {
+      "file": "docs/architecture.md",
+      "index": 3,
+      "pageStatus": 200,
+      "status": "rendered",
+      "type": "sequence",
+      "width": 1012,
+      "height": 941,
+      "visibleLabels": [
+        "SSE observers",
+        "Provider",
+        "SQLite",
+        "Runner",
+        "SSE observers",
+        "Provider",
+        "SQLite",
+        "Runner",
+        "loop",
+        "[N experts with bounded parallelism]",
+        "Read confirmed roles and committed transcript v",
+        "assessIntent with current member and transcript",
+        "Validated willingness and public focus",
+        "Rank candidates using response and fairness",
+        "generateUtterance for selected member",
+        "One or two sentences and reply references",
+        "CAS run epoch and content v, commit utterance and events",
+        "Publish committed event batch",
+        "extractSynthesis from updated transcript",
+        "Findings with evidence, possibly empty",
+        "CAS current coverage, replace findings and events",
+        "Publish synthesis update"
+      ],
+      "screenshot": "evidence/stage-8/remote/architecture-3.png"
+    },
+    {
+      "file": "docs/discussion-runtime-design.md",
+      "index": 1,
+      "pageStatus": 200,
+      "status": "rendered",
+      "type": "stateDiagram",
+      "width": 546.640625,
+      "height": 422,
+      "visibleLabels": [
+        "start绑定当前确认阵容",
+        "start绑定当前确认阵容",
+        "用户结束或系统边界",
+        "用户结束或系统边界",
+        "总结ready或明确unavailable",
+        "总结ready或明确unavailable",
+        "致命错误或启动恢复中断",
+        "致命错误或启动恢复中断",
+        "存储错误或启动恢复中断",
+        "存储错误或启动恢复中断",
+        "lineup_confirmed",
+        "running",
+        "stopping",
+        "completed",
+        "failed"
+      ],
+      "screenshot": "evidence/stage-8/remote/discussion-runtime-design-1.png"
+    },
+    {
+      "file": "docs/discussion-runtime-design.md",
+      "index": 2,
+      "pageStatus": 200,
+      "status": "rendered",
+      "type": "sequence",
+      "width": 1012,
+      "height": 1043,
+      "visibleLabels": [
+        "观察者",
+        "DiscussionProvider",
+        "SQLite",
+        "本场唯一Runner",
+        "观察者",
+        "DiscussionProvider",
+        "SQLite",
+        "本场唯一Runner",
+        "loop",
+        "[N位专家 按每场2/全局4分批并行]",
+        "一致读本场transcript v及角色",
+        "assessIntent(专家,v)",
+        "意愿与独立公开关注点",
+        "当前v有效候选与公平协调",
+        "generateUtterance(选定角色,v)",
+        "1至2句与引用",
+        "CAS短事务提交发言/版本/公开事件",
+        "提交后SSE按库补发",
+        "读取已提交v+1和既有综合",
+        "extractSynthesis(v+1)",
+        "共识/分歧及真实发言证据",
+        "校验来源版本并原子替换/写事件",
+        "提交后synthesis.updated",
+        "检查收尾条件后再开始下一轮"
+      ],
+      "screenshot": "evidence/stage-8/remote/discussion-runtime-design-2.png"
+    },
+    {
+      "file": "docs/discussion-runtime-design.md",
+      "index": 3,
+      "pageStatus": 200,
+      "status": "rendered",
+      "type": "er",
+      "width": 949.875,
+      "height": 655,
+      "visibleLabels": [
+        "confirmed_members",
+        "confirmed_members",
+        "committed_transcript",
+        "committed_transcript",
+        "speaks",
+        "speaks",
+        "observable_state",
+        "observable_state",
+        "current_synthesis",
+        "current_synthesis",
+        "cites",
+        "cites",
+        "evidence",
+        "evidence",
+        "atomic_history",
+        "atomic_history",
+        "DISCUSSIONS",
+        "LINEUP_MEMBERS",
+        "UTTERANCES",
+        "ROLE_PUBLIC_STATES",
+        "FINDINGS",
+        "FINDING_EVIDENCE",
+        "PUBLIC_EVENTS"
+      ],
+      "screenshot": "evidence/stage-8/remote/discussion-runtime-design-3.png"
+    },
+    {
+      "file": "docs/lineup-design.md",
+      "index": 1,
+      "pageStatus": 200,
+      "status": "rendered",
+      "type": "stateDiagram",
+      "width": 524,
+      "height": 398,
+      "visibleLabels": [
+        "生成",
+        "生成",
+        "完整阵容提交",
+        "完整阵容提交",
+        "尝试耗尽或进程中断",
+        "尝试耗尽或进程中断",
+        "用户重试新代次",
+        "用户重试新代次",
+        "用户重新生成",
+        "用户重新生成",
+        "确认当前版本",
+        "确认当前版本",
+        "created",
+        "generating_lineup",
+        "awaiting_confirmation",
+        "lineup_generation_failed",
+        "lineup_confirmed"
+      ],
+      "screenshot": "evidence/stage-8/remote/lineup-design-1.png"
+    }
+  ],
+  "browserClosed": true,
+  "initialCookies": 0,
+  "repository": {
+    "status": 200,
+    "title": "GitHub - schen0690-boop/-mvp · GitHub",
+    "formalReadme": true,
+    "signInVisible": true
+  },
+  "readmeLinks": [
+    {
+      "text": "总交付报告",
+      "href": "https://github.com/schen0690-boop/-mvp/blob/main/docs/delivery-validation.md"
+    },
+    {
+      "text": "五组人工预置阵容",
+      "href": "https://github.com/schen0690-boop/-mvp/blob/main/src/sample-data.ts"
+    },
+    {
+      "text": "API/SSE契约",
+      "href": "https://github.com/schen0690-boop/-mvp/blob/main/docs/contracts.md"
+    },
+    {
+      "text": "架构/ER/状态图",
+      "href": "https://github.com/schen0690-boop/-mvp/blob/main/docs/architecture.md"
+    },
+    {
+      "text": "真实Prompt精选索引",
+      "href": "https://github.com/schen0690-boop/-mvp/blob/main/docs/sources/development-prompts.md#%E9%98%B6%E6%AE%B57%E7%B2%BE%E9%80%89%E5%BC%80%E5%8F%91prompt%E7%B4%A2%E5%BC%95"
+    },
+    {
+      "text": "工作流说明",
+      "href": "https://github.com/schen0690-boop/-mvp/blob/main/docs/workflow.md"
+    },
+    {
+      "text": "交付验证",
+      "href": "https://github.com/schen0690-boop/-mvp/blob/main/docs/delivery-validation.md"
+    }
+  ],
+  "finishedAt": "2026-09-17T03:55:05.583Z",
+  "recheckedAt": "2026-09-17T03:58:33.604Z",
+  "promptAnchor": 1,
+  "readmeVisualChecked": true,
+  "visualReview": {
+    "checkedAt": "2026-09-17T04:00:49.881Z",
+    "diagramsReviewed": 7,
+    "result": "All seven actual GitHub renderings visually inspected; Chinese labels and relationships readable; viewer controls overlay a small bottom-right area",
+    "initialErCapture": "Transient blank capture excluded; initial recheck incorrectly asserted uppercase entity name (exit 1), corrected to actual lowercase source then exit 0",
+    "officialModelRequests": 0
+  }
+}

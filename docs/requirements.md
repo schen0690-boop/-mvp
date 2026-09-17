@@ -44,12 +44,12 @@
 
 | 编号 | 来源 | 要求描述 | 设计去处 | 计划验收方式 | 当前状态 | 待确认事项 |
 |---|---|---|---|---|---|---|
-| R24 | A §3.1 | 完整项目源码最终提供 GitHub/Gitee 链接，包含代码和数据库初始化脚本 | src/、web/、init-db.ts、db/migrations.ts、Git | git remote为空，须用户授权创建/推送 | 本地源码/初始化齐备；远程链接缺失 | 远程创建/推送另行授权 |
+| R24 | A §3.1 | 完整项目源码最终提供 GitHub/Gitee 链接，包含代码和数据库初始化脚本 | src/、web/、init-db.ts、db/migrations.ts、Git | 阶段8正常推送、匿名访问及非浅克隆；见delivery-validation | [GitHub源码及完整历史](https://github.com/schen0690-boop/-mvp)已发布并核验 | 无远程访问待办；工具口径另见D05 |
 | R25 | A §3.1 | 至少 5 条高质量样例数据，含预设讨论话题与对应嘉宾阵容 | src/sample-data.ts、import-samples.ts、seed.ts | samples.test、db:seed两次、delivery-smoke | 五组本地人工样例；自动化与浏览器复验 | C：按至少 5 组话题+各自主持人/专家阵容解释完整度；5 位嘉宾不是 5 组样例 |
-| R26 | A §3.1 | 开发文档体现 PRD、ER 图等，使用 Markdown、Mermaid；包含 API 文档 | requirements、architecture、contracts、ui-spec | 阶段7补充：Mermaid11.12.0/Edge七图渲染及逐图目视 | 当前7图本地渲染通过，中文/关系/标签可读；远程显示未验证 | 后续必须按实际实现更新 |
+| R26 | A §3.1 | 开发文档体现 PRD、ER 图等，使用 Markdown、Mermaid；包含 API 文档 | requirements、architecture、contracts、ui-spec | 阶段7补充：Mermaid11.12.0/Edge七图渲染及逐图目视 | 当前7图本地及GitHub实际渲染并目视通过，中文/关系/标签可读；Gitee未验证 | 后续必须按实际实现更新 |
 | R27 | A §3.1 | 交付测试代码 | tests/、web/tests/、e2e/、e2e-local/ | 不把HTTP测试当浏览器E2E | 持久化各层代码已交付；新结果见总报告 | 不把此文档等同测试实现 |
 | R28 | A §3.1 | README 含运行指南、环境变量配置、技术选型、主要 API 列表、已完成功能与后续改进 | README.md、.env.backend.example | 干净目录按README复现见总报告 | 当前运行、配置、API及限制已更新 | 环境变量示例不得含真实值 |
-| R29 | A §3.1 | Git Commit 演进历史层级清晰，可见文档/结构/UI/测试/逻辑等渐进开发 | 本地Git完整历史；development-log | git log，archive快照不代替历史 | 人工检查真实渐进提交；未推送 | 用户暂定schen/cs064210@163.com；不照抄题面示例伪造提交顺序 |
+| R29 | A §3.1 | Git Commit 演进历史层级清晰，可见文档/结构/UI/测试/逻辑等渐进开发 | 本地Git完整历史；development-log | git log，archive快照不代替历史 | 真实渐进历史已正常推送；远程完整克隆及初始化提交祖先核验通过 | 用户暂定schen/cs064210@163.com；不照抄题面示例伪造提交顺序 |
 | R30 | A §3.2 | 至少 5 段核心原始开发 Prompt，标出 SDD 数据建模/API 契约、DDD 前端组件/页面、TDD 测试与实现、E2E 系统测试/质量闭环 | sources/development-prompts.md精选索引 | P1/P3/P4/P6/P11/P12/P13等，不计应用提示词 | 至少5条真实原文覆盖SDD/DDD/TDD/E2E | 不扩写 SDD/DDD 英文全称；本轮长 Prompt 不能拆分冒充多段 |
 | R31 | A §3.2 | 每段 Prompt 附 1–2 句说明：意图、挑战、如何引导 AI 修正 | 同上各Prompt说明；阶段日志 | 原文不改；阶段7仅追加P17 | 人工检查真实意图及问题说明 | 只记录实际发生的纠偏 |
 | R32 | A §3.3 | 1–1.5 页开发过程思路/工作流说明：开发流程、2–3 个真实典型问题及解决路径、对工程化 AI 开发的理解 | workflow.md | 实际Codex、三真实案例；工具许可D05未确认 | 约1–1.5页Markdown工作流；版式口径另列 | D05：其中“Claude Code 结合 Deepseek V4 Pro”措辞冲突须确认；不能改写实际工具历史 |

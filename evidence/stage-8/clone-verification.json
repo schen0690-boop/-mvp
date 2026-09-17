@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-09-17T03:53:54.430Z",
+  "directory": "D:\\Codex-delivery-check\\stage8-remote-ea9df7df09",
+  "expectedHead": "3aa420cbbacf0c6435a649721d66891a175dbab1",
+  "cloneHead": "3aa420cbbacf0c6435a649721d66891a175dbab1",
+  "expectedTree": "c86b714ceefb6d0e605c8676b0d83fc29067174f",
+  "cloneTree": "c86b714ceefb6d0e605c8676b0d83fc29067174f",
+  "shallow": "false",
+  "commitsLocal": 55,
+  "commitsClone": 55,
+  "historyIdentical": true,
+  "applicationDiff": ""
+}

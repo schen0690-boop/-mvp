@@ -4,7 +4,7 @@
 
 只核对原题前三部分。题面原图本轮再次目视读取，第三部分仓库链接要求保留，第四部分提交方式不纳入。唯一逐项检查表为[requirements](requirements.md)，不另造需求体系。本报告区分本地自动化、历史真实单样本、人工检查和未验证事项。阶段7官方模型请求必须且实际保持0，旧4D/6B/R1授权关闭不变。
 
-**本地交付准备完成，仍有两项外部交付待办：GitHub/Gitee仓库链接，以及出题方工具口径确认。** 最终候选ddf1dc2已从已跟踪源码在同机独立目录使用提交内锁文件完成npm ci安装和全部本地验收；详见末节。真实质量、跨平台等限制不被本地测试覆盖。
+**本地交付与GitHub源码发布/匿名评阅访问已完成；剩余外部待办为出题方工具口径确认。** [公开仓库](https://github.com/schen0690-boop/-mvp)。下文阶段7及首次阶段8阻塞记录保留当时事实，最新发布核验见末节。 最终候选ddf1dc2已从已跟踪源码在同机独立目录使用提交内锁文件完成npm ci安装和全部本地验收；详见末节。真实质量、跨平台等限制不被本地测试覆盖。
 
 ## 交付材料与必要修补
 
@@ -168,3 +168,44 @@ Git实际提交：463101b（交付小修/样例/文档）、ddf1dc2（测试夹�
 发布安全补查覆盖932可达文本对象（含SVG及example），凭据形态命中0；历史路径无私有.env、数据库、.local或node_modules；20MiB以上blob为0。截图沿用相同blob的阶段7审查，新Mermaid SVG由阶段7收口目视；模式扫描不等于全面安全保证。旧42个受保护文件哈希不变，旧授权closed保持。证据在[stage-8](../evidence/stage-8)：preflight、merge、security-scan、publish-scan、history-paths、anonymous-before、push-attempt。原验收记录未覆盖，官方模型请求0，未启动应用/浏览器/真实服务，未重跑产品测试。
 
 当前状态：**发布受阻于认证，不能标记“远程仓库及评阅访问完成”**。远程完整克隆、最终HEAD/树/历史、关键页面及Mermaid GitHub实际渲染待认证后继续。本轮只新增发布记录和原Prompt，源码/依赖/配置/样例未变；另一个外部待办仍是出题方对Codex工具口径的确认。没有任何新信息允许改写为Claude Code使用记录。
+
+
+## 阶段8认证后继续：发布及远程核验完成（2026-09-17）
+
+P20确认本人已完成官方登录，沿用P19发布范围。开始时main干净，HEAD精确为3aa420cbbacf0c6435a649721d66891a175dbab1；origin fetch及全部push地址唯一且为指定仓库。fetch后origin/main仍为21ae943且是本地祖先，没有新增远程变更；未重复合并。正常执行git -c push.followTags=false push -u origin main:main，等待凭据管理器交互后**退出0**。过程中没有读取凭据或修改全局配置；凭据管理器自行退出，没有被终止。随后ls-remote确认远程main为3aa420c。此前退出128属于上节历史，未删除或改写。
+
+首次成功发布树为c86b714ceefb6d0e605c8676b0d83fc29067174f。受控合并921f337及双亲均保留；完整克隆的55个可达提交与本地逐项一致，0bfafea和远程初始化21ae943均为祖先。应用/依赖/配置/样例仍与已完整验收ddf1dc2一致。本次文档/证据提交不修改业务或README运行命令，无需安装依赖或重跑全部产品测试。
+
+### 本轮实际检查
+
+| 检查/命令 | 结果 | 退出码 |
+|---|---|---|
+| git fetch --no-tags origin main；祖先检查 | 远程main已包含在本地，无需再次合并 | 各0 |
+| git -c push.followTags=false push -u origin main:main | 21ae943 → 3aa420c，设置main上游 | 0 |
+| git ls-remote origin refs/heads/main | 与首次发布HEAD完整哈希相同 | 0 |
+| git clone --no-tags 指定URL 新目录 | 完整克隆；is-shallow-repository=false | 0 |
+| HEAD/树/全部提交及应用范围diff | 完全相同；应用差异为空 | 0 |
+| 独立Edge匿名网页/12个交付文件与目录请求 | HTTP200；公开仓库、正式README、src/web/tests/e2e/scripts/docs可读 | 0 |
+| GitHub Mermaid iframe实际渲染与逐图目视 | 7/7；见下表。未用源码可下载冒充渲染 | 0（最终核对） |
+
+克隆路径为D:/Codex-delivery-check/stage8-remote-ea9df7df09；没有复制原.git、依赖或配置。首次发布对象及完整历史记录见[clone-verification.json](../evidence/stage-8/clone-verification.json)。本节提交随后只按普通方式推送，最终本地/远程/克隆HEAD和树在收尾再次核对；最终哈希以Git历史和最终回复为准，不反复生成自引用哈希提交。
+
+匿名浏览器使用全新context，初始cookies=0，未加载用户资料/storageState；页面显示Public、Sign in、main与完整项目。README到API/SSE、架构/数据、五组样例源码、开发Prompt索引、工作流及报告均可访问，Prompt精选标题锚点实际存在。目录/文件HTTP与链接见[远程核验](../evidence/stage-8/remote/verification.json)，[仓库页面](../evidence/stage-8/remote/repository.png)、[正式README](../evidence/stage-8/remote/readme.png)。
+
+| 正式文档/图 | GitHub实际显示与证据 |
+|---|---|
+| architecture：ER | [关系图](../evidence/stage-8/remote/architecture-1-ready.png)，实体、关系完整 |
+| architecture：生命周期 | [状态图](../evidence/stage-8/remote/architecture-2.png)，阶段和箭头可读 |
+| architecture：调用/事件 | [时序图](../evidence/stage-8/remote/architecture-3.png)，调用及提交顺序可读 |
+| discussion-runtime-design：生命周期 | [中文状态图](../evidence/stage-8/remote/discussion-runtime-design-1.png)，中文完整 |
+| discussion-runtime-design：调用 | [中文时序图](../evidence/stage-8/remote/discussion-runtime-design-2.png)，中文及步骤可读 |
+| discussion-runtime-design：ER | [运行数据关系](../evidence/stage-8/remote/discussion-runtime-design-3.png)，关联可读 |
+| lineup-design：生命周期 | [中文状态图](../evidence/stage-8/remote/lineup-design-1.png)，中文和分支可读 |
+
+截图来自GitHub页面自己的渲染iframe，不是本地替换图。GitHub平移缩放控件占右下角少量区域，必要时可平移；没有图表语法错误或缺失标签。第一张ER初次截图捕获到1像素过渡帧，未作为通过证据；补充检查又因测试断言错误使用大写实体名而退出1，实际源码为小写。仅更正取证等待条件为ER类型、真实discussions标签及非零布局，重新读取并目视通过，没有修改项目图表。Gitee渲染未测试；这不是跨浏览器显示保证。
+
+本轮复用相对链接检查器逻辑，将输出单独保存为[links-resumed.json](../evidence/stage-8/links-resumed.json)：87条（含本节新增3条证据链接）、失败0、退出0，没有覆盖阶段7原报告。历史933个文本对象与新增暂存文本分别扫描，无凭据形态命中，见[安全复查](../evidence/stage-8/security-resumed.json)及[暂存审查](../evidence/stage-8/staged-review.json)；git diff --cached --check退出0。
+
+本轮只更新当前README/需求交付状态、真实P20及本节记录、精选公开截图/JSON。旧Prompt、原始验收/认证失败证据不变。新增文本/可达历史复查无凭据形态命中；42个旧受保护文件哈希保持，私有配置仍被忽略且未跟踪；模式检查不等于全面安全审计。独立浏览器均finally关闭，无应用/模型服务启动，无依赖安装，没有新Actions/Secrets/Pages/Release或仓库可见性更改。**本轮官方模型请求0，旧4D/6B/R1关闭授权不变。**
+
+**远程仓库及评阅访问已完成。** 唯一剩余外部确认是出题方对实际Codex使用的工具口径；未获许可，不改写成Claude Code。真实非空观点语义、长期质量、跨平台/移动真机、生产负载及全面安全/无障碍限制继续保留。停止，不部署或扩展功能。
