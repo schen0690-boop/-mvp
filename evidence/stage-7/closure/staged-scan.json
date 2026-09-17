@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-09-17T03:14:12.249Z",
+  "paths": [
+    "docs/delivery-validation.md",
+    "docs/development-log.md",
+    "docs/discussion-runtime-design.md",
+    "docs/requirements.md",
+    "docs/sources/development-prompts.md",
+    "docs/sources/stage-7-closure-request.md",
+    "evidence/stage-7/closure/archive-lock-hashes.json",
+    "evidence/stage-7/closure/consistency.json",
+    "evidence/stage-7/closure/diagrams/architecture-1.svg",
+    "evidence/stage-7/closure/diagrams/architecture-2.svg",
+    "evidence/stage-7/closure/diagrams/architecture-3.svg",
+    "evidence/stage-7/closure/diagrams/discussion-runtime-design-1.svg",
+    "evidence/stage-7/closure/diagrams/discussion-runtime-design-2.svg",
+    "evidence/stage-7/closure/diagrams/discussion-runtime-design-3.svg",
+    "evidence/stage-7/closure/diagrams/lineup-design-1.svg",
+    "evidence/stage-7/closure/links-before.json",
+    "evidence/stage-7/closure/links.json",
+    "evidence/stage-7/closure/lock-and-version.json",
+    "evidence/stage-7/closure/render-results.json",
+    "evidence/stage-7/closure/renderer-install.json",
+    "scripts/check-delivery-links.mjs",
+    "scripts/render-delivery-diagrams.mjs"
+  ],
+  "credentialShapeHits": [],
+  "scope": "Changed tracked and staged delivery text only; no private files read"
+}

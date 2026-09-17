@@ -1,0 +1,71 @@
+{
+  "checkedAt": "2026-09-17T03:04:51.103Z",
+  "testedRevision": "ddf1dc251156149914fcffde3d6d962fd72653f6",
+  "head": "10b7d2841728ae0f316ccfb369927c00aabb53d5",
+  "packageFiles": [
+    "package-lock.json",
+    "package.json",
+    "tools/env-probe/package-lock.json",
+    "tools/env-probe/package.json"
+  ],
+  "formalPackageDirectories": [
+    "."
+  ],
+  "frontendHasSeparatePackage": false,
+  "historicalProbe": "tools/env-probe excluded from application installation",
+  "actualCommand": "npm ci --ignore-scripts --no-audit --no-fund",
+  "installationLog": "evidence/stage-7/clean/clean-install.json",
+  "files": [
+    {
+      "path": "package.json",
+      "sourceSha256": "7da49b64faf09b7093578e21258e81dd1ce1648655d6fa85688ed51223da6887",
+      "cleanSha256": "e0455f9562b27e4de4c74df3a59c0c26965af2cf99ee439f13c21370f4820e9c",
+      "currentSha256": "7da49b64faf09b7093578e21258e81dd1ce1648655d6fa85688ed51223da6887",
+      "cleanByteIdentical": false,
+      "currentGitBlob": "bcdceec1414f4aafc7464b2cba8d6526a0d526fb",
+      "sourceGitBlob": "bcdceec1414f4aafc7464b2cba8d6526a0d526fb",
+      "normalizedContentIdentical": true,
+      "sourceLineEnding": "LF",
+      "archiveAndCleanLineEnding": "CRLF"
+    },
+    {
+      "path": "package-lock.json",
+      "sourceSha256": "11bfcb43296b88744dfab4483d61489801527b88d54b34e7be18a260e8b0d610",
+      "cleanSha256": "aa882ffbfdc83fc4a2698b4d2828a1b5c4c3e7c1216b16d353b315437c84d138",
+      "currentSha256": "aa882ffbfdc83fc4a2698b4d2828a1b5c4c3e7c1216b16d353b315437c84d138",
+      "cleanByteIdentical": false,
+      "currentGitBlob": "4ef0b5b88d229c9578dadf4ce890c9285e739e7b",
+      "sourceGitBlob": "4ef0b5b88d229c9578dadf4ce890c9285e739e7b",
+      "normalizedContentIdentical": true,
+      "sourceLineEnding": "LF",
+      "archiveAndCleanLineEnding": "CRLF"
+    }
+  ],
+  "diff": "M\tdocs/delivery-validation.md\nM\tdocs/development-log.md\nA\tevidence/stage-7/clean/clean-completed.png\nA\tevidence/stage-7/clean/clean-install.json\nA\tevidence/stage-7/clean/frontend-boundary.json\nA\tevidence/stage-7/clean/local-failure.json\nA\tevidence/stage-7/clean/local-success.json\nA\tevidence/stage-7/clean/readme-command-wrapper-error.json\nA\tevidence/stage-7/clean/readme-commands.json\nA\tevidence/stage-7/clean/samples.png\nA\tevidence/stage-7/clean/screenshots/desktop-4-members.png\nA\tevidence/stage-7/clean/screenshots/desktop-running.png\nA\tevidence/stage-7/clean/screenshots/lineup-390-1-bottom.png\nA\tevidence/stage-7/clean/screenshots/local-completed.png\nA\tevidence/stage-7/clean/screenshots/local-refreshed.png\nA\tevidence/stage-7/clean/screenshots/local-running.png\nA\tevidence/stage-7/clean/screenshots/narrow-studio.png\nA\tevidence/stage-7/clean/screenshots/studio-4-experts.png\nA\tevidence/stage-7/clean/screenshots/studio-8-experts.png\nA\tevidence/stage-7/clean/screenshots/summary-unavailable.png\nA\tevidence/stage-7/clean/smoke.json\nA\tevidence/stage-7/clean/startup-result.json\nA\tevidence/stage-7/clean/startup-ui-result.json\nA\tevidence/stage-7/clean/test-counts.json\nA\tevidence/stage-7/clean/verification.json\nA\tevidence/stage-7/cleanup.json\nA\tevidence/stage-7/final-consistency.json\nA\tevidence/stage-7/reproduction-final-source.json\nM\tevidence/stage-7/security-scan.json\n",
+  "dependencyCheck": {
+    "name": "dependencies",
+    "args": [
+      "scripts/check-dependencies.mjs"
+    ],
+    "startedAt": "2026-09-16T15:54:02.585Z",
+    "endedAt": "2026-09-16T15:54:02.693Z",
+    "exitCode": 0,
+    "output": "{\n  \"node\": \"v24.16.0\",\n  \"sqliteVersion\": \"3.53.0\",\n  \"packages\": {\n    \"express\": {\n      \"version\": \"5.2.1\",\n      \"path\": \"node_modules/express\"\n    },\n    \"react\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/react\"\n    },\n    \"react-dom\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/react-dom\"\n    },\n    \"@types/express\": {\n      \"version\": \"5.0.6\",\n      \"path\": \"node_modules/@types/express\"\n    },\n    \"@types/node\": {\n      \"version\": \"24.13.4\",\n      \"path\": \"node_modules/@types/node\"\n    },\n    \"typescript\": {\n      \"version\": \"7.0.2\",\n      \"path\": \"node_modules/typescript\"\n    },\n    \"vite\": {\n      \"version\": \"8.3.0\",\n      \"path\": \"node_modules/vite\"\n    },\n    \"vitest\": {\n      \"version\": \"5.0.1\",\n      \"path\": \"node_modules/vitest\"\n    },\n    \"@types/react\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/@types/react\"\n    },\n    \"@types/react-dom\": {\n      \"version\": \"19.3.0\",\n      \"path\": \"node_modules/@types/react-dom\"\n    },\n    \"@playwright/test\": {\n      \"version\": \"1.63.0\",\n      \"path\": \"node_modules/@playwright/test\"\n    }\n  },\n  \"resolution\": {\n    \"express\": \"node_modules\\\\express\\\\index.js\",\n    \"vitest\": \"node_modules\\\\vitest\\\\dist\\\\index.js\",\n    \"vite\": \"node_modules\\\\vite\\\\dist\\\\node\\\\index.js\",\n    \"typescript\": \"node_modules\\\\typescript\\\\lib\\\\version.cjs\"\n  },\n  \"lifecycleScripts\": [\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"lightningcss\",\n      \"version\": \"1.33.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"patch-package\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"path-to-regexp\",\n      \"version\": \"8.4.2\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"tinyexec\",\n      \"version\": \"1.3.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"npm run build\",\n      \"executed\": false\n    },\n    {\n      \"package\": \"content-type\",\n      \"version\": \"2.1.0\",\n      \"hook\": \"prepare\",\n      \"command\": \"ts-scripts install && npm run build\",\n      \"executed\": false\n    }\n  ],\n  \"installationPolicy\": \"--ignore-scripts --no-audit --no-fund\",\n  \"lockVerified\": true,\n  \"formalDependenciesIndependent\": true\n}\n"
+  },
+  "readmeChanged": false,
+  "archiveHashes": [
+    {
+      "path": "package.json",
+      "archiveSha256": "e0455f9562b27e4de4c74df3a59c0c26965af2cf99ee439f13c21370f4820e9c",
+      "postInstallSha256": "e0455f9562b27e4de4c74df3a59c0c26965af2cf99ee439f13c21370f4820e9c",
+      "archiveEqualsPostInstall": true
+    },
+    {
+      "path": "package-lock.json",
+      "archiveSha256": "aa882ffbfdc83fc4a2698b4d2828a1b5c4c3e7c1216b16d353b315437c84d138",
+      "postInstallSha256": "aa882ffbfdc83fc4a2698b4d2828a1b5c4c3e7c1216b16d353b315437c84d138",
+      "archiveEqualsPostInstall": true
+    }
+  ],
+  "conclusion": "Source Git blobs match current content; git archive exports CRLF with core.autocrlf=true. Archive entries and installed clean files have identical SHA256. No lock regeneration or dependency change."
+}

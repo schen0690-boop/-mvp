@@ -232,7 +232,7 @@ runner/AbortControllers、任务token、意愿/公平计数、重试反馈、队
 
 ## 10. HTTP/SSE与前端边界
 
-精确协议见[contracts阶段5A增量](contracts.md#阶段5a运行与sse契约草案待确认)。公开频道仅：发言、role状态/focus、综合、生命周期、安全notice。候选名单、意愿true/false、竞争、分数、taskId/epoch、Provider原始结果与诊断不进入任何公开通道。
+精确协议见[contracts运行与SSE实际契约](contracts.md#阶段5a设计5b运行与5c-sse实际契约)。公开频道仅：发言、role状态/focus、综合、生命周期、安全notice。候选名单、意愿true/false、竞争、分数、taskId/epoch、Provider原始结果与诊断不进入任何公开通道。
 
 GET快照是读事务内全部公开对象+lastEventId。SSE按同讨论完整事件序列补发；首次after，重连Last-Event-ID；数据库是事实源，先登记通知再追到高水位，通知只触发读库，不能依赖仅内存广播。重复传输由eventId去重，不能说天然恰好一次。多事件同dataVersion须完整应用，推荐缓冲到transactionLastEventId后一次替换前端状态；不因先收到一条就丢掉同版本其他事件。
 

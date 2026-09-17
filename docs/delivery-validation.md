@@ -4,7 +4,7 @@
 
 只核对原题前三部分。题面原图本轮再次目视读取，第三部分仓库链接要求保留，第四部分提交方式不纳入。唯一逐项检查表为[requirements](requirements.md)，不另造需求体系。本报告区分本地自动化、历史真实单样本、人工检查和未验证事项。阶段7官方模型请求必须且实际保持0，旧4D/6B/R1授权关闭不变。
 
-**本地交付准备完成，仍有两项外部交付待办：GitHub/Gitee仓库链接，以及出题方工具口径确认。** 最终候选ddf1dc2已从已跟踪源码在同机独立目录完成锁安装和全部本地验收；详见末节。真实质量、跨平台等限制不被本地测试覆盖。
+**本地交付准备完成，仍有两项外部交付待办：GitHub/Gitee仓库链接，以及出题方工具口径确认。** 最终候选ddf1dc2已从已跟踪源码在同机独立目录使用提交内锁文件完成npm ci安装和全部本地验收；详见末节。真实质量、跨平台等限制不被本地测试覆盖。
 
 ## 交付材料与必要修补
 
@@ -62,13 +62,13 @@
 
 ## 图与外部待办
 
-当前architecture三图、discussion-runtime-design及lineup-design现行图按代码人工核对；本机未找到项目mermaid/mmdc，未安装渲染器，**Mermaid渲染未验证**。历史设计图不作为执行证据。
+阶段7原验收时未找到本地渲染器，彼时只人工核图；阶段7补充收口已在隔离目录使用Mermaid11.12.0和现有Edge实际渲染全部7张有效图并逐图目视检查，详见下节。历史方案、Prompt和原始失败记录的图未改写；不宣称远程平台显示已验证。
 
 第三部分远程GitHub/Gitee链接尚缺（git remote为空）；本轮不创建或推送。Codex与题面工具口径仍待出题方确认，不能签署或虚构许可。实际开发模型未核实；应用运行模型明确deepseek-flash。跨平台、移动真机、长期/多题质量与生产负载均未验证。
 
 ## 首次干净复现发现与修正
 
-候选463101b在D:/Codex-delivery-check/stage7-d950261835/project从git archive导出；锁安装127包成功，README类型/构建/初始化/两次样例导入与正式Fake浏览器冒烟均退出0。完整后端回归402通过/1失败：新增普通配置工厂测试用local-test-credential，而已有HTTP stub严格要求local-stub-credential，返回LOCAL_STUB_FAILURE。定位为测试夹具输入不一致，不是供应商或产品故障；改为引用已有adapterConfig.apiKey，单文件回归通过。保留first-clean-verification.json；不把该夹具错误计作业务RED，不修改生产鉴权或放宽parser。修正测试后另提交候选、重新导出新目录并完整复验，不只在临时目录修补。
+候选463101b在D:/Codex-delivery-check/stage7-d950261835/project从git archive导出；使用提交内锁文件执行npm ci安装127包成功，README类型/构建/初始化/两次样例导入与正式Fake浏览器冒烟均退出0。完整后端回归402通过/1失败：新增普通配置工厂测试用local-test-credential，而已有HTTP stub严格要求local-stub-credential，返回LOCAL_STUB_FAILURE。定位为测试夹具输入不一致，不是供应商或产品故障；改为引用已有adapterConfig.apiKey，单文件回归通过。保留first-clean-verification.json；不把该夹具错误计作业务RED，不修改生产鉴权或放宽parser。修正测试后另提交候选、重新导出新目录并完整复验，不只在临时目录修补。
 
 ## 最终干净目录复现（实际执行）
 
@@ -81,7 +81,7 @@
 
 | 最终实际命令/检查 | 结果 | 退出码 |
 |---|---|---|
-| npm ci --ignore-scripts --no-audit --no-fund | 127包，锁安装成功 | 0 |
+| npm ci --ignore-scripts --no-audit --no-fund | 127包，使用提交内锁文件执行npm ci成功 | 0 |
 | node scripts/check-dependencies.mjs | 精确版本/锁一致；模块解析在新目录node_modules，无探针/Codex缓存依赖 | 0 |
 | npm run typecheck、typecheck:web、typecheck:e2e、typecheck:startup | 4项通过 | 各0 |
 | npm run build、build:web、build:startup | 后端、前端、启动脚本构建成功 | 各0 |
@@ -109,4 +109,48 @@
 
 Git实际提交：463101b（交付小修/样例/文档）、ddf1dc2（测试夹具修正）；最终证据以随本报告的文档提交归档。最终回归之后只追加文档与筛选证据，源码/样例/配置未改，因此不重复机械全测。使用既有项目身份schen，未改写历史、未创建远程或推送。
 
-**待用户/出题方处理：**（1）第三部分GitHub/Gitee仓库链接尚缺，需另行授权创建与推送；（2）确认实际Codex开发是否符合题面工具口径，不补造Claude Code使用记录。**未验证：**真实非空观点语义、长期多话题质量、性能/负载、跨平台/移动真机、Mermaid渲染及完整无障碍/安全认证。R1真实短样本与4D真实阵容仅沿用历史证据，本轮不追加调用。到此停止，不自动发布或执行新的真实讨论。
+**待用户/出题方处理：**（1）第三部分GitHub/Gitee仓库链接尚缺，需另行授权创建与推送；（2）确认实际Codex开发是否符合题面工具口径，不补造Claude Code使用记录。**未验证：**真实非空观点语义、长期多话题质量、性能/负载、跨平台/移动真机、GitHub/Gitee图表显示及完整无障碍/安全认证。R1真实短样本与4D真实阵容仅沿用历史证据，本轮不追加调用。到此停止，不自动发布或执行新的真实讨论。
+
+## 阶段7补充收口：锁文件、版本与图表（2026-09-17）
+
+### 安装来源与版本关系
+
+阶段7实际使用 **npm ci --ignore-scripts --no-audit --no-fund**，复用ddf1dc2提交中的清单和锁文件；没有重新生成锁文件。“重新锁定安装”是此前聊天中的不准确措辞，现明确为“依据提交内既有锁文件执行npm ci”。原始安装/测试记录保持原样，不重写日志。
+
+核对Git已跟踪全部package.json/package-lock.json：正式应用只有根目录一组，web没有独立清单或锁，根脚本直接编译/测试web；tools/env-probe另一组属于历史探针，不参与正式复现。对照原git archive压缩包与安装后仍保留的新目录：package-lock.json的SHA256同为aa882ffbfdc83fc4a2698b4d2828a1b5c4c3e7c1216b16d353b315437c84d138，package.json同为e0455f9562b27e4de4c74df3a59c0c26965af2cf99ee439f13c21370f4820e9c。Git blob为LF，导出为CRLF（本库core.autocrlf=true），仅换行不同；规范化内容和当前Git blob完全一致，不能把字节换行差异误判为npm改锁。[逐文件哈希](../evidence/stage-7/closure/archive-lock-hashes.json)、[来源与版本核对](../evidence/stage-7/closure/lock-and-version.json)保留完整依据。
+
+实际被测应用提交仍为ddf1dc251156149914fcffde3d6d962fd72653f6；本轮起点HEAD为10b7d28。ddf1dc2之后只有10b7d28一个提交，29个路径均为2份文档及27份证据。源码、依赖、配置、样例、运行/构建/初始化/测试脚本和README均无差异；README npm命令与clean/readme-commands及verification命令对照一致。此前403后端/91前端/37 Fake E2E/2 HTTP替身E2E为历史已执行结果，本轮没有再跑，亦不写成本轮新成绩。
+
+本轮仅更新当前文档状态、一处过期锚点、真实Prompt索引/过程记录；新增两个交付验证脚本及精简渲染证据，不进入产品运行或构建配置。本轮文档/证据提交由Git历史中包含本节的提交标识，不为了写入自身哈希另造提交；最终答复单独给出该哈希。应用代码仍对应ddf1dc2。
+
+### 图表逐项验收
+
+| 文件及源码位置 | 标题 | 类型 | 结果 |
+|---|---|---|---|
+| architecture.md:24 | 当前数据库关系（003） | ER | 渲染/目视通过 |
+| architecture.md:44 | 生命周期 | 状态机 | 渲染/目视通过 |
+| architecture.md:63 | 一次专家发言与中途提炼 | 时序 | 渲染/目视通过 |
+| discussion-runtime-design.md:57 | 生命周期与唯一runner | 状态机（中文） | 渲染/目视通过 |
+| discussion-runtime-design.md:145 | 调用路径、并发与有限总预算 | 时序（中文） | 渲染/目视通过 |
+| discussion-runtime-design.md:219 | 事务与公开状态 | ER | 渲染/目视通过 |
+| lineup-design.md:65 | 生命周期、重复与恢复 | 状态机（中文） | 渲染/目视通过 |
+
+共7图：2 ER、3状态、2时序。每张均实际打开本地PNG检查中文字形、标签完整性、箭头/关系和布局；程序检查也未发现文字超出SVG边界。实体与schema-v2/v3关联、生命周期与当前契约一致。时序图表达正常非末轮路径，末轮按同文正文跳过提炼并收尾；不是另一套运行规则。无需修改Mermaid源代码，Markdown源码全部保留。
+
+渲染器为官方npm mermaid@11.12.0（MIT，仓库mermaid-js/mermaid），不使用在线编辑器。隔离目录D:/Codex-delivery-check/mermaid-11.12.0-bdde270397；先审阅npm包脚本、生成隔离锁并检查hasInstallScript（无），再npm ci --ignore-scripts --no-audit --no-fund安装125包；传递包prepare脚本记录且未执行。该目录的锁不属于应用锁。复用项目Playwright和现有Edge153.0.4234.32，不下载浏览器、不安装全局工具。API用法依据[官方使用文档](https://mermaid.js.org/config/usage.html)，实际版本与依赖证据见[renderer-install](../evidence/stage-7/closure/renderer-install.json)。
+
+实际命令（根目录，渲染依赖目录须先按上述方式准备）：
+
+`node --check scripts/render-delivery-diagrams.mjs`
+
+`node scripts/render-delivery-diagrams.mjs D:/Codex-delivery-check/mermaid-11.12.0-bdde270397`
+
+均退出0。[渲染清单](../evidence/stage-7/closure/render-results.json)记录源文件/行/标题/类型/源哈希和尺寸，7份SVG各对应一个有效图，保存在[diagrams](../evidence/stage-7/closure/diagrams)；PNG仅保留于隔离目录供人工检查，不重复提交。全部内容只由回环服务送入独立本地浏览器；非本机请求被拒绝，未上传项目图表。本地通过不代表GitHub/Gitee远程渲染通过。
+
+### 链接、复验与边界
+
+检查README及9份当前交付文档的内联相对链接，依Git跟踪路径（含待提交清单）、文件存在及Markdown标题锚点核对。README到API/SSE、架构/数据、样例源码及就地导入说明、Prompt精选索引、工作流、总报告均有效。发现运行规格一处旧“阶段5A契约草案”锚点，目标文件存在但标题已更名；只修正该链接和标签，未动历史Prompt。[修前结果](../evidence/stage-7/closure/links-before.json)保留65条中1条失效；[最终结果](../evidence/stage-7/closure/links.json)含新增证据链接共72条，失败0。R26更新为7图本地渲染通过、远程未验证。
+
+`node --check scripts/check-delivery-links.mjs`、`node scripts/check-delivery-links.mjs`及git diff --check均实际执行；未重新安装应用依赖、未启动应用服务、未执行迁移或全量产品测试。两个小脚本仅用于交付材料，不在package脚本/运行入口中引用。
+
+独立Edge及临时回环渲染服务已在finally关闭（本次端口44269）；隔离依赖和预览保留可复查，没有删除未知进程或用户文件。没有访问私有配置正文、数据库或授权记录，没有模型请求。原始验收证据及历史Prompt前缀保持，应用锁不变。两项外部待办仍是GitHub/Gitee实际链接及评阅访问、出题方对Codex工具口径的确认；真实非空观点语义、长期质量、跨平台/移动真机、全面安全/无障碍仍未验证。停止，不发布、不继续扩功能。

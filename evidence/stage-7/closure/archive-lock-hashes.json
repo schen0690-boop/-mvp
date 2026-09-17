@@ -1,0 +1,14 @@
+[
+  {
+    "path": "package.json",
+    "archiveSha256": "e0455f9562b27e4de4c74df3a59c0c26965af2cf99ee439f13c21370f4820e9c",
+    "postInstallSha256": "e0455f9562b27e4de4c74df3a59c0c26965af2cf99ee439f13c21370f4820e9c",
+    "archiveEqualsPostInstall": true
+  },
+  {
+    "path": "package-lock.json",
+    "archiveSha256": "aa882ffbfdc83fc4a2698b4d2828a1b5c4c3e7c1216b16d353b315437c84d138",
+    "postInstallSha256": "aa882ffbfdc83fc4a2698b4d2828a1b5c4c3e7c1216b16d353b315437c84d138",
+    "archiveEqualsPostInstall": true
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "recordedAt": "2026-09-17T03:08:45.778Z",
+  "version": "11.12.0",
+  "repository": "https://github.com/mermaid-js/mermaid",
+  "license": "MIT",
+  "integrity": "sha512-ZudVx73BwrMJfCFmSSJT84y6u5brEoV8DOItdHomNLz32uBjNrelm7mg95X7g+C6UoQH/W6mBLGDEDv73JdxBg==",
+  "root": "D:/Codex-delivery-check/mermaid-11.12.0-bdde270397",
+  "commands": [
+    {
+      "command": "npm install --prefix <isolated-dir> --package-lock-only --ignore-scripts --no-audit --no-fund",
+      "exitCode": 0
+    },
+    {
+      "command": "npm ci --prefix <isolated-dir> --ignore-scripts --no-audit --no-fund",
+      "exitCode": 0,
+      "addedPackages": 125
+    }
+  ],
+  "lockDeclaredInstallScriptPackages": [],
+  "lifecycleHooks": [
+    {
+      "package": "dompurify",
+      "version": "3.4.15",
+      "name": "prepare",
+      "command": "husky",
+      "executed": false
+    },
+    {
+      "package": "stylis",
+      "version": "4.4.0",
+      "name": "prepare",
+      "command": "npm run build",
+      "executed": false
+    },
+    {
+      "package": "tinyexec",
+      "version": "1.3.1",
+      "name": "prepare",
+      "command": "npm run build",
+      "executed": false
+    },
+    {
+      "package": "uuid",
+      "version": "11.1.1",
+      "name": "prepare",
+      "command": "husky",
+      "executed": false
+    }
+  ],
+  "lockSha256": "cc31351a58a84c78026b36aa45617b748d9ccd02262d87c6ce3661bbb103564c",
+  "apiReference": "https://mermaid.js.org/config/usage.html",
+  "noGlobalInstall": true,
+  "noBrowserDownload": true,
+  "applicationLockChanged": false
+}

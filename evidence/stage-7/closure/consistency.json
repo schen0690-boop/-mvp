@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-09-17T03:13:27.436Z",
+  "promptPrefixPreserved": true,
+  "logPrefixPreserved": true,
+  "applicationChanges": "",
+  "originalEvidenceChanges": "",
+  "diagramSourceUnchanged": [
+    {
+      "file": "docs/architecture.md",
+      "unchanged": true
+    },
+    {
+      "file": "docs/discussion-runtime-design.md",
+      "unchanged": true
+    },
+    {
+      "file": "docs/lineup-design.md",
+      "unchanged": true
+    }
+  ]
+}

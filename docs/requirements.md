@@ -46,7 +46,7 @@
 |---|---|---|---|---|---|---|
 | R24 | A §3.1 | 完整项目源码最终提供 GitHub/Gitee 链接，包含代码和数据库初始化脚本 | src/、web/、init-db.ts、db/migrations.ts、Git | git remote为空，须用户授权创建/推送 | 本地源码/初始化齐备；远程链接缺失 | 远程创建/推送另行授权 |
 | R25 | A §3.1 | 至少 5 条高质量样例数据，含预设讨论话题与对应嘉宾阵容 | src/sample-data.ts、import-samples.ts、seed.ts | samples.test、db:seed两次、delivery-smoke | 五组本地人工样例；自动化与浏览器复验 | C：按至少 5 组话题+各自主持人/专家阵容解释完整度；5 位嘉宾不是 5 组样例 |
-| R26 | A §3.1 | 开发文档体现 PRD、ER 图等，使用 Markdown、Mermaid；包含 API 文档 | requirements、architecture、contracts、ui-spec | 当前图手工检查；无现有渲染器 | Markdown/ER/状态/时序已核对；Mermaid未渲染 | 后续必须按实际实现更新 |
+| R26 | A §3.1 | 开发文档体现 PRD、ER 图等，使用 Markdown、Mermaid；包含 API 文档 | requirements、architecture、contracts、ui-spec | 阶段7补充：Mermaid11.12.0/Edge七图渲染及逐图目视 | 当前7图本地渲染通过，中文/关系/标签可读；远程显示未验证 | 后续必须按实际实现更新 |
 | R27 | A §3.1 | 交付测试代码 | tests/、web/tests/、e2e/、e2e-local/ | 不把HTTP测试当浏览器E2E | 持久化各层代码已交付；新结果见总报告 | 不把此文档等同测试实现 |
 | R28 | A §3.1 | README 含运行指南、环境变量配置、技术选型、主要 API 列表、已完成功能与后续改进 | README.md、.env.backend.example | 干净目录按README复现见总报告 | 当前运行、配置、API及限制已更新 | 环境变量示例不得含真实值 |
 | R29 | A §3.1 | Git Commit 演进历史层级清晰，可见文档/结构/UI/测试/逻辑等渐进开发 | 本地Git完整历史；development-log | git log，archive快照不代替历史 | 人工检查真实渐进提交；未推送 | 用户暂定schen/cs064210@163.com；不照抄题面示例伪造提交顺序 |
