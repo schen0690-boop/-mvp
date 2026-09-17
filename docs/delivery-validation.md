@@ -4,7 +4,23 @@
 
 2026-09-17，用户授权补齐环境检查、可选浏览器和验收说明，并更新ZIP/GitHub。新增check:env/check:browser/setup，Node范围保持>=24.16.0 <25，不升级依赖；E2E默认Chromium，E2E_BROWSER可选择msedge/chrome，未知值拒绝。旧阶段报告保持当时语境。
 
-当前候选的17项定向检查通过：版本/浏览器14项、实际环境检查命令3项；其中核心行为先10项RED，随后14项GREEN。已完成新脚本checkJs、后端及E2E类型检查和Chromium/Edge实际启动检查。独立目录安装与最终回归结果待执行后追加，当前不提前声明完成。
+被测源码提交为 `18188886afcce67a623c0d954368abd96b107996`。通过 git archive 导出到独立目录 `D:/Codex-delivery-check/reviewer-733a9c1c81/project`，未复制依赖、私有配置或数据库。根目录是唯一正式依赖安装位置，使用提交中的锁文件执行 `npm ci --ignore-scripts --no-audit --no-fund`，127包安装成功；安装和验证前后 package.json/package-lock.json 均未改变。后续提交只归档本节结果及精选证据，不改变被测工具或应用代码。
+
+| 本轮实际检查 | 结果（退出码均为0） |
+|---|---|
+| 安装前环境检查、README setup | Node/SQLite检查、前后端构建、001→003初始化、五组样例导入通过；重复导入通过 |
+| 类型检查 | 后端、前端、E2E、启动器、新工具checkJs共5项通过；启动器编译通过 |
+| 后端/前端回归 | 420/91项通过，0失败、0跳过 |
+| Chromium Fake E2E | 37项通过，0失败、0跳过、0 flaky |
+| Chromium真实适配器本地HTTP替身E2E | 2项通过，0失败、0跳过、0 flaky；不代表真实模型质量 |
+| 正式默认入口冒烟 | 页面五组样例可见；确认、开始、13条公开发言、总结、刷新、停服只读重开一致 |
+| 共用启动器本地彩排 | 独立测试夹具与本地HTTP替身完成短讨论、刷新、关闭；没有创建真实授权 |
+
+新增17项测试计入上述420项：版本/浏览器14项、实际检查命令3项。代表性TDD：初始骨架使10项业务断言失败（另4项已通过），补实现后14项全通过，再加入CLI检查得到17项通过。新脚本已纳入checkJs；未用缺依赖或路径错误冒充业务RED。
+
+使用项目锁定Playwright 1.63.0执行 `node node_modules/playwright/cli.js install chromium`，浏览器下载到用户本地缓存，未安装全局工具或改变应用依赖。Chromium 153.0.8010.12与既有Edge 153.0.4234.32均实际启动检查通过；全量E2E使用Chromium。没有在本轮重新执行全套Edge E2E。
+
+实际命令、时间、退出码与汇总见[干净复现记录](../evidence/reviewer-portability/clean-verification.json)，来源见[源码导出记录](../evidence/reviewer-portability/clean-source.json)，TDD见[准备记录](../evidence/reviewer-portability/preparation.json)。精选[样例页面](../evidence/reviewer-portability/samples.png)、[结束页面](../evidence/reviewer-portability/completed.png)已目视检查，Fake文本不作模型质量证据；[正式冒烟记录](../evidence/reviewer-portability/smoke.json)与[收尾检查](../evidence/reviewer-portability/closure.json)单独留存。原始中间日志保留在忽略目录，不纳入交付历史。
 
 只改验收工具与说明，不改讨论、Provider、迁移或模型预算。此前真实授权不重启，不读取私有配置；官方模型请求0。Windows11/macOS/Linux尚未实测；新增选择能力不是跨系统认证。独立Prompt/工作流交付文件按用户既有要求仍排除在源码ZIP外。
 

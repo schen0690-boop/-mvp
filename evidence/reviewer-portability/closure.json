@@ -1,0 +1,12 @@
+{
+  "removedOwnExitedTestLocks": [
+    "D:\\Codex-delivery-check\\reviewer-733a9c1c81\\project\\.tmp\\stage-5c\\browser-9J5oiP\\test.sqlite.owner",
+    "D:\\Codex-delivery-check\\reviewer-733a9c1c81\\project\\.tmp\\stage-6a\\browser-UW5D5h\\test.sqlite.owner"
+  ],
+  "checkedAt": "2026-09-17T16:02:07.3541667+08:00",
+  "listeningTestPorts": [],
+  "databasesPreserved": true,
+  "protectedFilesChecked": 42,
+  "changedProtectedFiles": [],
+  "officialModelRequests": 0
+}

@@ -1,0 +1,235 @@
+{
+  "sourceCommit": "18188886afcce67a623c0d954368abd96b107996",
+  "directory": "D:\\Codex-delivery-check\\reviewer-733a9c1c81\\project",
+  "method": "git archive HEAD; no dependencies/config/database copied",
+  "startedAt": "2026-09-17T07:54:03.573Z",
+  "platform": "win32",
+  "node": "v24.16.0",
+  "browser": "chromium",
+  "initialPrivateArtifacts": [],
+  "commands": [
+    {
+      "name": "environment before install",
+      "args": [
+        "scripts/check-environment.mjs"
+      ],
+      "startedAt": "2026-09-17T07:54:03.575Z",
+      "finishedAt": "2026-09-17T07:54:03.703Z",
+      "exitCode": 0
+    },
+    {
+      "name": "npm ci",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "ci",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "startedAt": "2026-09-17T07:54:03.704Z",
+      "finishedAt": "2026-09-17T07:54:16.102Z",
+      "exitCode": 0
+    },
+    {
+      "name": "README setup",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "setup"
+      ],
+      "startedAt": "2026-09-17T07:54:16.103Z",
+      "finishedAt": "2026-09-17T07:54:22.150Z",
+      "exitCode": 0
+    },
+    {
+      "name": "browser check",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "check:browser"
+      ],
+      "startedAt": "2026-09-17T07:54:22.150Z",
+      "finishedAt": "2026-09-17T07:54:23.979Z",
+      "exitCode": 0
+    },
+    {
+      "name": "seed again",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "db:seed"
+      ],
+      "startedAt": "2026-09-17T07:54:23.979Z",
+      "finishedAt": "2026-09-17T07:54:24.464Z",
+      "exitCode": 0
+    },
+    {
+      "name": "typecheck",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-09-17T07:54:24.464Z",
+      "finishedAt": "2026-09-17T07:54:26.625Z",
+      "exitCode": 0
+    },
+    {
+      "name": "typecheck:web",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "typecheck:web"
+      ],
+      "startedAt": "2026-09-17T07:54:26.626Z",
+      "finishedAt": "2026-09-17T07:54:28.445Z",
+      "exitCode": 0
+    },
+    {
+      "name": "typecheck:e2e",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "typecheck:e2e"
+      ],
+      "startedAt": "2026-09-17T07:54:28.445Z",
+      "finishedAt": "2026-09-17T07:54:29.826Z",
+      "exitCode": 0
+    },
+    {
+      "name": "typecheck:startup",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "typecheck:startup"
+      ],
+      "startedAt": "2026-09-17T07:54:29.827Z",
+      "finishedAt": "2026-09-17T07:54:30.905Z",
+      "exitCode": 0
+    },
+    {
+      "name": "typecheck:tools",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "typecheck:tools"
+      ],
+      "startedAt": "2026-09-17T07:54:30.905Z",
+      "finishedAt": "2026-09-17T07:54:31.988Z",
+      "exitCode": 0
+    },
+    {
+      "name": "build:startup",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "build:startup"
+      ],
+      "startedAt": "2026-09-17T07:54:31.989Z",
+      "finishedAt": "2026-09-17T07:54:33.028Z",
+      "exitCode": 0
+    },
+    {
+      "name": "backend regression",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "--reporter=json",
+        "--outputFile=D:\\实测文件夹\\evidence\\reviewer-portability/raw/backend.json"
+      ],
+      "startedAt": "2026-09-17T07:54:33.028Z",
+      "finishedAt": "2026-09-17T07:54:55.425Z",
+      "exitCode": 0
+    },
+    {
+      "name": "frontend regression",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "web/vitest.config.ts",
+        "--reporter=json",
+        "--outputFile=D:\\实测文件夹\\evidence\\reviewer-portability/raw/frontend.json"
+      ],
+      "startedAt": "2026-09-17T07:54:55.426Z",
+      "finishedAt": "2026-09-17T07:54:57.904Z",
+      "exitCode": 0
+    },
+    {
+      "name": "Fake Chromium E2E",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "test:e2e"
+      ],
+      "startedAt": "2026-09-17T07:54:57.905Z",
+      "finishedAt": "2026-09-17T07:57:54.364Z",
+      "exitCode": 0
+    },
+    {
+      "name": "HTTP stub Chromium E2E",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "test:e2e:local-adapter"
+      ],
+      "startedAt": "2026-09-17T07:57:54.365Z",
+      "finishedAt": "2026-09-17T07:58:11.102Z",
+      "exitCode": 0
+    },
+    {
+      "name": "formal default smoke",
+      "args": [
+        "scripts/delivery-smoke.mjs"
+      ],
+      "startedAt": "2026-09-17T07:58:11.102Z",
+      "finishedAt": "2026-09-17T07:58:16.615Z",
+      "exitCode": 0
+    },
+    {
+      "name": "shared launcher local rehearsal",
+      "args": [
+        "D:/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "rehearse:stage6b"
+      ],
+      "startedAt": "2026-09-17T07:58:16.616Z",
+      "finishedAt": "2026-09-17T07:58:22.854Z",
+      "exitCode": 0
+    }
+  ],
+  "officialModelRequests": 0,
+  "manifestsUnchanged": {
+    "package.json": true,
+    "package-lock.json": true
+  },
+  "finishedAt": "2026-09-17T07:58:22.856Z",
+  "backend": {
+    "passed": 420,
+    "failed": 0,
+    "skipped": 0
+  },
+  "frontend": {
+    "passed": 91,
+    "failed": 0,
+    "skipped": 0
+  },
+  "fake": {
+    "startTime": "2026-09-17T07:54:59.810Z",
+    "duration": 174511.392,
+    "expected": 37,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "http": {
+    "startTime": "2026-09-17T07:57:55.595Z",
+    "duration": 15473.886,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

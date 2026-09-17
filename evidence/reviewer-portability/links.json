@@ -1,0 +1,874 @@
+{
+  "checkedAt": "2026-09-17T08:02:21.157Z",
+  "scope": [
+    "README.md",
+    "docs/requirements.md",
+    "docs/architecture.md",
+    "docs/contracts.md",
+    "docs/test-plan.md",
+    "docs/ui-spec.md",
+    "docs/lineup-design.md",
+    "docs/discussion-runtime-design.md",
+    "docs/workflow.md",
+    "docs/delivery-validation.md"
+  ],
+  "records": [
+    {
+      "file": "README.md",
+      "label": "总交付报告",
+      "url": "docs/delivery-validation.md",
+      "target": "docs/delivery-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "验收环境改进记录",
+      "url": "docs/delivery-validation.md#验收环境便利性改进",
+      "target": "docs/delivery-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "五组人工预置阵容",
+      "url": "src/sample-data.ts",
+      "target": "src/sample-data.ts",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": ".env.backend.example",
+      "url": ".env.backend.example",
+      "target": ".env.backend.example",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "API/SSE契约",
+      "url": "docs/contracts.md",
+      "target": "docs/contracts.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "唯一需求/交付检查表",
+      "url": "docs/requirements.md",
+      "target": "docs/requirements.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "架构/ER/状态图",
+      "url": "docs/architecture.md",
+      "target": "docs/architecture.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "运行设计",
+      "url": "docs/discussion-runtime-design.md",
+      "target": "docs/discussion-runtime-design.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "界面",
+      "url": "docs/ui-spec.md",
+      "target": "docs/ui-spec.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "测试计划",
+      "url": "docs/test-plan.md",
+      "target": "docs/test-plan.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "真实Prompt精选索引",
+      "url": "docs/sources/development-prompts.md#阶段7精选开发prompt索引",
+      "target": "docs/sources/development-prompts.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "工作流说明",
+      "url": "docs/workflow.md",
+      "target": "docs/workflow.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "过程记录",
+      "url": "docs/development-log.md",
+      "target": "docs/development-log.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "README.md",
+      "label": "交付验证",
+      "url": "docs/delivery-validation.md",
+      "target": "docs/delivery-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/requirements.md",
+      "label": "真实 Prompt",
+      "url": "sources/development-prompts.md",
+      "target": "docs/sources/development-prompts.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/requirements.md",
+      "label": "阶段 0 原报告",
+      "url": "sources/stage-0-audit.md",
+      "target": "docs/sources/stage-0-audit.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/requirements.md",
+      "label": "架构",
+      "url": "architecture.md",
+      "target": "docs/architecture.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/requirements.md",
+      "label": "契约",
+      "url": "contracts.md",
+      "target": "docs/contracts.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/requirements.md",
+      "label": "界面",
+      "url": "ui-spec.md",
+      "target": "docs/ui-spec.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/requirements.md",
+      "label": "测试计划",
+      "url": "test-plan.md",
+      "target": "docs/test-plan.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/requirements.md",
+      "label": "开发记录",
+      "url": "development-log.md",
+      "target": "docs/development-log.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/requirements.md",
+      "label": "lineup-design.md",
+      "url": "lineup-design.md",
+      "target": "docs/lineup-design.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/architecture.md",
+      "label": "需求矩阵",
+      "url": "requirements.md",
+      "target": "docs/requirements.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/architecture.md",
+      "label": "契约",
+      "url": "contracts.md",
+      "target": "docs/contracts.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/architecture.md",
+      "label": "交付验证",
+      "url": "delivery-validation.md",
+      "target": "docs/delivery-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/architecture.md",
+      "label": "运行规格",
+      "url": "discussion-runtime-design.md",
+      "target": "docs/discussion-runtime-design.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/contracts.md",
+      "label": "lineup-design.md",
+      "url": "lineup-design.md",
+      "target": "docs/lineup-design.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/contracts.md",
+      "label": "lineup-design.md",
+      "url": "lineup-design.md",
+      "target": "docs/lineup-design.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/contracts.md",
+      "label": "discussion-runtime-design.md",
+      "url": "discussion-runtime-design.md",
+      "target": "docs/discussion-runtime-design.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/contracts.md",
+      "label": "5B验证",
+      "url": "stage-5b-validation.md",
+      "target": "docs/stage-5b-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/contracts.md",
+      "label": "5C验证",
+      "url": "stage-5c-validation.md",
+      "target": "docs/stage-5c-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/contracts.md",
+      "label": "验证与6B待授权方案",
+      "url": "stage-6a-validation.md",
+      "target": "docs/stage-6a-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/test-plan.md",
+      "label": "阶段7总验证",
+      "url": "delivery-validation.md",
+      "target": "docs/delivery-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/test-plan.md",
+      "label": "阶段2记录",
+      "url": "stage-2-validation.md",
+      "target": "docs/stage-2-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/test-plan.md",
+      "label": "阶段3记录",
+      "url": "stage-3-validation.md",
+      "target": "docs/stage-3-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/test-plan.md",
+      "label": "lineup-design.md",
+      "url": "lineup-design.md",
+      "target": "docs/lineup-design.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/test-plan.md",
+      "label": "discussion-runtime-design.md",
+      "url": "discussion-runtime-design.md",
+      "target": "docs/discussion-runtime-design.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/test-plan.md",
+      "label": "5B验证报告",
+      "url": "stage-5b-validation.md",
+      "target": "docs/stage-5b-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/test-plan.md",
+      "label": "5C验证",
+      "url": "stage-5c-validation.md",
+      "target": "docs/stage-5c-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/test-plan.md",
+      "label": "stage-6a-validation",
+      "url": "stage-6a-validation.md",
+      "target": "docs/stage-6a-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/ui-spec.md",
+      "label": "contracts.md",
+      "url": "contracts.md",
+      "target": "docs/contracts.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/ui-spec.md",
+      "label": "5C验证",
+      "url": "stage-5c-validation.md",
+      "target": "docs/stage-5c-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/lineup-design.md",
+      "label": "4B实施计划",
+      "url": "superpowers/plans/2026-09-16-lineup-backend.md",
+      "target": "docs/superpowers/plans/2026-09-16-lineup-backend.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/lineup-design.md",
+      "label": "4B验证记录",
+      "url": "stage-4b-validation.md",
+      "target": "docs/stage-4b-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/discussion-runtime-design.md",
+      "label": "实际验证报告",
+      "url": "stage-5b-validation.md",
+      "target": "docs/stage-5b-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/discussion-runtime-design.md",
+      "label": "contracts运行与SSE实际契约",
+      "url": "contracts.md#阶段5a设计5b运行与5c-sse实际契约",
+      "target": "docs/contracts.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/discussion-runtime-design.md",
+      "label": "6A记录",
+      "url": "stage-6a-validation.md",
+      "target": "docs/stage-6a-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/workflow.md",
+      "label": "开发Prompt精选",
+      "url": "sources/development-prompts.md#阶段7精选开发prompt索引",
+      "target": "docs/sources/development-prompts.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/workflow.md",
+      "label": "5C验证",
+      "url": "stage-5c-validation.md",
+      "target": "docs/stage-5c-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/workflow.md",
+      "label": "6B/R1记录",
+      "url": "stage-6b-validation.md",
+      "target": "docs/stage-6b-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/workflow.md",
+      "label": "交付验证",
+      "url": "delivery-validation.md",
+      "target": "docs/delivery-validation.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "干净复现记录",
+      "url": "../evidence/reviewer-portability/clean-verification.json",
+      "target": "evidence/reviewer-portability/clean-verification.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "源码导出记录",
+      "url": "../evidence/reviewer-portability/clean-source.json",
+      "target": "evidence/reviewer-portability/clean-source.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "准备记录",
+      "url": "../evidence/reviewer-portability/preparation.json",
+      "target": "evidence/reviewer-portability/preparation.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "样例页面",
+      "url": "../evidence/reviewer-portability/samples.png",
+      "target": "evidence/reviewer-portability/samples.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "结束页面",
+      "url": "../evidence/reviewer-portability/completed.png",
+      "target": "evidence/reviewer-portability/completed.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "正式冒烟记录",
+      "url": "../evidence/reviewer-portability/smoke.json",
+      "target": "evidence/reviewer-portability/smoke.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "收尾检查",
+      "url": "../evidence/reviewer-portability/closure.json",
+      "target": "evidence/reviewer-portability/closure.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "requirements",
+      "url": "requirements.md",
+      "target": "docs/requirements.md",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "reproduction-final-source.json",
+      "url": "../evidence/stage-7/reproduction-final-source.json",
+      "target": "evidence/stage-7/reproduction-final-source.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "clean/verification.json",
+      "url": "../evidence/stage-7/clean/verification.json",
+      "target": "evidence/stage-7/clean/verification.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "逐文件数量",
+      "url": "../evidence/stage-7/clean/test-counts.json",
+      "target": "evidence/stage-7/clean/test-counts.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "安装",
+      "url": "../evidence/stage-7/clean/clean-install.json",
+      "target": "evidence/stage-7/clean/clean-install.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "README命令",
+      "url": "../evidence/stage-7/clean/readme-commands.json",
+      "target": "evidence/stage-7/clean/readme-commands.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "smoke",
+      "url": "../evidence/stage-7/clean/smoke.json",
+      "target": "evidence/stage-7/clean/smoke.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "样例截图",
+      "url": "../evidence/stage-7/clean/samples.png",
+      "target": "evidence/stage-7/clean/samples.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "结束截图",
+      "url": "../evidence/stage-7/clean/clean-completed.png",
+      "target": "evidence/stage-7/clean/clean-completed.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "成功",
+      "url": "../evidence/stage-7/clean/local-success.json",
+      "target": "evidence/stage-7/clean/local-success.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "总结失败",
+      "url": "../evidence/stage-7/clean/local-failure.json",
+      "target": "evidence/stage-7/clean/local-failure.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "共享启动结果",
+      "url": "../evidence/stage-7/clean/startup-result.json",
+      "target": "evidence/stage-7/clean/startup-result.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "页面事件",
+      "url": "../evidence/stage-7/clean/startup-ui-result.json",
+      "target": "evidence/stage-7/clean/startup-ui-result.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "clean/screenshots",
+      "url": "../evidence/stage-7/clean/screenshots",
+      "target": "evidence/stage-7/clean/screenshots",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "清理证据",
+      "url": "../evidence/stage-7/cleanup.json",
+      "target": "evidence/stage-7/cleanup.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "逐文件哈希",
+      "url": "../evidence/stage-7/closure/archive-lock-hashes.json",
+      "target": "evidence/stage-7/closure/archive-lock-hashes.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "来源与版本核对",
+      "url": "../evidence/stage-7/closure/lock-and-version.json",
+      "target": "evidence/stage-7/closure/lock-and-version.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "renderer-install",
+      "url": "../evidence/stage-7/closure/renderer-install.json",
+      "target": "evidence/stage-7/closure/renderer-install.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "渲染清单",
+      "url": "../evidence/stage-7/closure/render-results.json",
+      "target": "evidence/stage-7/closure/render-results.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "diagrams",
+      "url": "../evidence/stage-7/closure/diagrams",
+      "target": "evidence/stage-7/closure/diagrams",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "修前结果",
+      "url": "../evidence/stage-7/closure/links-before.json",
+      "target": "evidence/stage-7/closure/links-before.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "最终结果",
+      "url": "../evidence/stage-7/closure/links.json",
+      "target": "evidence/stage-7/closure/links.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "stage-8",
+      "url": "../evidence/stage-8",
+      "target": "evidence/stage-8",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "clone-verification.json",
+      "url": "../evidence/stage-8/clone-verification.json",
+      "target": "evidence/stage-8/clone-verification.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "远程核验",
+      "url": "../evidence/stage-8/remote/verification.json",
+      "target": "evidence/stage-8/remote/verification.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "仓库页面",
+      "url": "../evidence/stage-8/remote/repository.png",
+      "target": "evidence/stage-8/remote/repository.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "正式README",
+      "url": "../evidence/stage-8/remote/readme.png",
+      "target": "evidence/stage-8/remote/readme.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "关系图",
+      "url": "../evidence/stage-8/remote/architecture-1-ready.png",
+      "target": "evidence/stage-8/remote/architecture-1-ready.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "状态图",
+      "url": "../evidence/stage-8/remote/architecture-2.png",
+      "target": "evidence/stage-8/remote/architecture-2.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "时序图",
+      "url": "../evidence/stage-8/remote/architecture-3.png",
+      "target": "evidence/stage-8/remote/architecture-3.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "中文状态图",
+      "url": "../evidence/stage-8/remote/discussion-runtime-design-1.png",
+      "target": "evidence/stage-8/remote/discussion-runtime-design-1.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "中文时序图",
+      "url": "../evidence/stage-8/remote/discussion-runtime-design-2.png",
+      "target": "evidence/stage-8/remote/discussion-runtime-design-2.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "运行数据关系",
+      "url": "../evidence/stage-8/remote/discussion-runtime-design-3.png",
+      "target": "evidence/stage-8/remote/discussion-runtime-design-3.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "中文状态图",
+      "url": "../evidence/stage-8/remote/lineup-design-1.png",
+      "target": "evidence/stage-8/remote/lineup-design-1.png",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "links-resumed.json",
+      "url": "../evidence/stage-8/links-resumed.json",
+      "target": "evidence/stage-8/links-resumed.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "安全复查",
+      "url": "../evidence/stage-8/security-resumed.json",
+      "target": "evidence/stage-8/security-resumed.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    },
+    {
+      "file": "docs/delivery-validation.md",
+      "label": "暂存审查",
+      "url": "../evidence/stage-8/staged-review.json",
+      "target": "evidence/stage-8/staged-review.json",
+      "tracked": true,
+      "exists": true,
+      "anchorExists": true
+    }
+  ],
+  "failures": [],
+  "externalLinks": "Not rechecked by this local link check"
+}

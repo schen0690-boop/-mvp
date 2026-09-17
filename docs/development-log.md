@@ -4,6 +4,8 @@
 
 用户授权依照前轮建议改进并更新ZIP/GitHub，原文另存sources/reviewer-portability-request.md。沿用brainstorming已确认方向、writing-plans拆分、TDD和verification-before-completion；不启用代理/worktree。只扩展环境检查、浏览器选择、准备命令及文档，旧真实授权和业务代码不动。用户自行编辑的独立Prompt和工作流文件保留，不纳入源码包。
 
+候选1818888从Git导出到新目录后，按README执行锁文件安装和setup，后端420、前端91、Fake E2E37、本地HTTP替身E2E2均通过；5类类型检查、前后端构建、默认入口冒烟、共享启动器本地彩排均退出0。代表性RED为10项版本/浏览器行为失败，最小实现后14项通过，加CLI边界后17项通过。新检查只用SQLite内存库，不碰已有数据；浏览器默认Chromium，保留Edge/Chrome显式选择。详细证据和未验证平台见delivery-validation.md“验收环境便利性改进”。官方模型请求0，后续文档提交与ZIP归档不改变该被测代码。
+
 ## 当前：阶段1B实际执行记录
 
 - 日期：2026-09-15。用户已授权局部环境探针，实际工作目录为 `D:\实测文件夹\tools\env-probe`。没有重新初始化或搬移Git。
