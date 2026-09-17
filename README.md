@@ -122,5 +122,3 @@ Vitest网络边界只允许本机；Fake E2E和HTTP替身入口明确注入替�
 [唯一需求/交付检查表](docs/requirements.md) · [架构/ER/状态图](docs/architecture.md) · [运行设计](docs/discussion-runtime-design.md) · [界面](docs/ui-spec.md) · [测试计划](docs/test-plan.md) · [真实Prompt精选索引](docs/sources/development-prompts.md#阶段7精选开发prompt索引) · [工作流说明](docs/workflow.md) · [过程记录](docs/development-log.md) · [交付验证](docs/delivery-validation.md)。
 
 实现了完整Fake核心用户流程与真实适配器、本地契约测试；真实证据仅各一次独立阵容和短讨论。R1空提炼未验证非空观点真实语义支持；引用存在不证明内容成立。长期质量、跨平台、移动真机、生产负载和完整辅助技术检查未验证。后续应独立授权质量评估及更广环境测试，不自动增加账户/音视频/云部署。
-
-仍需出题方确认Codex与题面Claude Code/Deepseek V4 Pro口径差异；不虚构工具使用。源码与完整历史已发布至[GitHub schen0690-boop/-mvp](https://github.com/schen0690-boop/-mvp)，匿名评阅访问及远程完整克隆已核验。排除提交方式不免除源码仓库链接这一第三部分交付要求。
